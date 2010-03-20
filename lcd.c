@@ -85,42 +85,37 @@ void initializeDisplay(){
   PTA_PTA5 = 1;
   wait(10);
   
-  // Graphics Home Address
-  writeData(0x00);
-  writeData(0x00);  
-  writeCommand(0x42); 
-
-  // Graphics Area Set
-  writeData(0x1e);
-  writeData(0x00);
-  writeCommand(0x43);   
-  
   // Text Home Address
-  writeData(0x00);
-  writeData(0x00);
-  writeCommand(0x40);
+  writeData(TEXT_HOME_ADDRESS);
+  writeData(TEXT_HOME_ADDRESS >> 8);
+  writeCommand(SET_TEXT_HOME_ADDRESS);
   
   // Text Area Set
-  writeData(0x1e);
+  writeData(TEXT_AREA);
   writeData(0x00);
-  writeCommand(0x41);
+  writeCommand(SET_TEXT_AREA);
+  
+  // Graphics Home Address
+  writeData(GRAPHICS_HOME_ADDRESS);
+  writeData(GRAPHICS_HOME_ADDRESS >> 8);  
+  writeCommand(SET_GRAPHICS_HOME_ADDRESS); 
+
+  // Graphics Area Set
+  writeData(GRAPHICS_AREA);
+  writeData(0x00);
+  writeCommand(SET_GRAPHICS_AREA);   
   
   // Mode Set
-  writeCommand(0x80);
+  writeCommand(OR_MODE);
   
   // Display Mode
-  writeCommand(0x9f);
+  writeCommand(TEXT_ON_GRAPHIC_ON);
   
   /* Address Pointer
-  readStatus();
   writeData(0x23);
-  readStatus();
   writeData(0x01);
-  readStatus();
   writeCommand(0x24);
   
-  readStatus();
   writeData(0x21);
-  readStatus();
   writeCommand(0xC0);*/
 }

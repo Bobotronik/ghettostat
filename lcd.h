@@ -20,8 +20,8 @@
 #define LCD_HEIGHT              128
 #define FONT_WIDTH              6
 #define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)
-#define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))
 #define GRAPHIC_AREA            (LCD_WIDTH/FONT_WIDTH)
+#define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))
 #define GRAPHIC_SIZE	          (GRAPHIC_AREA*LCD_HEIGHT)
 #define TEXT_HOME			          0
 #define GRAPHIC_HOME					  (TEXT_HOME+TEXT_SIZE)
@@ -78,12 +78,12 @@
 
 void wait(unsigned char);
 
+unsigned char readStatus();
+
 void writeData(unsigned char);
 
 unsigned char readData();
 
 void writeCommand(unsigned char);
-
-unsigned char readStatus();
 
 void initializeDisplay();
