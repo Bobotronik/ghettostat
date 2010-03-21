@@ -1,6 +1,23 @@
 #include "derivative.h"
 #include "lcd.h"
 
+void initializeCharMap(){
+  charMap['0'] = 0x;
+  charMap['1'] = 0x;
+  charMap['2'] = 0x;
+  charMap['3'] = 0x;
+  charMap['4'] = 0x;
+  charMap['5'] = 0x;
+  charMap['6'] = 0x;
+  charMap['7'] = 0x;
+  charMap['8'] = 0x;
+  charMap['9'] = 0x;
+  charMap['a'] = 0x;
+  charMap['b'] = 0x;
+  charMap['c'] = 0x;
+  charMap['d'] = 0x;
+}
+
 void wait(unsigned char cycles){
   for (;cycles == 0; cycles--){
   
@@ -71,6 +88,42 @@ void writeCommand(unsigned char command){
   CE = 1; 
 }
 
+void setADP(unsigned short int ADP){
+  writeData(ADP & 0xff);
+  writeData(ADP >> 8);
+  writeCommand(SET_ADDRESS_POINTER);
+}
+
+void display(unsigned char data){
+  writeData(data);
+  writeCommand(WRITE_DATA_AND_INCREMENT);
+}
+
+void printChar(char character)[
+  display(char - 32);
+}
+
+void printStr(char* string){
+  while(*string){
+    display(*string-32);
+    string++;
+  }
+}
+
+void printBox(unsigned char x, unsigned char y, unsigned char width, unsigned char height){
+
+}
+
+void goToText(unsigned char x, unsigned char y){
+  unsigned short int address = TEXT_HOME + TEXT_AREA*y + x;
+  setADP(address);
+}
+
+void goToGraphics(unsigned char x, unsigned char y){
+  unsigned short int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
+  setADP(address);
+}
+
 void initializeDisplay(){
 
   // Set control lines as output
@@ -84,23 +137,18 @@ void initializeDisplay(){
   wait(10);
   PTA_PTA5 = 1;
   wait(10);
-  
-  // Text Home Address
-  writeData(TEXT_HOME_ADDRESS);
+
+  writeData(TEXT_HOME_ADDRESS & 0xff);
   writeData(TEXT_HOME_ADDRESS >> 8);
   writeCommand(SET_TEXT_HOME_ADDRESS);
-  
-  // Text Area Set
+
   writeData(TEXT_AREA);
   writeData(0x00);
   writeCommand(SET_TEXT_AREA);
   
-  // Graphics Home Address
-  writeData(GRAPHICS_HOME_ADDRESS);
+  writeData(GRAPHICS_HOME_ADDRESS & 0xff);
   writeData(GRAPHICS_HOME_ADDRESS >> 8);  
-  writeCommand(SET_GRAPHICS_HOME_ADDRESS); 
 
-  // Graphics Area Set
   writeData(GRAPHICS_AREA);
   writeData(0x00);
   writeCommand(SET_GRAPHICS_AREA);   
@@ -110,6 +158,10 @@ void initializeDisplay(){
   
   // Display Mode
   writeCommand(TEXT_ON_GRAPHIC_ON);
+  
+  // Test Program
+  goToText(1, 1);
+  display(0x21);
   
   /* Address Pointer
   writeData(0x23);
