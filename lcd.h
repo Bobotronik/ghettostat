@@ -18,14 +18,14 @@
 // LCD Properties
 #define LCD_WIDTH               240
 #define LCD_HEIGHT              128
-#define FONT_WIDTH              6
+#define FONT_WIDTH              8
 #define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)        // 240/6=40
 #define GRAPHIC_AREA            (LCD_WIDTH/FONT_WIDTH)        // 240/6=40
 #define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))    // 40*16=640
 #define GRAPHIC_SIZE	          (GRAPHIC_AREA*LCD_HEIGHT)     // 40*128=5120
 #define TEXT_HOME			          0
 #define GRAPHIC_HOME					  (TEXT_HOME+TEXT_SIZE)
-//#define OFFSET_REGISTER	  2                           // 640+5120=5760
+//#define OFFSET_REGISTER	  2                            640+5120=5760
 //#define EXTERNAL_CG_HOME   (GLCD_OFFSET_REGISTER << 11)
 
 // Commands
@@ -52,20 +52,20 @@
 // Display Mode
 #define DISPLAY_OFF               0x90
 #define CURSOR_ON_BLINK_OFF       0x92
-#define CURSOR_ON_BLINK_OFF       0x93
+#define CURSOR_ON_BLINK_ON        0x93
 #define TEXT_ON_GRAPHIC_OFF       0x94
 #define TEXT_OFF_GRAPHIC_ON       0x98
-#define TEXT_ON_GRAPHIC_OFF       0x9c
+#define TEXT_ON_GRAPHIC_ON        0x9c
 
 // Set Cursor Pattern
-#define 1_LINE_CURSOR             0xa0
-#define 2_LINE_CURSOR             0xa1
-#define 3_LINE_CURSOR             0xa2
-#define 4_LINE_CURSOR             0xa3
-#define 5_LINE_CURSOR             0xa4
-#define 6_LINE_CURSOR             0xa5
-#define 7_LINE_CURSOR             0xa6
-#define 8_LINE_CURSOR             0xa7
+#define ONE_LINE_CURSOR           0xa0
+#define TWO_LINE_CURSOR           0xa1
+#define THREE_LINE_CURSOR         0xa2
+#define FOUR_LINE_CURSOR          0xa3
+#define FIVE_LINE_CURSOR          0xa4
+#define SIX_LINE_CURSOR           0xa5
+#define SEVEN_LINE_CURSOR         0xa6
+#define EIGHT_LINE_CURSOR         0xa7
 
 // Data Auto Read/Write
 #define SET_DATA_AUTO_WRITE       0xb0
@@ -83,9 +83,10 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
-unsigned char charMap[255];
+//unsigned char charMap[255];
+//
 
-void initializeCharMap();
+///void initializeCharMap();
 void wait(unsigned char);
 unsigned char readStatus();
 void writeData(unsigned char);
@@ -98,10 +99,13 @@ void printChar(char);
 void printStr(char*);
 void printBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
+void clearText();
+void clearGraphic();
+
 // X: 0-39    Y: 0-15
 void goToText(unsigned char, unsigned char);
 // X: 0-239   Y: 0-127
 // Note: this will only put you at the byte of the specified coordinates
-void goToGraphics(unsigned char, unsigned char);
+void goToGraphic(unsigned char, unsigned char);
 
-void initializeDisplay();
+void initializeDisplay(void);
