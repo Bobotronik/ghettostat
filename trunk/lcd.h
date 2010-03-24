@@ -66,7 +66,7 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
-unsigned char abs(short int);
+unsigned char charAbs(short int);
 
 void wait(unsigned char);
 unsigned char readStatus();
