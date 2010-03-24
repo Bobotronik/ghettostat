@@ -1,5 +1,6 @@
 #include "derivative.h"
 #include "pins.h"
+#include "touch.h"
 
 unsigned char isTouched(){
   if (getX() < MIN_TOUCH && getY() < MIN_TOUCH)
@@ -16,8 +17,8 @@ unsigned char getX(){
   TS_PIN2 = 1;
   TS_PIN4 = 0;
    
-  ADSCR = 0x08;
-  while(ADSCR_COCO == 0);
+  ADCSC = 0x08;
+  while(ADCSC_COCO == 0);
   
   return ADRL;
 }
@@ -29,8 +30,8 @@ unsigned char getY(){
   TS_PIN1 = 1;
   TS_PIN3 = 0;
   
-  ADSCR = 0x09; 
-  while(ADSCR_COCO == 0);
+  ADCSC = 0x09; 
+  while(ADCSC_COCO == 0);
   
   return ADRL;
 }

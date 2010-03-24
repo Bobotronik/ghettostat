@@ -1,20 +1,7 @@
 #include "derivative.h"
 #include "devices.h"
-#include "i2c.h"
 #include "lcd.h"  
 #include "pins.h"
-
-unsigned char abs(short int num){
-  unsigned char absNum;
-  if(num < 0){
-    num = -num;
-    absNum = num & 0xff;
-  }
-  else{
-    absNum = num & 0xff;
-  }
-  return absNum;
-}
 
 unsigned char charAbs(short int num){
   unsigned char absNum;
@@ -275,19 +262,19 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
 void initializeDisplay(){
 
   // Set control lines as output
-  LCD_RD = 1;
-  LCD_WR = 1;
-  LCD_CD = 1;
-  LCD_CE = 1; 
+  LCD_RD_DIR = 1;
+  LCD_WR_DIR = 1;
+  LCD_CD_DIR = 1;
+  LCD_CE_DIR = 1; 
   
   // Set font select to 6
-  portxOn(P_FS);
+  portxOff(P_FONTSEL);
   
   // Reset
   portxOff(P_RESET);
-  wait(5);
+  wait(10);
   portxOn(P_RESET);
-  wait(5);
+  wait(20);
 
   writeData(GRAPHIC_HOME & 0xff);
   writeData(GRAPHIC_HOME >> 8); 
@@ -316,9 +303,9 @@ void initializeDisplay(){
   clearGraphic();
   goToText(2, 7);
   printStr("HELLO WORLD!");
-  setPixel(20, 20, 1);
-  drawLine(120, 0, 120, 127);
-  drawBox(9, 9, 219, 117);
+  //setPixel(20, 20, 1);
+  //drawLine(120, 0, 120, 127);
+  //drawBox(9, 9, 219, 117);
   
   /* Address Pointer
   LCD_WRiteData(0x23);
