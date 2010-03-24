@@ -128,6 +128,11 @@ void clearCG(){
     display(0x00);
 }
 
+void clearScreen(){
+  clearText();
+  clearGraphic();
+}
+
 void setPixel(unsigned char x0, unsigned char y0, unsigned char color){
   unsigned char data;
   unsigned int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
@@ -174,9 +179,9 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
   }
   
   if(abs(dy) <= abs(dx))
-    doInverse == 0;
+    lessThan1 == 0;
   else
-    doInverse == 1;
+    lessThan1 == 1;
     
   // m = [0:1]
   if ( dy >= -dx && 0 >= dy ) {
@@ -185,7 +190,7 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     delNE = (dy+dx) << 1;
     
     if(lessThan1){
-      for(;x < x1; x++){
+      for(; x <= x1; ){
         if(d >= 0) {
           d += delE; 
         }
@@ -193,19 +198,21 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
           d += delNE; 
           y--;
         }
+        x++;
         setPixel(x, y, 1);
       }
     }
     else{
-      for(;x < x1; x++){
+      for(; x <= x1; x++){
         if(d >= 0) {
           d += delE; 
         }
         else{
           d += delNE; 
           y--;
-          setPixel(y, x, 1);
         }
+        x++;
+        setPixel(y, x, 1);
       }
     }
   }
@@ -216,7 +223,7 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     delNE = (dy-dx) << 1;
     
     if(lessThan1){
-      for(;x < x1;x++){
+      for(; x <= x1; x++){
         if(d <= 0) {
           d += delE; 
         }
@@ -224,11 +231,12 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
           d += delNE; 
           y++;
         }
+        x++;
         setPixel(x, y, 1);
       }   
     }
     else{
-      for(;x < x1;x++){
+      for(; x <= x1; x++){
         if(d <= 0) {
           d += delE; 
         }
@@ -236,6 +244,7 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
           d += delNE; 
           y++;
         }
+        x++;
         setPixel(y, x, 1);
       }
     }
@@ -256,7 +265,7 @@ void initializeDisplay(){
   DDRA_DDRA1 = 1;
   DDRA_DDRA4 = 1;
   DDRA_DDRA5 = 1; 
-  DDLCD_RD_DDLCD_RD4 = 1; 
+  DDRD_DDRD4 = 1; 
   
   // Reset
   PTA_PTA5 = 0;

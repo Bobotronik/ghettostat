@@ -88,6 +88,7 @@ void printStr(char*);
 void clearText();
 void clearGraphic();
 void clearCG();
+void clearScreen();
 
 void setPixel(unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
