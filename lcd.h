@@ -1,20 +1,3 @@
-// Control Lines
-#define WR          PTA_PTA0
-#define RD          PTA_PTA1
-#define CD          PTA_PTA4
-#define CE          PTD_PTD4
-
-// Data Lines
-#define DB          PTB
-#define DB0         PTB_PTB0
-#define DB1         PTB_PTB1
-#define DB2         PTB_PTB2
-#define DB3         PTB_PTB3
-#define DB4         PTB_PTB4
-#define DB5         PTB_PTB5
-#define DB6         PTB_PTB6
-#define DB7         PTB_PTB7
-
 // LCD Properties
 #define LCD_WIDTH               240 
 #define LCD_HEIGHT              128
@@ -83,6 +66,8 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
+unsigned char abs(short int);
+
 void wait(unsigned char);
 unsigned char readStatus();
 void writeData(unsigned char);
@@ -90,18 +75,21 @@ unsigned char readData();
 void writeCommand(unsigned char);
 
 void setADP(short unsigned int);
-void display(unsigned char);
-void printChar(char);
-void printStr(char*);
-void printBox(unsigned char, unsigned char, unsigned char, unsigned char);
-
-void clearText();
-void clearGraphic();
 
 // X: 0-39    Y: 0-15
 void goToText(unsigned char, unsigned char);
 // X: 0-239   Y: 0-127
 // Note: this will only put you at the byte of the specified coordinates
 void goToGraphic(unsigned char, unsigned char);
+
+void display(unsigned char);
+void printChar(char);
+void printStr(char*);
+void clearText();
+void clearGraphic();
+
+void setPixel(unsigned char, unsigned char);
+void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
+void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
 void initializeDisplay(void);
