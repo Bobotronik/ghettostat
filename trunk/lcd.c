@@ -110,19 +110,24 @@ void goToGraphic(unsigned char x, unsigned char y){
 void clearText(){
   short unsigned int i;
   setADP(TEXT_HOME);  
-  for (i = TEXT_SIZE; i != 0; i--){
-    display(0x00); 
-  }
+  for (i = TEXT_SIZE; i != 0; i--)
+    display(0x00);
 }
 
 void clearGraphic(){
   short unsigned int i;
   setADP(GRAPHIC_HOME);
-  for (i = GRAPHIC_SIZE; i != 0; i--){
+  for (i = GRAPHIC_SIZE; i != 0; i--)
     display(0x00); 
-  } 
 }
       
+void clearCG(){
+  unsigned int i;
+  setADP(CG_RAM_HOME);
+  for(i = 256; i != 0; i--)
+    display(0x00);
+}
+
 void setPixel(unsigned char x0, unsigned char y0, unsigned char color){
   unsigned char data;
   unsigned int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
@@ -259,33 +264,36 @@ void initializeDisplay(){
   PTA_PTA5 = 1;
   wait(10);
 
-  LCD_WRiteData(GRAPHIC_HOME & 0xff);
-  LCD_WRiteData(GRAPHIC_HOME >> 8); 
-  LCD_WRiteCommand(SET_GRAPHIC_HOME_ADDRESS); 
+  LCD_WriteData(GRAPHIC_HOME & 0xff);
+  LCD_WriteData(GRAPHIC_HOME >> 8); 
+  LCD_WriteCommand(SET_GRAPHIC_HOME_ADDRESS); 
 
-  LCD_WRiteData(GRAPHIC_AREA);
-  LCD_WRiteData(0x00);
-  LCD_WRiteCommand(SET_GRAPHIC_AREA); 
+  LCD_WriteData(GRAPHIC_AREA);
+  LCD_WriteData(0x00);
+  LCD_WriteCommand(SET_GRAPHIC_AREA); 
   
-  LCD_WRiteData(TEXT_HOME & 0xff);
-  LCD_WRiteData(TEXT_HOME >> 8);
-  LCD_WRiteCommand(SET_TEXT_HOME_ADDRESS);
+  LCD_WriteData(TEXT_HOME & 0xff);
+  LCD_WriteData(TEXT_HOME >> 8);
+  LCD_WriteCommand(SET_TEXT_HOME_ADDRESS);
 
-  LCD_WRiteData(TEXT_AREA);
-  LCD_WRiteData(0x00);
-  LCD_WRiteCommand(SET_TEXT_AREA);  
+  LCD_WriteData(TEXT_AREA);
+  LCD_WriteData(0x00);
+  LCD_WriteCommand(SET_TEXT_AREA);  
   
   // Mode Set
-  LCD_WRiteCommand(OR_MODE);
+  LCD_WriteCommand(OR_MODE);
   
   // Display Mode
-  LCD_WRiteCommand(TEXT_ON_GRAPHIC_ON);
+  LCD_WriteCommand(TEXT_ON_GRAPHIC_ON);
   
   // Test Program
   clearText();
   clearGraphic();
-  goToText(1, 1);
-  printStr("Hello World");
+  goToText(2, 7);
+  printStr("HELLO WORLD!");
+  setPixel(20, 20, 1);
+  drawLine(120, 0, 120, 127);
+  drawBox(9, 9, 219, 117);
   
   /* Address Pointer
   LCD_WRiteData(0x23);
