@@ -1,8 +1,8 @@
 #include "derivative.h"
-#include "lLCD_CD.h"  
+#include "lcd.h"  
 #include "pins.h"
 
-unsigned char abs(short int num){
+unsigned char charAbs(short int num){
   unsigned char absNum;
   if(num < 0){
     num = -num;
@@ -39,7 +39,7 @@ unsigned char readStatus(){
   return 1;
 }
 
-void LCD_WRiteData(unsigned char data){
+void writeData(unsigned char data){
   readStatus();
   LCD_DB_DIR = 0xff;
   LCD_DB = data; 
@@ -65,7 +65,7 @@ unsigned char readData(){
   return data; 
 }
 
-void LCD_WriteCommand(unsigned char command){
+void writeCommand(unsigned char command){
   readStatus();
   LCD_DB_DIR = 0xff;
   LCD_DB = command;
@@ -77,14 +77,14 @@ void LCD_WriteCommand(unsigned char command){
 }
 
 void setADP(unsigned short int ADP){
-  LCD_WriteData(ADP & 0xff);
-  LCD_WriteData(ADP >> 8);
-  LCD_WriteCommand(SET_ADDRESS_POINTER);
+  writeData(ADP & 0xff);
+  writeData(ADP >> 8);
+  writeCommand(SET_ADDRESS_POINTER);
 }
 
 void display(unsigned char data){
-  LCD_WriteData(data);
-  LCD_WriteCommand(DATA_LCD_WRITE_AND_INCREMENT);
+  writeData(data);
+  writeCommand(DATA_WRITE_AND_INCREMENT);
 }
 
 void printChar(char character){
@@ -133,13 +133,13 @@ void clearScreen(){
   clearGraphic();
 }
 
-void setPixel(unsigned char x0, unsigned char y0, unsigned char color){
+void setPixel(unsigned char x, unsigned char y, unsigned char color){
   unsigned char data;
   unsigned int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
 
   setADP(address);
 
-  LCD_WriteCommand(DATA_READ_AND_NONVARIABLE);
+  writeCommand(DATA_READ_AND_NONVARIABLE);
   data = readData();
 
   if(color)
@@ -150,9 +150,9 @@ void setPixel(unsigned char x0, unsigned char y0, unsigned char color){
   display(data);
 }
 
-void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y0){
+void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1){
   short int dx, dy, x, y;
-  unsigned char lessThan1:
+  unsigned char lessThan1;
   short int d, delE, delNE;
   
   if (y0 <= y1){
@@ -178,7 +178,7 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     return;
   }
   
-  if(abs(dy) <= abs(dx))
+  if(charAbs(dy) <= charAbs(dx))
     lessThan1 == 0;
   else
     lessThan1 == 1;
@@ -273,27 +273,27 @@ void initializeDisplay(){
   PTA_PTA5 = 1;
   wait(10);
 
-  LCD_WriteData(GRAPHIC_HOME & 0xff);
-  LCD_WriteData(GRAPHIC_HOME >> 8); 
-  LCD_WriteCommand(SET_GRAPHIC_HOME_ADDRESS); 
+  writeData(GRAPHIC_HOME & 0xff);
+  writeData(GRAPHIC_HOME >> 8); 
+  writeCommand(SET_GRAPHIC_HOME_ADDRESS); 
 
-  LCD_WriteData(GRAPHIC_AREA);
-  LCD_WriteData(0x00);
-  LCD_WriteCommand(SET_GRAPHIC_AREA); 
+  writeData(GRAPHIC_AREA);
+  writeData(0x00);
+  writeCommand(SET_GRAPHIC_AREA); 
   
-  LCD_WriteData(TEXT_HOME & 0xff);
-  LCD_WriteData(TEXT_HOME >> 8);
-  LCD_WriteCommand(SET_TEXT_HOME_ADDRESS);
+  writeData(TEXT_HOME & 0xff);
+  writeData(TEXT_HOME >> 8);
+  writeCommand(SET_TEXT_HOME_ADDRESS);
 
-  LCD_WriteData(TEXT_AREA);
-  LCD_WriteData(0x00);
-  LCD_WriteCommand(SET_TEXT_AREA);  
+  writeData(TEXT_AREA);
+  writeData(0x00);
+  writeCommand(SET_TEXT_AREA);  
   
   // Mode Set
-  LCD_WriteCommand(OR_MODE);
+  writeCommand(OR_MODE);
   
   // Display Mode
-  LCD_WriteCommand(TEXT_ON_GRAPHIC_ON);
+  writeCommand(TEXT_ON_GRAPHIC_ON);
   
   // Test Program
   clearText();
