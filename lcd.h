@@ -2,14 +2,14 @@
 #define LCD_WIDTH               240 
 #define LCD_HEIGHT              128
 #define FONT_WIDTH              8
-#define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)        // 240/6=40
-#define GRAPHIC_AREA            (LCD_WIDTH/FONT_WIDTH)        // 240/6=40
-#define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))    // 40*16=640
-#define GRAPHIC_SIZE	          (GRAPHIC_AREA*LCD_HEIGHT)     // 40*128=5120
+#define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)        
+#define GRAPHIC_AREA            (LCD_WIDTH/FONT_WIDTH)     
+#define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))  
+#define GRAPHIC_SIZE	          (GRAPHIC_AREA*LCD_HEIGHT)   
 #define TEXT_HOME			          0
 #define GRAPHIC_HOME					  (TEXT_HOME+TEXT_SIZE)
-#define OFFSET_REGISTER	        3                            
-//#define EXTERNAL_CG_HOME   (GLCD_OFFSET_REGISTER << 11)
+#define OFFSET_REGISTER	        (((TEXT_SIZE+GRAPHIC_SIZE) >> 11) + 1)                          
+#define CG_RAM_HOME             (OFFSET_REGISTER << 11)
 
 // Commands
 
@@ -87,6 +87,7 @@ void printChar(char);
 void printStr(char*);
 void clearText();
 void clearGraphic();
+void clearCG();
 
 void setPixel(unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
