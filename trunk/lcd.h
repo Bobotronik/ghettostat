@@ -16,7 +16,7 @@
 #define DB7         PTB_PTB7
 
 // LCD Properties
-#define LCD_WIDTH               240
+#define LCD_WIDTH               240 
 #define LCD_HEIGHT              128
 #define FONT_WIDTH              8
 #define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)        // 240/6=40
@@ -25,7 +25,7 @@
 #define GRAPHIC_SIZE	          (GRAPHIC_AREA*LCD_HEIGHT)     // 40*128=5120
 #define TEXT_HOME			          0
 #define GRAPHIC_HOME					  (TEXT_HOME+TEXT_SIZE)
-//#define OFFSET_REGISTER	  2                            640+5120=5760
+#define OFFSET_REGISTER	        3                            
 //#define EXTERNAL_CG_HOME   (GLCD_OFFSET_REGISTER << 11)
 
 // Commands
@@ -83,10 +83,6 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
-//unsigned char charMap[255];
-//
-
-///void initializeCharMap();
 void wait(unsigned char);
 unsigned char readStatus();
 void writeData(unsigned char);

@@ -1,22 +1,5 @@
 #include "derivative.h"
-#include "lcd.h"
-
-/*void initializeCharMap(){
-  charMap['0'] = 0x;
-  charMap['1'] = 0x;
-  charMap['2'] = 0x;
-  charMap['3'] = 0x;
-  charMap['4'] = 0x;
-  charMap['5'] = 0x;
-  charMap['6'] = 0x;
-  charMap['7'] = 0x;
-  charMap['8'] = 0x;
-  charMap['9'] = 0x;
-  charMap['a'] = 0x;
-  charMap['b'] = 0x;
-  charMap['c'] = 0x;
-  charMap['d'] = 0x;
-}   */
+#include "lcd.h"  
 
 void wait(unsigned char cycles){
   for (;cycles != 0; cycles--){
@@ -35,7 +18,7 @@ unsigned char readStatus(){
   do{
     CE = 0;
     wait(1);
-    status = PTB;
+    status = DB;
     CE = 1;    
     status &= 0x03;     
   } while(status != 0x03);
@@ -46,7 +29,7 @@ unsigned char readStatus(){
 void writeData(unsigned char data){
   readStatus();
   DDRB = 0xff;
-  PTB = data; 
+  DB = data; 
   CD = 0;
   WR = 0;
   RD = 1;
@@ -63,7 +46,7 @@ unsigned char readData(){
   WR = 1; 
   CE = 0; 
   wait(1);
-  data = PTB;
+  data = DB;
   CE = 1;
   
   return data; 
@@ -72,7 +55,7 @@ unsigned char readData(){
 void writeCommand(unsigned char command){
   readStatus();
   DDRB = 0xff;
-  PTB = command;
+  DB = command;
   CD = 1;
   WR = 0;
   RD = 1; 
@@ -97,8 +80,7 @@ void printChar(char character){
 
 void printStr(char* string){
   while(*string){
-    display(*string-32);
-    string++;
+    display(*string++ - 32);
   }
 }
 
@@ -173,7 +155,7 @@ void initializeDisplay(){
   clearText();
   clearGraphic();
   goToText(1, 1);
-  display(0x21);
+  printStr("Hello World");
   
   /* Address Pointer
   writeData(0x23);
