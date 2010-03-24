@@ -5,11 +5,11 @@
 #define LCD_WR_DIR      DDRA_DDRA0
 #define LCD_RD_DIR      DDRA_DDRA1
 #define LCD_CD_DIR      DDRA_DDRA4
-#define LCD_CE_DIR      DDRD_DDRD4
+#define LCD_CE_DIR      DDRA_DDRA5
 #define LCD_WR          PTA_PTA0
 #define LCD_RD          PTA_PTA1
 #define LCD_CD          PTA_PTA4
-#define LCD_CE          PTD_PTD4
+#define LCD_CE          PTA_PTA5
 
 // Data Lines
 #define LCD_DB_DIR      DDRB
