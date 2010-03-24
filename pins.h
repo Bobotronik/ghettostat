@@ -1,5 +1,5 @@
 
-// LCD
+// ****LCD****
 
 // Control Lines
 #define LCD_WR_DIR      DDRA_DDRA0
@@ -30,3 +30,6 @@
 #define LCD_DB5         PTB_PTB5
 #define LCD_DB6         PTB_PTB6
 #define LCD_DB7         PTB_PTB7
+
+// ****Touch Screen****
+
