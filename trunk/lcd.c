@@ -2,6 +2,18 @@
 #include "lcd.h"  
 #include "pins.h"
 
+unsigned char abs(short int num){
+  unsigned char absNum;
+  if(num < 0){
+    num = -num;
+    absNum = num & 0xff;
+  }
+  else{
+    absNum = num & 0xff;
+  }
+  return absNum;
+}
+
 unsigned char charAbs(short int num){
   unsigned char absNum;
   if(num < 0){
