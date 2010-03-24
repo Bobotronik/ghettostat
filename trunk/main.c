@@ -1,7 +1,11 @@
 #include <hidef.h> /* for EnableInterrupts macro */
 #include "derivative.h" /* include peripheral declarations */
+#include "devices.h"
+#include "delay.h"
+#include "i2c.h"
 #include "lcd.h"
-
+#include "pins.h"
+#include "touch.h"
 
 void main(void) {
 
@@ -10,6 +14,7 @@ void main(void) {
   
   CONFIG1_COPD = 1;
 
+  portxInit();
   initializeDisplay();
   
   for(;;) {

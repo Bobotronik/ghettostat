@@ -1,4 +1,6 @@
 #include "derivative.h"
+#include "devices.h"
+#include "i2c.h"
 #include "lcd.h"  
 #include "pins.h"
 
@@ -273,17 +275,19 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
 void initializeDisplay(){
 
   // Set control lines as output
-  DDRA_DDRA0 = 1;
-  DDRA_DDRA1 = 1;
-  DDRA_DDRA4 = 1;
-  DDRA_DDRA5 = 1; 
-  DDRD_DDRD4 = 1; 
+  LCD_RD = 1;
+  LCD_WR = 1;
+  LCD_CD = 1;
+  LCD_CE = 1; 
+  
+  // Set font select to 6
+  portxOn(P_FS);
   
   // Reset
-  PTA_PTA5 = 0;
-  wait(10);
-  PTA_PTA5 = 1;
-  wait(10);
+  portxOff(P_RESET);
+  wait(5);
+  portxOn(P_RESET);
+  wait(5);
 
   writeData(GRAPHIC_HOME & 0xff);
   writeData(GRAPHIC_HOME >> 8); 
