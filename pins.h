@@ -32,4 +32,11 @@
 #define LCD_DB7         PTB_PTB7
 
 // ****Touch Screen****
-
+#define TS_PIN1_DIR     DDRD_DDRD1
+#define TS_PIN2_DIR     DDRD_DDRD2
+#define TS_PIN3_DIR     DDRD_DDRD3
+#define TS_PIN4_DIR     DDRD_DDRD4
+#define TS_PIN1         PTD_PTD1
+#define TS_PIN2         PTD_PTD2
+#define TS_PIN3         PTD_PTD3
+#define TS_PIN4         PTD_PTD4
