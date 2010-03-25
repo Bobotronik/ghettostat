@@ -13,7 +13,11 @@ void main(void) {
   /* include your code here */
   
   CONFIG1_COPD = 1;
-
+  
+  i2c_init((unsigned char)2);
+  tempConfig();
+  tempSet((unsigned char)23);
+  tempStart();
   portxInit();
   initializeDisplay();
   
