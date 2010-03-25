@@ -45,8 +45,8 @@ void writeData(unsigned char data){
   LCD_DB_DIR = 0xff;
   LCD_DB = data; 
   LCD_CD = 0;
-  LCD_WR = 0;
   LCD_RD = 1;
+  LCD_WR = 0;
   LCD_CE = 0;
   LCD_CE = 1;
 }
@@ -71,8 +71,8 @@ void writeCommand(unsigned char command){
   LCD_DB_DIR = 0xff;
   LCD_DB = command;
   LCD_CD = 1;
-  LCD_WR = 0;
-  LCD_RD = 1; 
+  LCD_RD = 1;
+  LCD_WR = 0; 
   LCD_CE = 0;
   LCD_CE = 1; 
 }
@@ -262,9 +262,9 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
 void initializeDisplay(){
 
   // Set control lines as output
+  LCD_CD_DIR = 1;
   LCD_RD_DIR = 1;
   LCD_WR_DIR = 1;
-  LCD_CD_DIR = 1;
   LCD_CE_DIR = 1; 
   
   // Set font select to 6

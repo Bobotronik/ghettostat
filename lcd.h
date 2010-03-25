@@ -1,7 +1,7 @@
 // LCD Properties
 #define LCD_WIDTH               240 
 #define LCD_HEIGHT              128
-#define FONT_WIDTH              8
+#define FONT_WIDTH              6
 #define TEXT_AREA			          (LCD_WIDTH/FONT_WIDTH)        
 #define GRAPHIC_AREA            (LCD_WIDTH/FONT_WIDTH)     
 #define TEXT_SIZE			          (TEXT_AREA*(LCD_HEIGHT/8))  
