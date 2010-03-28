@@ -22,6 +22,9 @@ void main(void) {
   initializeDisplay();
   
   for(;;) {
+    if (isTouched()){
+    
+    }
     __RESET_WATCHDOG(); /* feeds the dog */    
   } /* loop forever */
   /* please make sure that you never leave main */
