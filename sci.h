@@ -1,8 +1,6 @@
 #ifndef SCI_H
 #define SCI_H
 
-#include "derivative.h"
-
 // Settings for Control Register 1
 #define S_LOOPS       0b0   // Disable loops mode
 #define S_ENSCI       0b1   // Enable SCI
@@ -29,10 +27,10 @@
 
 // Data 
 
-void sci_init(void);
-void sci_out(unsigned char);
-unsigned char sci_in(void);
-void sci_send(unsigned char, unsigned char);
-void sci_receive(unsigned char* data_bytes);
+void initSCI(void);
+void sendByteSCI(unsigned char);
+unsigned char receiveByteSCI(void);
+void sendDataSCI(unsigned char, unsigned char);
+void receiveDataSCI(unsigned char* data_bytes);
 
 #endif

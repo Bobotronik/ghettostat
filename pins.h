@@ -42,3 +42,6 @@
 #define TS_LEFT         PTD_PTD4
 #define TS_X_INPUT      0x08  
 #define TS_Y_INPUT      0x09
+
+// Humidity Sensor
+#define H_CH            0x0b

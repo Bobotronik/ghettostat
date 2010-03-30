@@ -1,4 +1,7 @@
+#include "derivative.h"
 #include "portx.h"
+
+#include "i2c.h"
 
 #pragma DATA_SEG DEFAULT
 #pragma CODE_SEG DEFAULT
@@ -6,24 +9,24 @@
 unsigned char PORTX_DATA;
 
 // Setup the port expander initially
-void portxInit(void) {
+void initPortX(void) {
   PORTX_DATA = P_INIT;
-  portxSet();
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
 }
 
 // Write to the port expander
-void portxSet(void) {
-  i2c_write(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
+void setPortX(void) {
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
 }
 
 // Turn specific bits on
-void portxOn(unsigned char bitmask) {
+void setBitsPortX(unsigned char bitmask) {
   PORTX_DATA = PORTX_DATA | bitmask; 
-  portxSet();
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
 }
 
 // Turn specitif bits off
-void portxOff(unsigned char bitmask) {
+void clearBitsPortX(unsigned char bitmask) {
   PORTX_DATA = PORTX_DATA & ~bitmask;
-  portxSet();
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
 }
