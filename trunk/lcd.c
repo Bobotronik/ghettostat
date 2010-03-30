@@ -88,12 +88,15 @@ void display(unsigned char data){
   writeCommand(DATA_WRITE_AND_INCREMENT);
 }
 
-void printChar(char character){
+void printChar(char character) {
   display(character - 32);
 }
 
-void printStr(char* string){
-  while(*string){
+void printNum(unsigned char num) {
+  display(num + 16);
+}
+void printStr(char* string) {
+  while (*string) {
     display(*string++ - 32);
   }
 }

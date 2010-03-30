@@ -1,10 +1,6 @@
 #ifndef TEMPSENSE_H
 #define TEMPSENSE_H
 
-#include "derivative.h"
-#include "i2c.h"
-#include "delay.h"
-
 // I2C Address
 #define TEMPSENSE_ADDR  0x9E
 
@@ -23,10 +19,10 @@
 #define T_PLUSMINUS     1
 
 // Temperature sensor functions
-void tempConfig(void);
-void tempSet(unsigned char temp);
-void tempStart(void);
-void tempStop(void);
-unsigned char tempGet(void);
+void configureTemp(void);
+void startTemp(void);
+void stopTemp(void);
+unsigned char getTemp(void);
+void setTemp(unsigned char);
 
 #endif

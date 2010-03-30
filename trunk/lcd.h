@@ -66,6 +66,8 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
+// Special characters
+#define NOTHING                   0x00
 unsigned char charAbs(short int);
 
 void wait(unsigned char);

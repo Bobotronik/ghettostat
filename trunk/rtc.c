@@ -1,4 +1,7 @@
+#include "derivative.h"
 #include "rtc.h"
+
+#include "i2c.h"
 
 #pragma DATA_SEG DEFAULT
 #pragma CODE_SEG DEFAULT
@@ -7,35 +10,35 @@ unsigned char DEVICE_TIME[7];
 unsigned char DEVICE_ALRM[4];
 
 // Set the first two configuration bytes for the clock
-void clockConfig(void) {
+void configureClock(void) {
   DEVICE_DATA[0] = C_SETTING1;
   DEVICE_DATA[1] = C_SETTING2;
-  i2c_write(RTC_ADDR, C_CONTROL1, DEVICE_DATA, 2);
+  writeI2C(RTC_ADDR, C_CONTROL1, DEVICE_DATA, 2);
 }
 
 // Clear the alarm interrupt
-void clockClearAI(void) {
+void clearAI(void) {
   DEVICE_DATA[0] = C_SETTING2 & 0xF7;
-  i2c_write(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
+  writeI2C(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
 }
 
 // Clear the timer interrupt
-void clockClearTI(void) {
+void clearTI(void) {
   DEVICE_DATA[0] = C_SETTING2 & 0xFB;
-  i2c_write(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
+  writeI2C(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
 }
 
 // Set the time from the array to the clock
-void clockSetTime(void) {
-  i2c_write(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
+void setTime(void) {
+  writeI2C(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
 }
 
 // Read the time from the clock into the array
-void clockGetTime(void) {
-  i2c_read(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
+void getTime(void) {
+  readI2C(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
 }
 
 // Set the alarms from the array to the clock
-void clockSetAlrm(void) {
-  i2c_write(RTC_ADDR, C_ALARM_MINUTE, DEVICE_ALRM, 4);
+void setAlarm(void) {
+  writeI2C(RTC_ADDR, C_ALARM_MINUTE, DEVICE_ALRM, 4);
 }

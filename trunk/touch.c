@@ -1,6 +1,7 @@
 #include "derivative.h"
-#include "pins.h"
 #include "touch.h"
+#include "pins.h"
+
 #include "adc.h"
 
 unsigned char isTouched(){
@@ -17,13 +18,12 @@ unsigned char getX(){
   TS_TOP_DIR = 0;
   TS_BOTTOM_DIR = 0;
   
-  TS_LEFT = 1;
-  TS_RIGHT = 0;
+  TS_LEFT = 0;
+  TS_RIGHT = 1;
    
-  //ADCSC = 0x08;
-  //while(ADCSC_COCO == 0);
+  // delay
   
-  return convertADC(TS_X_INPUT);
+  return convertAD(TS_X_INPUT);
 }
 
 unsigned char getY(){
@@ -32,13 +32,12 @@ unsigned char getY(){
   TS_LEFT_DIR = 0;
   TS_RIGHT_DIR = 0;
   
-  TS_BOTTOM = 1;
   TS_TOP = 0;
+  TS_BOTTOM = 1;
   
-  //ADCSC = 0x09; 
-  //while(ADCSC_COCO == 0);
+  // delay
   
-  return convertADC(TS_Y_INPUT);
+  return convertAD(TS_Y_INPUT);
 }
 
 void initializeTS(){

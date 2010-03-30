@@ -1,9 +1,6 @@
 #ifndef RTC_H
 #define RTC_H
 
-#include "derivative.h"
-#include "i2c.h"
-
 // I2C Address
 #define RTC_ADDR    0xA2
 
@@ -34,11 +31,11 @@ extern unsigned char DEVICE_TIME[7];
 extern unsigned char DEVICE_ALRM[4];
 
 // Real time clock functions
-void clockConfig(void);
-void clockClearAI(void);
-void clockClearTI(void);
-void clockSetTime(void);
-void clockGetTime(void);
-void clockSetAlrm(void);
+void configureClock(void);
+void clearAI(void);
+void clearTI(void);
+void setAlrm(void);
+void getTime(void);
+void setTime(void);
 
 #endif

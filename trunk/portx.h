@@ -1,11 +1,8 @@
 #ifndef PORTX_H
 #define PORTX_H
 
-#include "derivative.h"
-#include "i2c.h"
-
 // I2C Address
-#define PORTX_ADDR    0x7E
+#define PORTX_ADDR      0x7E
 
 // Port Expander Initial Setting
 #define P_INIT          0x18  // LCD reset off, font select to 6*8          
@@ -24,9 +21,9 @@
 extern unsigned char PORTX_DATA;
 
 // Port expander functions
-void portxInit(void);
-void portxSet(void);
-void portxOn(unsigned char);
-void portxOff(unsigned char);
+void initPortX(void);
+void setPortX(void);
+void setBitsPortX(unsigned char);
+void clearBitsPortX(unsigned char);
 
 #endif
