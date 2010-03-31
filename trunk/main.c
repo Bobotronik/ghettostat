@@ -42,7 +42,8 @@ void main(void) {
     
     // Poll touchscreen
     if (isTouched()){
-      
+      determineButton();
+      updateScreen();
     }
     __RESET_WATCHDOG(); /* feeds the dog */    
   } /* loop forever */

@@ -111,30 +111,52 @@ void goToGraphic(unsigned char x, unsigned char y){
   setADP(address);
 }
 
-void clearText(){
+void clearText() {
   short unsigned int i;
   setADP(TEXT_HOME);  
   for (i = TEXT_SIZE; i != 0; i--)
     display(0x00);
 }
 
-void clearGraphic(){
+void clearGraphic() {
   short unsigned int i;
   setADP(GRAPHIC_HOME);
   for (i = GRAPHIC_SIZE; i != 0; i--)
     display(0x00); 
 }
-      
-void clearCG(){
+/*
+void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
+  unsigned char i, j;
+  unsigned char textWidth = width/FONT_WIDTH;
+  unsigned char textHeight = height/8;
+  
+  goToText(x/FONT_WIDTH,  y/8);
+  for (i = 0; i < textHeight; i++) {
+    for (j = 0; j < textWidth; j++) {
+      display(0x00);
+    }
+  } 
+  
+  for (i = 0; i < height; i++) {
+    for (j = 0; j < width; j++) {
+      display(0x00);
+    }
+  } 
+  
+  goToGraphic(x, y);
+  
+}
+*/
+void clearScreen(){
+  clearText();
+  clearGraphic();
+}
+    
+void clearCG() {
   unsigned int i;
   setADP(CG_RAM_HOME);
   for(i = 256; i != 0; i--)
     display(0x00);
-}
-
-void clearScreen(){
-  clearText();
-  clearGraphic();
 }
 
 void setPixel(unsigned char x, unsigned char y, unsigned char color){
