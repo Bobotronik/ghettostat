@@ -7,7 +7,7 @@
 #pragma CODE_SEG DEFAULT
 
 unsigned char DEVICE_TIME[7];
-unsigned char DEVICE_ALRM[4];
+unsigned char DEVICE_ALARM[4];
 
 // Set the first two configuration bytes for the clock
 void configureClock(void) {
@@ -40,5 +40,5 @@ void getTime(void) {
 
 // Set the alarms from the array to the clock
 void setAlarm(void) {
-  writeI2C(RTC_ADDR, C_ALARM_MINUTE, DEVICE_ALRM, 4);
+  writeI2C(RTC_ADDR, C_ALARM_MINUTE, DEVICE_ALARM, 4);
 }

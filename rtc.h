@@ -28,13 +28,13 @@
 
 // Global Data Variables
 extern unsigned char DEVICE_TIME[7];
-extern unsigned char DEVICE_ALRM[4];
+extern unsigned char DEVICE_ALARM[4];
 
 // Real time clock functions
 void configureClock(void);
 void clearAI(void);
 void clearTI(void);
-void setAlrm(void);
+void setAlarm(void);
 void getTime(void);
 void setTime(void);
 

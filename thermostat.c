@@ -137,9 +137,11 @@ void updateTemp() {
 
 }
 
-void displayCurrentTemp() {
+void displayTemps() {
   unsigned char quotient;
   unsigned char remainder;
+  
+  getTemp();
   
   quotient = currentTemperature/100;
   remainder = currentTemperature%100;
@@ -155,26 +157,6 @@ void displayCurrentTemp() {
   remainder %= 10;
   printNum(quotient);
   printNum(remainder);
-}
-
-void displaySetTemp() {
-  unsigned char quotient;
-  unsigned char remainder;
-  
-  quotient = currentTemperature/100;
-  remainder = currentTemperature%100;
-  
-  if (quotient == 0) {
-    display(0x00);
-  }
-  else {
-    display(0x11);
-  }
-  
-  quotient = remainder/10;
-  remainder %= 10;
-  display(quotient + 16);  
-  display(remainder + 16);
 }
 
 void updatePeriods() {
@@ -215,4 +197,44 @@ void updateThermometer() {
 }
 
 void drawMainScreen() {
+  // Drawing mode buttons on left side
+  unsigned char i;
+  unsigned char startX = 6;
+  unsigned char startY = 18;
+  unsigned char buttonWidth;
+  unsigned char buttonHeight;
+  
+  for (i = 0; i < 4; i++) {
+    drawBox(startX, startY, buttonWidth, buttonHeight);
+    startY += 24;
+  }
+  
+  goToText(2, 3);
+  printStr("OFF");
+  goToText(2, 6);
+  printStr("HEAT");
+  goToText(2, 9)  ;
+  printStr("COOL");
+  goToText(2, 12);
+  printStr("CIRC");
+   
+}
+
+void detectButtons() {
+  unsigned char xTouch;
+  unsigned char yTouch;
+  
+  // Determin state, then button
+  if (state == MAIN) {
+    xTouch = getX();
+    if (xTouch < ) {
+    
+    }
+    
+    else if (xTouch > ) {
+    
+    }
+    
+    else
+  }
 }
