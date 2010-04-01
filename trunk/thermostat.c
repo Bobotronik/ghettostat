@@ -2,6 +2,8 @@
 #include "thermostat.h"
 
 #include "lcd.h"
+#include "i2cDevices.h"
+
 /*
 ****Features****
 4 time periods per day (fixed number of periods)
@@ -20,15 +22,15 @@ struct period {
   unsigned char startTime;
   unsigned char temperature;
   unsigned char setting;
-}
+};
 
 // 4 periods per program
 struct program {
-  period periods[NUM_PERIODS];
-}
+  struct period periods[NUM_PERIODS];
+};
 
 // 5 program slots available
-program programs[NUM_PROGRAMS];
+struct program programs[NUM_PROGRAMS];
 
 // Which day has which program (0 - numPrograms)
 unsigned char day[7];
@@ -36,17 +38,17 @@ unsigned char day[7];
 // Format of *Period
 // | 7  | 6  | 5  | 4  | 3  | 2  | 1  | 0  |
 //  PRO3 PRO2 PRO1 PRO0 PER3 PER2 PER1 PER0
- 
-unsigned char currentTime;
-unsigned char currentDay;
 
+unsigned char currentTemperature; 
+unsigned char currentTime;
 unsigned char currentPeriod;
+unsigned char currentDay;
 
 unsigned char nextPeriod;
 unsigned char dayOfNextPeriod;
 
-period overridePeriod;
-unsigned char isOverride:
+struct period overridePeriod;
+unsigned char isOverride;
 
 unsigned char state;
 
@@ -69,7 +71,7 @@ void initializeThermostat() {
   programs[0].periods[NIGHT].temperature = 62;
   programs[0].periods[NIGHT].setting = HEAT;
   
-  for (i = 0; i < 7: i++) {
+  for (i = 0; i < 7; i++) {
     day[i] = 0;
   }
 }
@@ -87,7 +89,7 @@ void displayTime() {
   getTime();
   
   // Determine whether AM or PM;
-  temp = DEVICE_TIME[2];
+  temp = RTC_TIME[2];
   if ((temp & 0x20) == 0x00) {
     pm = 0;
     tempTime = 0;
@@ -99,7 +101,7 @@ void displayTime() {
   
   // Determine whether to display nothing or 1
   if ((temp & 0x10) == 0x00) {
-    display(BLANK);
+    display(NOTHING);
   }
   else {
     printNum(1);
@@ -112,7 +114,7 @@ void displayTime() {
   printChar(':');
  
   // Display minutes
-  temp = DEVICE_TIME[1];
+  temp = RTC_TIME[1];
   printNum((temp & 0x70) >> 4);
   printNum(temp & 0x0f);
   tempMinutes = ((temp & 0x70) >> 4)*10;
@@ -147,7 +149,7 @@ void displayTemps() {
   remainder = currentTemperature%100;
   
   if (quotient == 0) {
-    display(BLANK);
+    display(NOTHING);
   }
   else {
     printNum(1);
@@ -163,7 +165,7 @@ void updatePeriods() {
   // Update only applicable if next period is on current day
   if (currentDay == dayOfNextPeriod) {
   
-    if(currentTime >= programs[days[dayOfNextPeriod]].periods[nextPeriod].startTime) {
+    if(currentTime >= programs[day[dayOfNextPeriod]].periods[nextPeriod].startTime) {
       currentPeriod = nextPeriod;
       
       // Updating period
@@ -187,13 +189,13 @@ void updatePeriods() {
       }
       
       // Update thermometer
-      setTemp(programs[days[currentDay]].periods[currentPeriod].temperature);
+      setTemp(programs[day[currentDay]].periods[currentPeriod].temperature);
     }
   }
 }
 
 void updateThermometer() {
-  setTemp(programs[days[currentDay]].periods[currentPeriod].temperature);
+  setTemp(programs[day[currentDay]].periods[currentPeriod].temperature);
 }
 
 void drawMainScreen() {
@@ -225,7 +227,7 @@ void detectButtons() {
   unsigned char yTouch;
   
   // Determin state, then button
-  if (state == MAIN) {
+  /*if (state == MAIN) {
     xTouch = getX();
     if (xTouch < ) {
     
@@ -236,5 +238,5 @@ void detectButtons() {
     }
     
     else
-  }
+  }  */
 }
