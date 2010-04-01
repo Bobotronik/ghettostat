@@ -68,6 +68,11 @@
 
 // Special characters
 #define NOTHING                   0x00
+
+// Touch stuff
+#define MIN_TOUCH     0x02
+#define MAX_TOUCH     0xd0
+
 unsigned char charAbs(short int);
 
 void wait(unsigned char);
@@ -86,14 +91,20 @@ void goToGraphic(unsigned char, unsigned char);
 
 void display(unsigned char);
 void printChar(char);
+void printNum(unsigned char);
 void printStr(char*);
 void clearText();
 void clearGraphic();
-void clearCG();
 void clearScreen();
+void clearCG();
 
 void setPixel(unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
-void initializeDisplay(void);
+unsigned char isTouched();
+unsigned char getX();
+unsigned char getY();
+
+void initializeDisplay();
+void initializeTS();

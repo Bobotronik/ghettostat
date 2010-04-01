@@ -1,35 +1,36 @@
 #include "derivative.h"
-#include "devices.h"
 #include "lcd.h"  
+
 #include "pins.h"
 
-unsigned char charAbs(short int num){
+unsigned char charAbs(short int num) {
   unsigned char absNum;
-  if(num < 0){
+  
+  if (num < 0) {
     num = -num;
     absNum = num & 0xff;
   }
-  else{
+  else {
     absNum = num & 0xff;
   }
+  
   return absNum;
 }
 
 void wait(unsigned char cycles){
-  for (;cycles != 0; cycles--){
+  for (; cycles != 0; cycles--) {
   
   }
 }
 
-unsigned char readStatus(){
+unsigned char readStatus() {
   unsigned char status;
   LCD_DB_DIR = 0x00;
-  
   LCD_CD = 1;
   LCD_RD = 0;
   LCD_WR = 1;
   
-  do{
+  do {
     LCD_CE = 0;
     wait(1);
     status = LCD_DB;
@@ -40,7 +41,7 @@ unsigned char readStatus(){
   return 1;
 }
 
-void writeData(unsigned char data){
+void writeData(unsigned char data) {
   readStatus();
   LCD_DB_DIR = 0xff;
   LCD_DB = data; 
@@ -51,7 +52,7 @@ void writeData(unsigned char data){
   LCD_CE = 1;
 }
 
-unsigned char readData(){
+unsigned char readData() {
   unsigned char data;
   readStatus();
   LCD_DB_DIR = 0x00;
@@ -66,7 +67,7 @@ unsigned char readData(){
   return data; 
 }
 
-void writeCommand(unsigned char command){
+void writeCommand(unsigned char command) {
   readStatus();
   LCD_DB_DIR = 0xff;
   LCD_DB = command;
@@ -77,13 +78,23 @@ void writeCommand(unsigned char command){
   LCD_CE = 1; 
 }
 
-void setADP(unsigned short int ADP){
+void setADP(unsigned short int ADP) {
   writeData(ADP & 0xff);
   writeData(ADP >> 8);
   writeCommand(SET_ADDRESS_POINTER);
 }
 
-void display(unsigned char data){
+void goToText(unsigned char x, unsigned char y) {
+  unsigned short int address = TEXT_HOME + TEXT_AREA*y + x;
+  setADP(address);
+}
+
+void goToGraphic(unsigned char x, unsigned char y) {
+  unsigned short int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
+  setADP(address);
+}
+
+void display(unsigned char data) {
   writeData(data);
   writeCommand(DATA_WRITE_AND_INCREMENT);
 }
@@ -101,27 +112,17 @@ void printStr(char* string) {
   }
 }
 
-void goToText(unsigned char x, unsigned char y){
-  unsigned short int address = TEXT_HOME + TEXT_AREA*y + x;
-  setADP(address);
-}
-
-void goToGraphic(unsigned char x, unsigned char y){
-  unsigned short int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
-  setADP(address);
-}
-
 void clearText() {
   short unsigned int i;
   setADP(TEXT_HOME);  
-  for (i = TEXT_SIZE; i != 0; i--)
+  for (i = 0; i < TEXT_SIZE; i++)
     display(0x00);
 }
 
 void clearGraphic() {
   short unsigned int i;
   setADP(GRAPHIC_HOME);
-  for (i = GRAPHIC_SIZE; i != 0; i--)
+  for (i = 0; i < GRAPHIC_SIZE; i++)
     display(0x00); 
 }
 /*
@@ -147,7 +148,8 @@ void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned c
   
 }
 */
-void clearScreen(){
+
+void clearScreen() {
   clearText();
   clearGraphic();
 }
@@ -155,11 +157,11 @@ void clearScreen(){
 void clearCG() {
   unsigned int i;
   setADP(CG_RAM_HOME);
-  for(i = 256; i != 0; i--)
+  for(i = 0; i < 256; i++)
     display(0x00);
 }
 
-void setPixel(unsigned char x, unsigned char y, unsigned char color){
+void setPixel(unsigned char x, unsigned char y, unsigned char color) {
   unsigned char data;
   unsigned int address = GRAPHIC_HOME + GRAPHIC_AREA*y + x/FONT_WIDTH;
 
@@ -169,25 +171,25 @@ void setPixel(unsigned char x, unsigned char y, unsigned char color){
   data = readData();
 
   if(color)
-    data |= (1 << (FONT_WIDTH - (x % FONT_WIDTH) - 1));
+    data |= (1 << (FONT_WIDTH - (x%FONT_WIDTH) - 1));
   else
-    data &= ~(1 << (FONT_WIDTH - (x % FONT_WIDTH) - 1));
+    data &= ~(1 << (FONT_WIDTH - (x%FONT_WIDTH) - 1));
 
   display(data);
 }
 
-void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1){
+void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
   short int dx, dy, x, y;
   unsigned char lessThan1;
   short int d, delE, delNE;
   
-  if (y0 <= y1){
+  if (y0 <= y1) {
     dx = x1 - x0;
     dy = y1 - y0;
     x = x0;
     y = y0;
   }
-  else{
+  else {
     dx = x0 - x1;
     dy = y0 - y1;
     x = x1;
@@ -204,7 +206,7 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     return;
   }
   
-  if(charAbs(dy) <= charAbs(dx))
+  if (charAbs(dy) <= charAbs(dx))
     lessThan1 == 0;
   else
     lessThan1 == 1;
@@ -215,12 +217,12 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     delE = dy << 1;
     delNE = (dy+dx) << 1;
     
-    if(lessThan1){
-      for(; x <= x1; ){
-        if(d >= 0) {
+    if (lessThan1) {
+      for (; x <= x1; ) {
+        if (d >= 0) {
           d += delE; 
         }
-        else{
+        else {
           d += delNE; 
           y--;
         }
@@ -228,12 +230,12 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
         setPixel(x, y, 1);
       }
     }
-    else{
-      for(; x <= x1; x++){
+    else {
+      for(; x <= x1; x++) {
         if(d >= 0) {
           d += delE; 
         }
-        else{
+        else {
           d += delNE; 
           y--;
         }
@@ -248,12 +250,12 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
     delE = dy << 1;
     delNE = (dy-dx) << 1;
     
-    if(lessThan1){
-      for(; x <= x1; x++){
-        if(d <= 0) {
+    if (lessThan1) {
+      for (; x <= x1; x++) {
+        if (d <= 0) {
           d += delE; 
         }
-        else{
+        else {
           d += delNE; 
           y++;
         }
@@ -261,12 +263,12 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
         setPixel(x, y, 1);
       }   
     }
-    else{
-      for(; x <= x1; x++){
-        if(d <= 0) {
+    else {
+      for (; x <= x1; x++) {
+        if (d <= 0) {
           d += delE; 
         }
-        else{
+        else {
           d += delNE; 
           y++;
         }
@@ -277,14 +279,56 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
   }
 }
 
-void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned char height){
+void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned char height) {
   drawLine(x0, y0, x0+width, y0);
   drawLine(x0+width, y0, x0+width, y0+height);
   drawLine(x0, y0, x0, y0+height);
   drawLine(x0, y0+height, x0+width, y0+height);
 }
 
-void initializeDisplay(){
+unsigned char isTouched(){
+  if (getX() < MIN_TOUCH && getY() < MIN_TOUCH)
+    return 0;
+  return 1;
+}
+
+unsigned char getX(){
+  unsigned char command;
+  
+  TS_LEFT_DIR = 1;
+  TS_RIGHT_DIR = 1;
+  TS_TOP_DIR = 0;
+  TS_BOTTOM_DIR = 0;
+  
+  TS_LEFT = 0;
+  TS_RIGHT = 1;
+   
+  // delay
+  
+  return convertAD(TS_X_INPUT);
+}
+
+unsigned char getY(){
+  TS_TOP_DIR = 1;
+  TS_BOTTOM_DIR = 1;
+  TS_LEFT_DIR = 0;
+  TS_RIGHT_DIR = 0;
+  
+  TS_TOP = 0;
+  TS_BOTTOM = 1;
+  
+  // delay
+  
+  return convertAD(TS_Y_INPUT);
+}
+
+void initializeTS(){
+  // Put ADC high speed mode, input clock / 1, internal clock, 8-bit mode,
+  // short sample time, synchronous clock
+  ADCLK = 0x10;
+}
+
+void initializeDisplay() {
 
   // Set control lines as output
   LCD_CD_DIR = 1;
@@ -293,13 +337,13 @@ void initializeDisplay(){
   LCD_CE_DIR = 1; 
   
   // Set font select to 6
-  portxOff(P_FONTSEL);
+  clearBitsPortX(P_FONTSEL);
   
   // Reset
-  portxOff(P_RESET);
+  clearBitsPortX(P_RESET);
   wait(10);
-  portxOn(P_RESET);
-  wait(20);
+  setBitsPortX(P_RESET);
+  wait(10);
 
   writeData(GRAPHIC_HOME & 0xff);
   writeData(GRAPHIC_HOME >> 8); 

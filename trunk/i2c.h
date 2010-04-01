@@ -5,7 +5,7 @@
 #define BUAD_DIVISOR  0x02
 
 void initI2C(void);
-void writeI2C(unsigned char, unsigned char, unsigned char *, int);
-void readI2C(unsigned char, unsigned char, unsigned char *, int);
+void writeI2C(unsigned char, unsigned char, unsigned char *, unsigned char);
+void readI2C(unsigned char, unsigned char, unsigned char *, unsigned char);
 
 #endif
