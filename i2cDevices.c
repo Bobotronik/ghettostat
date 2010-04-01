@@ -1,65 +1,16 @@
+#include "i2cDevices.h"
 #include "derivative.h"
 #include "i2c.h"
+#include "delay.h"
 
+#pragma DATA_SEG DEFAULT
+#pragma CODE_SEG DEFAULT
+
+unsigned char DEVICE_DATA[2];
+unsigned char RTC_TIME[7];
 unsigned char PORTX_DATA;
-unsigned char DEVICE_TIME[7];
-unsigned char DEVICE_ALARM[4];
 
-/**** Port Expander ****/
-
-void initPortX(void) {
-  writeI2C(PORTX_ADDR, 0x00, DEVICE_DATA, 0);
-}
-
-// Turn specific bits on
-void setBitsPortX(unsigned char bitmask) {
-  PORTX_DATA = PORTX_DATA | bitmask; 
-  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
-}
-
-// Turn specitif bits off
-void clearBitsPortX(unsigned char bitmask) {
-  PORTX_DATA = PORTX_DATA & ~bitmask;
-  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
-}
-
-/**** Real Time Clock ****/
-
-// Set the first two configuration bytes for the clock
-void configureClock(void) {
-  DEVICE_DATA[0] = C_SETTING1;
-  DEVICE_DATA[1] = C_SETTING2;
-  writeI2C(RTC_ADDR, C_CONTROL1, DEVICE_DATA, 2);
-}
-
-// Clear the alarm interrupt
-void clearAI(void) {
-  DEVICE_DATA[0] = C_SETTING2 & 0xF7;
-  writeI2C(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
-}
-
-// Clear the timer interrupt
-void clearTI(void) {
-  DEVICE_DATA[0] = C_SETTING2 & 0xFB;
-  writeI2C(RTC_ADDR, C_CONTROL2, DEVICE_DATA, 1);
-}
-
-// Set the time from the array to the clock
-void setTime(void) {
-  writeI2C(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
-}
-
-// Read the time from the clock into the array
-void getTime(void) {
-  readI2C(RTC_ADDR, C_SECONDS, DEVICE_TIME, 7);
-}
-
-// Set the alarms from the array to the clock
-void setAlarm(void) {
-  writeI2C(RTC_ADDR, C_ALARM_MINUTE, DEVICE_ALARM, 4);
-}
-
-/**** Temperature Sensor ****/
+// Temperature Sensor -------------------------------
 
 // Write the configuration byte to the temperature sensor
 void configureTemp(void) {
@@ -71,7 +22,7 @@ void configureTemp(void) {
 // Start converting
 void startTemp(void) {
  writeI2C(TEMPSENSE_ADDR, T_START, DEVICE_DATA, 0);
- del1m(1000);
+ del1m(1000); // wait 1000 ms for first temperature to be ready
 }
 
 // Stop converting
@@ -87,12 +38,72 @@ unsigned char getTemp(void) {
 
 // Set the high and low registers based on some margin
 void setTemp(unsigned char temp) {
-  DEVICE_DATA[0] = temp - T_MARGIN;
+  DEVICE_DATA[0] = temp -  T_PLUSMINUS;
   DEVICE_DATA[1] = 0x00;
   writeI2C(TEMPSENSE_ADDR, T_TL, DEVICE_DATA, 2);
   del1m(20);
   
-  DEVICE_DATA[0] = temp + T_MARGIN;
+  DEVICE_DATA[0] = temp + T_PLUSMINUS;
   writeI2C(TEMPSENSE_ADDR, T_TH, DEVICE_DATA, 2);
   del1m(20);
+}
+
+// Real Time Clock ----------------------------------
+
+// Set the first two configuration bytes for the clock
+void configureClock(void) {
+  DEVICE_DATA[0] = C_SETTING;
+  writeI2C(RTC_ADDR, C_CONTROL, DEVICE_DATA, 1);
+}
+
+// Set the time from the array to the clock
+void setTime(void) {
+  clearChBit();
+  writeI2C(RTC_ADDR, C_SECONDS, RTC_TIME, 7);
+}
+
+// Set the time from the array to the clock
+// Use only seconds, minutes, hours, and day of the week
+void setTimeMinimal(void) {
+  clearChBit();
+  writeI2C(RTC_ADDR, C_SECONDS, RTC_TIME, 4);
+}
+
+// Read the time from the clock into the array
+void getTime(void) {
+  readI2C(RTC_ADDR, C_SECONDS, RTC_TIME, 7);
+}
+
+void getTimeMinimal(void) {
+  readI2C(RTC_ADDR, C_SECONDS, RTC_TIME, 4);
+}
+
+// Clear the Clock Halt bit 
+void clearChBit(void) {
+  RTC_TIME[0] = RTC_TIME[0] & 0x7F;
+}
+
+// Port Expander ------------------------------------
+
+// Setup the port expander initially
+void initPortX(void) {
+  PORTX_DATA = P_INIT;
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
+}
+
+// Write to the port expander
+void setPortX(void) {
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
+}
+
+// Turn specific bits on
+void setBitsPortX(unsigned char bitmask) {
+  PORTX_DATA = PORTX_DATA | bitmask; 
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
+}
+
+// Turn specific bits off
+void clearBitsPortX(unsigned char bitmask) {
+  PORTX_DATA = PORTX_DATA & ~bitmask;
+  writeI2C(PORTX_ADDR, PORTX_DATA, DEVICE_DATA, 0);
 }
