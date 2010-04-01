@@ -2,6 +2,7 @@
 #include "lcd.h"  
 
 #include "pins.h"
+#include "i2cDevices.h"
 
 unsigned char charAbs(short int num) {
   unsigned char absNum;
