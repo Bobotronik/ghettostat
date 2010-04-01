@@ -2,8 +2,8 @@
 #include "i2c.h"
 
 //i2c_init - Initialize the MMIIC port
-void initI2C(unsigned char bdiv) {
-  MIMCR_MMBR = bdiv;                // Set baud rate divisor
+void initI2C() {
+  MIMCR_MMBR = BUAD_DIVISOR;                // Set baud rate divisor
   MMCR_MMEN = 1;                    // Enable MMIIC
 }
 
