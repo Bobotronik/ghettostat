@@ -1,5 +1,6 @@
-#include "i2cDevices.h"
 #include "derivative.h"
+#include "i2cDevices.h"
+
 #include "i2c.h"
 #include "delay.h"
 

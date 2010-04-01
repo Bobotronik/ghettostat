@@ -1,9 +1,8 @@
 #include "derivative.h"
 #include "humsense.h"
-#include "pins.h"
 
-#include "adc.h"
-#include "bcd.h"
+#include "pins.h"
+#include "functions.h"
 
 unsigned char getHumidityDec(void) {
  int tempHumidity = convertAD(H_CH);

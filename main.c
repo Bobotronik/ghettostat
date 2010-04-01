@@ -6,8 +6,7 @@
 #include "delay.h"
 #include "i2c.h"
 #include "lcd.h"
-#include "rtc.h"
-#include "touch.h"
+#include "functions.h"
 
 #pragma TRAP_PROC
 void thermometerISR(void) {
