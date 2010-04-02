@@ -17,6 +17,7 @@ void writeI2C(unsigned char deviceAddress, unsigned char command, unsigned char 
   MIMCR_MMAST = 1;                  // Start transmission
   while (MMSR_MMRXAK);
 
+  n++;
   while (n > 0) {
     while (!MMSR_MMTXBE);       // Wait for TX buffer empty
     MMDTR = *data++;              // data -> DTR
