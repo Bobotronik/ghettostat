@@ -33,28 +33,29 @@ void sendDataSCI(unsigned char type_byte, unsigned char data_byte) {
   unsigned char counter;
   // Output the dummy byte to ensure proper link
   for (counter=0;counter < NUM_DUMMY; counter++) {
-    sendByteSerial(DUMMY_TX);
+    sendByteSCI(DUMMY_TX);
   }
   
   // Output the next-valid byte
-  sendByteSerial(VALID_TX);
+  sendByteSCI(VALID_TX);
   //Output the type indicator
-  sendByteSerial(type_byte);
+  sendByteSCI(type_byte);
   //Output the data
-  sendByteSerial(data_byte);}
+  sendByteSCI(data_byte);
+}
 
 void receiveDataSCI(unsigned char* data_bytes) {
   unsigned char temp_byte;
   
   // Wait until reaching the next-valid byte
-  temp_byte = receiveByteSerial();
+  temp_byte = receiveByteSCI();
   while (temp_byte != VALID_TX) {
-    temp_byte = receiveByteSerial();
+    temp_byte = receiveByteSCI();
   }
   
   // Store the type byte
-  data_bytes[0] = receiveByteSerial();
+  data_bytes[0] = receiveByteSCI();
   // Store the data byte
-  data_bytes[1] = receiveByteSerial();
+  data_bytes[1] = receiveByteSCI();
 }
   
