@@ -48,9 +48,9 @@
 #define PORTX_ADDR      0x7E
 
 // Bit Masks
-#define P_HEAT          0x01
+#define P_COOL          0x01
 #define P_FAN           0x02
-#define P_COOL          0x04
+#define P_HEAT          0x04
 #define P_RESET         0x08
 #define P_FONTSEL       0x10
 #define P_6             0x20
@@ -77,6 +77,8 @@ void startTemp(void);
 void stopTemp(void);
 unsigned char getTemp(void);
 void setTemp(unsigned char);
+void setTempPolarity(void);
+void clearTempPolarity(void);
 
 // Real Time Clock
 void configureClock(void);

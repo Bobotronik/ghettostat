@@ -49,6 +49,20 @@ void setTemp(unsigned char temp) {
   del1m(20);
 }
 
+// Set the polarity to 1
+void setTempPolarity(void) {
+  DEVICE_DATA[0] = T_SETTING | 0x02;
+  writeI2C(TEMPSENSE_ADDR, T_CONFIG, DEVICE_DATA,1);
+  del1m(20);
+}
+
+// Set the polarity to 0
+void clearTempPolarity(void) {
+  DEVICE_DATA[0] = T_SETTING & ~0x02;
+  writeI2C(TEMPSENSE_ADDR, T_CONFIG, DEVICE_DATA,1);
+  del1m(20);
+}
+
 // Real Time Clock ----------------------------------
 
 // Set the first two configuration bytes for the clock
