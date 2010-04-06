@@ -6,7 +6,7 @@
 
 // Aux Board Functions ------------------------------
 // Disable the pullups and turn off the relays
-void initAux(void) {
+void initAuxRelays(void) {
   AUX_COOL_PULLUP = 1;
   AUX_HEAT_PULLUP = 1;
   AUX_FAN_PULLUP  = 1;
