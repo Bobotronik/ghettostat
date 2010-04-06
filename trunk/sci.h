@@ -9,7 +9,7 @@
 #define S_PEN         0b1   // Enable parity
 #define S_PTY         0b1   // Odd parity
 
-// Settings for BUAD rate
+// Settings for BAUD rate
 // 300bps w/ 9.83 MHz clock)
 #define S_SCP         0b00  //Prescalar = 1
 #define S_SCR         0b111 //Divisor = 128
@@ -19,18 +19,24 @@
 #define S_RE          0b1   // Enable reciever
 
 // Settings for Good Transmission
-#define DUMMY_TX      0xAA
-#define VALID_TX      0xAB
-#define TYPE_CMD      0xAC
-#define TYPE_TEMP     0xAD
+#define DUMMY_TX      0x50
+#define VALID_TX      0xAA
 #define NUM_DUMMY     20
 
-// Data 
+// Settings for Message Types
+#define TYPE_SETTEMP  0x5B
+#define TYPE_GETTEMP  0x5C
 
+// Data
+//extern unsigned char SCI_DATA[4];
+ 
+// Functions
 void initSCI(void);
 void sendByteSCI(unsigned char);
 unsigned char receiveByteSCI(void);
-void sendDataSCI(unsigned char, unsigned char);
-void receiveDataSCI(unsigned char* data_bytes);
+void sendDataSCI(void);
+void receiveDataSCI(void);
+void sendSettings(
+void receiveTemperature
 
 #endif
