@@ -3,6 +3,7 @@
 
 #include "i2c.h"
 #include "delay.h"
+#include "functions.h"
 
 #pragma DATA_SEG DEFAULT
 #pragma CODE_SEG DEFAULT
@@ -31,22 +32,37 @@ void stopTemp(void) {
   writeI2C(TEMPSENSE_ADDR, T_STOP, DEVICE_DATA, 0);
 }
 
-// Return the temperature
-unsigned char getTemp(void) {
-  readI2C(TEMPSENSE_ADDR, T_TEMP, DEVICE_DATA, 2);
-  return DEVICE_DATA[0];
+// Return the temperature in C
+void getTempC(unsigned char * C) {
+  readI2C(TEMPSENSE_ADDR, T_TEMP, DEVICE_DATA,2);
+  C[0] = DEVICE_DATA[0];
+  C[1] = DEVICE_DATA[1];
+}
+
+// Return the temperature in F
+unsigned char getTempF(void) {
+  unsigned char C[2];
+  getTempC(C);
+  return convertCtoF(C);
 }
 
 // Set the high and low registers based on some margin
-void setTemp(unsigned char temp) {
-  DEVICE_DATA[0] = temp -  T_PLUSMINUS;
-  DEVICE_DATA[1] = 0x00;
+void setTempC(unsigned char * temp) {
+  DEVICE_DATA[0] = temp[0] -  T_PLUSMINUS;
+  DEVICE_DATA[1] = temp[1];
   writeI2C(TEMPSENSE_ADDR, T_TL, DEVICE_DATA, 2);
   del1m(20);
   
-  DEVICE_DATA[0] = temp + T_PLUSMINUS;
+  DEVICE_DATA[0] = temp[0] + T_PLUSMINUS;
   writeI2C(TEMPSENSE_ADDR, T_TH, DEVICE_DATA, 2);
   del1m(20);
+}
+
+// Set the high and low registers based on some margin
+void setTempF(unsigned char temp) {
+  unsigned char C[2];
+  convertFtoC(temp, C);
+  setTempC(C);
 }
 
 // Set the polarity to 1

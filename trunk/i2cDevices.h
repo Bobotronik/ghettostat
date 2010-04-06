@@ -75,8 +75,10 @@ extern unsigned char PORTX_DATA;
 void configureTemp(void);
 void startTemp(void);
 void stopTemp(void);
-unsigned char getTemp(void);
-void setTemp(unsigned char);
+void getTempC(unsigned char *);
+unsigned char getTempF(void);
+void setTempC(unsigned char *);
+void setTempF(unsigned char);
 void setTempPolarity(void);
 void clearTempPolarity(void);
 
