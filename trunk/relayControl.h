@@ -15,7 +15,7 @@
 #define AUX_HEAT_PULLUP   PTAPUE_PTAPUE4
 
 // Functions for Aux Board --------------------------
-void initAux(void);
+void initAuxRelays(void);
 void enableAuxCool(void);
 void enableAuxFan(void);
 void enableAuxHeat(void);
