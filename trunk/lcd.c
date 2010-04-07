@@ -103,7 +103,7 @@ void printChar(char character) {
   display(character - 32);
 }
 
-void printNum(unsigned char num) {
+void printNum(int num) {
   unsigned char dividend, remainder, neg;
   
   if (num < 0) {
@@ -124,6 +124,10 @@ void printNum(unsigned char num) {
   
   if (neg)
     display('-');
+}
+
+void printBCD(unsigned char bcd) {
+  display(bcd + 16);
 }
 
 void printStr(char* string) {
