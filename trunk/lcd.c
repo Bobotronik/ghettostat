@@ -179,103 +179,105 @@ void setPixel(unsigned char x, unsigned char y, unsigned char color) {
   display(data);
 }
 
-void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-  short int dx, dy, x, y;
-  unsigned char lessThan1;
-  short int d, delE, delNE;
+void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
+  unsigned char dx, dy, d, delE, delNE, x, y;
   
+  dx = x1 - x0;
+  dy = y1 - y0;
+  x = x0;
+  y = y0;
+  setPixel(x, y, 1);
+
+  // m = [0:1]
+  if ( dy >= -dx && 0 >= dy ) {
+    d = (dy << 1) + dx;
+    delE = dy << 1;
+    delNE = (dy+dx) << 1;
+
+    while(x < x1) {
+      if(d >= 0) {
+        d += delE; 
+        x = x+1;
+      }
+      else{
+        d += delNE; 
+        x = x+1; 
+        y = y-1;
+      }
+      if (doInverse) 
+        setPixel(y, x, 1);
+      else
+        setPixel(x, y, 1);
+    }
+  }
+  // m = [-1:0)
+  else if (dy <= dx && 0 < dy) {
+    d = (dy << 1) - dx;
+    delE = dy << 1;
+    delNE = (dy-dx) << 1;
+
+    while(x < x1) {
+      if(d <= 0) {
+        d += delE; 
+        x = x+1;
+      }
+      else{
+        d += delNE; 
+        x = x+1; 
+        y = y+1;
+      }
+      if (doInverse) 
+        setPixel(y, x, 1);
+      else
+        setPixel(x, y, 1);
+    }
+  }
+}
+
+void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
+  short int dx, dy, y, i, absDy;
+  unsigned char lessThan1;
+
   if (y0 <= y1) {
     dx = x1 - x0;
     dy = y1 - y0;
-    x = x0;
     y = y0;
   }
   else {
     dx = x0 - x1;
     dy = y0 - y1;
-    x = x1;
     y = y1;
   }
-    
-  setPixel(x, y, 1);
-
-  // Draw vertical line
-  if (x0 == x1) {
-    for (; y <= y1; y++) {
-      setPixel(x0, y, 1);
-    } 
-    return;
-  }
   
-  if (charAbs(dy) <= charAbs(dx))
-    lessThan1 == 0;
-  else
-    lessThan1 == 1;
+  if (dy <= charAbs(dx))
+    lessThan1 = 1;
+  else {
+    // Draw vertical line
+    if (x0 == x1) {
+      for (i = 0; i <= dy;) {
+        setPixel(x0, y, 1);
+        i++;
+        y++;
+      } 
+      return;
+    }
+    lessThan1 = 0;
+  }
     
-  // m = [0:1]
-  if ( dy >= -dx && 0 >= dy ) {
-    d = (dy+dx) << 1;
-    delE = dy << 1;
-    delNE = (dy+dx) << 1;
-    
-    if (lessThan1) {
-      for (; x <= x1; ) {
-        if (d >= 0) {
-          d += delE; 
-        }
-        else {
-          d += delNE; 
-          y--;
-        }
-        x++;
-        setPixel(x, y, 1);
-      }
+  if (lessThan1) {
+    if (x0 < x1) {
+      line(x0, y0, x1, y1);
     }
     else {
-      for(; x <= x1; x++) {
-        if(d >= 0) {
-          d += delE; 
-        }
-        else {
-          d += delNE; 
-          y--;
-        }
-        x++;
-        setPixel(y, x, 1);
-      }
+      line(x1, y1, x0, y0);
     }
   }
-  // m = [-1:0)
-  else if (dy <= dx && 0 < dy) {
-    d = (dy-dx) << 1;
-    delE = dy << 1;
-    delNE = (dy-dx) << 1;
-    
-    if (lessThan1) {
-      for (; x <= x1; x++) {
-        if (d <= 0) {
-          d += delE; 
-        }
-        else {
-          d += delNE; 
-          y++;
-        }
-        x++;
-        setPixel(x, y, 1);
-      }   
+  else {
+    if (y0 < y1) {
+      line(y0, x0, y1, x1);
     }
     else {
-      for (; x <= x1; x++) {
-        if (d <= 0) {
-          d += delE; 
-        }
-        else {
-          d += delNE; 
-          y++;
-        }
-        x++;
-        setPixel(y, x, 1);
-      }
+      line(y1, x1, y0, x0);
     }
   }
 }
