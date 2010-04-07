@@ -15,17 +15,15 @@ void thermometerISR(void) {
 
 
 void main(void) {
-
+  unsigned char x, y;
+  
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
   
   CONFIG1_COPD = 1;
   
-  i2c_init((unsigned char)2);
-  tempConfig();
-  tempSet((unsigned char)23);
-  tempStart();
-  portxInit();
+  initI2C();
+  initPortX();
   initializeDisplay();
   
   /*
@@ -38,11 +36,25 @@ void main(void) {
   for(;;) {
     // Poll clock
     getTime();
-    
+    //goToText(2, 6);
+    //printStr("X:          ");
+    //printNum(getX());
+    //goToText(2, 7);
+    //printNum(getY());
+    //printStr("Y:          ");
     // Poll touchscreen
     if (isTouched()){
-      determineButton();
-      updateScreen();
+      x = getX();
+      y = getY();
+      
+      switch (state) {
+        case MAIN:
+          break;
+        case PROGRAM:
+          break;
+        case SETTINGS:
+          break;
+      }
     }
     __RESET_WATCHDOG(); /* feeds the dog */    
   } /* loop forever */
