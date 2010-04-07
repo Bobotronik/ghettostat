@@ -36,10 +36,10 @@
 #define TS_RIGHT_DIR    DDRD_DDRD2
 #define TS_TOP_DIR      DDRD_DDRD3
 #define TS_LEFT_DIR     DDRD_DDRD4
-#define TS_BOTTOM       PTD_PTD1
-#define TS_RIGHT        PTD_PTD2
-#define TS_TOP          PTD_PTD3
-#define TS_LEFT         PTD_PTD4
+#define TS_BOTTOM       PTD_PTD1    //CH10
+#define TS_RIGHT        PTD_PTD2    //CH9
+#define TS_TOP          PTD_PTD3    //CH8
+#define TS_LEFT         PTD_PTD4    //No ADC
 #define TS_X_INPUT      0x08  
 #define TS_Y_INPUT      0x09
 

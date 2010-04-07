@@ -123,7 +123,7 @@ void printNum(int num) {
   } while(dividend != 0);
   
   if (neg)
-    display('-');
+    printChar('-');
 }
 
 void printBCD(unsigned char bcd) {
@@ -203,56 +203,88 @@ void setPixel(unsigned char x, unsigned char y, unsigned char color) {
 }
 
 void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-  unsigned char dx, dy, d, delE, delNE, x, y;
+  unsigned char dx, dy, d, delE, delNE, x, y, lessThan1;
   
   dx = x1 - x0;
   dy = y1 - y0;
   x = x0;
   y = y0;
+  
   setPixel(x, y, 1);
-
+  if (charAbs(dy) <= charAbs(dx)) {
+    lessThan1 = 1; 
+  } 
+  else {
+    lessThan1 = 0;  
+  }
   // m = [0:1]
   if ( dy >= -dx && 0 >= dy ) {
-    d = (dy << 1) + dx;
+    d = (dy << 1) - dx;
     delE = dy << 1;
-    delNE = (dy+dx) << 1;
+    delNE = (dy - dx) << 1;
 
-    while(x < x1) {
-      if(d >= 0) {
-        d += delE; 
-        x = x+1;
-      }
-      else{
-        d += delNE; 
-        x = x+1; 
-        y = y-1;
-      }
-      if (doInverse) 
-        setPixel(y, x, 1);
-      else
+    if (lessThan1) {
+      while(x < x1) {
+        if(d >= 0) {
+          d += delE; 
+          x++;
+        }
+        else{
+          d += delNE; 
+          x++; 
+          y--;
+        }
         setPixel(x, y, 1);
+      }
+    } 
+    else {
+      while(x < x1) {
+        if(d >= 0) {
+          d += delE; 
+          x++;
+        }
+        else{
+          d += delNE; 
+          x++; 
+          y--;
+        }  
+        setPixel(y, x, 1);
+      }
     }
   }
   // m = [-1:0)
   else if (dy <= dx && 0 < dy) {
-    d = (dy << 1) - dx;
+    d = (dy << 1) + dx;
     delE = dy << 1;
-    delNE = (dy-dx) << 1;
+    delNE = (dy + dx) << 1;
 
-    while(x < x1) {
-      if(d <= 0) {
-        d += delE; 
-        x = x+1;
-      }
-      else{
-        d += delNE; 
-        x = x+1; 
-        y = y+1;
-      }
-      if (doInverse) 
-        setPixel(y, x, 1);
-      else
+    if (lessThan1) {
+      while(x < x1) {
+        if(d <= 0) {
+          d += delE; 
+          x++;
+        }
+        else{
+          d += delNE; 
+          x++; 
+          y++;
+        }  
         setPixel(x, y, 1);
+      }
+    }
+    else {
+      while(x < x1) {
+        if(d <= 0) {
+          d += delE; 
+          x++;
+        }
+        else{
+          d += delNE; 
+          x++; 
+          y++;
+        }  
+        setPixel(y, x, 1);
+      }  
     }
   }
 }
@@ -313,7 +345,7 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
 }
 
 unsigned char getX(){
-  unsigned char command;
+  unsigned char x;
   
   TS_LEFT_DIR = 1;
   TS_RIGHT_DIR = 1;
@@ -323,12 +355,15 @@ unsigned char getX(){
   TS_LEFT = 0;
   TS_RIGHT = 1;
    
-  // delay
+  wait(10);
   
-  return convertAD(TS_X_INPUT);
+  x = convertAD(TS_X_INPUT) >> 1;
+  return x;
 }
 
 unsigned char getY(){
+  unsigned char y;
+  
   TS_TOP_DIR = 1;
   TS_BOTTOM_DIR = 1;
   TS_LEFT_DIR = 0;
@@ -337,13 +372,14 @@ unsigned char getY(){
   TS_TOP = 0;
   TS_BOTTOM = 1;
   
-  // delay
+  wait(10);
   
-  return convertAD(TS_Y_INPUT);
+  y = convertAD(TS_Y_INPUT) >> 2;
+  return y;
 }
 
 unsigned char isTouched(){
-  if (getX() < MIN_TOUCH && getY() < MIN_TOUCH)
+  if (getX() == 127)
     return 0;
   return 1;
 }
@@ -363,7 +399,7 @@ void initializeDisplay() {
   LCD_CE_DIR = 1; 
   
   // Set font select to 6
-  clearBitsPortX(P_FONTSEL);
+  setBitsPortX(P_FONTSEL);
   
   // Reset
   clearBitsPortX(P_RESET);
@@ -396,15 +432,18 @@ void initializeDisplay() {
   // Test Program
   clearText();
   clearGraphic();
-  goToText(2, 4);
-  printStr("HELLO WORLD!");
-  goToText(2, 5);
-  printNum(69);
-  goToText(2, 6);
-  printNum(-69);
+  //goToText(2, 4);
+  //printStr("HELLO WORLD!");
+  //goToText(2, 5);
+  //printNum(69);
+  //goToText(2, 6);
+  //printNum(-69);
   //goToText(2, 6);
   //printNum(getX());
   //setPixel(20, 20, 1);
+  drawLine(5, 5, 100, 100);
+  drawLine(10, 10, 230, 100);
+  drawLine(10, 118, 230, 10);
   //drawLine(120, 0, 120, 127);
   //drawBox(9, 9, 219, 117);
   
