@@ -70,10 +70,12 @@
 #define NOTHING                   0x00
 
 // Touch stuff
-#define MIN_X     13
-#define MAX_X     116
-#define MIN_Y     14
-#define MAX_Y     51
+#define MIN_X                     13
+#define MAX_X                     116
+#define MIN_Y                     14
+#define MAX_Y                     51
+#define X_DIFFERENCE              (MAX_X-MIN_X)
+#define Y_DIFFERENCE              (MAX_Y-MIN_Y)
 
 unsigned char charAbs(short int);
 

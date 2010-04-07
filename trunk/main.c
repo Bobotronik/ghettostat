@@ -27,7 +27,7 @@ void main(void) {
   initPortX();
   initializeDisplay();
   
-  drawMainScreen();
+  //drawMainScreen();
   /*
   General Algorightm
   -Check if touched
@@ -35,6 +35,7 @@ void main(void) {
   -Update state and LCD
   
   */
+  state = MAIN;
   for(;;) {
     // Poll clock
     //getTime();
@@ -49,9 +50,20 @@ void main(void) {
     if (isTouched()){
       x = getX();
       y = getY();
+      x = mapToXPixel(x);
+      y = mapToYPixel(y);
       
+      setPixel(x, y, 1);
       switch (state) {
         case MAIN:
+          if (x <= 42) {
+            if (y <= 16) {
+              break; 
+            }
+            else if (y <= 12) {
+                
+            }
+          }
           break;
         case PROGRAM:
           break;
