@@ -2,8 +2,9 @@
 #include "i2c.h"
 
 //i2c_init - Initialize the MMIIC port
-void initI2C(unsigned char bdiv) {
-  MIMCR_MMBR = bdiv;                // Set baud rate divisor
+void initI2C(void) {
+  MIMCR_MMBR = BAUD_DIVISOR;        // Set baud rate divisor
+  CONFIG2_IICSEL = 1;
   MMCR_MMEN = 1;                    // Enable MMIIC
 }
 
@@ -17,7 +18,8 @@ void writeI2C(unsigned char deviceAddress, unsigned char command, unsigned char 
   MIMCR_MMAST = 1;                  // Start transmission
   while (MMSR_MMRXAK);
 
-  while (n >= 0) {
+  n++;
+  while (n > 0) {
     while (!MMSR_MMTXBE);       // Wait for TX buffer empty
     MMDTR = *data++;              // data -> DTR
     while (MMSR_MMRXAK);          // Wait for ACK from slave

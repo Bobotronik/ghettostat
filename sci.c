@@ -41,7 +41,8 @@ void sendDataSCI(unsigned char type_byte, unsigned char data_byte) {
   //Output the type indicator
   sendByteSerial(type_byte);
   //Output the data
-  sendByteSerial(data_byte);}
+  sendByteSerial(data_byte);
+}
 
 void receiveDataSCI(unsigned char* data_bytes) {
   unsigned char temp_byte;
