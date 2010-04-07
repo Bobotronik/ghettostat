@@ -105,8 +105,21 @@ void printChar(char character) {
 }
 
 void printNum(unsigned char num) {
-  display(num + 16);
+  unsigned char modulo;
+  unsigned char neg = 0;
+  if (num < 0)
+    neg = 1;
+  int remainder = num;
+  do {
+    modulo = remainder % 10;
+    remainder /= 10;
+    writeData(modulo + 16);
+    writeCommand(DATA_WRITE_AND_DECREMENT);
+  } while(remainder != 0);
+  if (neg)
+    display('-');
 }
+
 void printStr(char* string) {
   while (*string) {
     display(*string++ - 32);
@@ -375,6 +388,10 @@ void initializeDisplay() {
   clearGraphic();
   goToText(2, 7);
   printStr("HELLO WORLD!");
+  goToText(2, 5);
+  printNum(69);
+  goToText(2, 6);
+  printNum(-69);
   //setPixel(20, 20, 1);
   //drawLine(120, 0, 120, 127);
   //drawBox(9, 9, 219, 117);
