@@ -12,4 +12,7 @@ unsigned char convertDecToBCD(unsigned char);
 unsigned char convertCtoF(unsigned char *);
 void convertFtoC(unsigned char, unsigned char *);
 
+unsigned char mapToXPixel(unsigned char);
+unsigned char mapToYPixel(unsigned char);
+
 #endif

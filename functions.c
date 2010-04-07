@@ -2,7 +2,8 @@
 #include "functions.h"
 
 #include "pins.h"
-
+#include "lcd.h"
+         
 void initADC(void) {
   ADCLK_ACLKEN =  0; // Internal bus clock
   ADCLK_ADLSMP =  1; // Long sample time
@@ -58,4 +59,16 @@ void convertFtoC(unsigned char F, unsigned char * C) {
   } else {
     C[1] = 0x80;
   }
+}
+
+unsigned char mapToXPixel(unsigned char data) {
+  unsigned char pixel;
+  pixel = (data - MIN_X)*LCD_WIDTH/X_DIFFERENCE;
+  return pixel;
+}
+
+unsigned char mapToYPixel(unsigned char data) {
+  unsigned char pixel;
+  pixel = (data - MIN_Y)*LCD_HEIGHT/Y_DIFFERENCE; 
+  return pixel; 
 }

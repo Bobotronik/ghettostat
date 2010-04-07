@@ -203,7 +203,8 @@ void setPixel(unsigned char x, unsigned char y, unsigned char color) {
 }
 
 void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-  unsigned char dx, dy, d, delE, delNE, x, y, lessThan1;
+  unsigned char lessThan1, x, y;
+  int dx, dy, d, delE, delNE;
   
   dx = x1 - x0;
   dy = y1 - y0;
@@ -355,7 +356,7 @@ unsigned char getX(){
   TS_LEFT = 0;
   TS_RIGHT = 1;
    
-  wait(10);
+  wait(100);
   
   x = convertAD(TS_X_INPUT) >> 1;
   return x;
@@ -372,7 +373,7 @@ unsigned char getY(){
   TS_TOP = 0;
   TS_BOTTOM = 1;
   
-  wait(10);
+  wait(100);
   
   y = convertAD(TS_Y_INPUT) >> 2;
   return y;
@@ -441,9 +442,9 @@ void initializeDisplay() {
   //goToText(2, 6);
   //printNum(getX());
   //setPixel(20, 20, 1);
-  drawLine(5, 5, 100, 100);
-  drawLine(10, 10, 230, 100);
-  drawLine(10, 118, 230, 10);
+  //drawLine(5, 5, 100, 100);
+  //drawLine(10, 10, 230, 100);
+  //drawLine(10, 118, 230, 10);
   //drawLine(120, 0, 120, 127);
   //drawBox(9, 9, 219, 117);
   
