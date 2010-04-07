@@ -222,7 +222,7 @@ void drawMainScreen() {
    
 }
 
-void detectButtons() {
+void determineButtons() {
   unsigned char xTouch;
   unsigned char yTouch;
   

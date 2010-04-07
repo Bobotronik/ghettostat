@@ -1,6 +1,7 @@
 #include "derivative.h"
 #include "lcd.h"  
 
+#include "functions.h"
 #include "pins.h"
 #include "i2cDevices.h"
 
@@ -19,9 +20,7 @@ unsigned char charAbs(short int num) {
 }
 
 void wait(unsigned char cycles){
-  for (; cycles != 0; cycles--) {
-  
-  }
+  for (; cycles != 0; cycles--);
 }
 
 unsigned char readStatus() {
@@ -105,17 +104,24 @@ void printChar(char character) {
 }
 
 void printNum(unsigned char num) {
-  unsigned char modulo;
-  unsigned char neg = 0;
-  if (num < 0)
+  unsigned char dividend, remainder, neg;
+  
+  if (num < 0) {
+    dividend = -num;
     neg = 1;
-  int remainder = num;
+  }
+  else {
+    dividend = num;
+    neg = 0;
+  }
+  
   do {
-    modulo = remainder % 10;
-    remainder /= 10;
-    writeData(modulo + 16);
+    remainder = dividend % 10;
+    dividend /= 10;
+    writeData(remainder + 16);
     writeCommand(DATA_WRITE_AND_DECREMENT);
-  } while(remainder != 0);
+  } while(dividend != 0);
+  
   if (neg)
     display('-');
 }
@@ -185,9 +191,9 @@ void setPixel(unsigned char x, unsigned char y, unsigned char color) {
   data = readData();
 
   if(color)
-    data |= (1 << (FONT_WIDTH - (x%FONT_WIDTH) - 1));
+    data |= (1 << (FONT_WIDTH - (x % FONT_WIDTH) - 1));
   else
-    data &= ~(1 << (FONT_WIDTH - (x%FONT_WIDTH) - 1));
+    data &= ~(1 << (FONT_WIDTH - (x % FONT_WIDTH) - 1));
 
   display(data);
 }
@@ -296,16 +302,10 @@ void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned cha
 }
 
 void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned char height) {
-  drawLine(x0, y0, x0+width, y0);
-  drawLine(x0+width, y0, x0+width, y0+height);
-  drawLine(x0, y0, x0, y0+height);
-  drawLine(x0, y0+height, x0+width, y0+height);
-}
-
-unsigned char isTouched(){
-  if (getX() < MIN_TOUCH && getY() < MIN_TOUCH)
-    return 0;
-  return 1;
+  drawLine(x0, y0, x0+width-1, y0);
+  drawLine(x0+width-1, y0, x0+width-1, y0+height-1);
+  drawLine(x0, y0, x0, y0+height-1);
+  drawLine(x0, y0+height-1, x0+width-1, y0+height-1);
 }
 
 unsigned char getX(){
@@ -336,6 +336,12 @@ unsigned char getY(){
   // delay
   
   return convertAD(TS_Y_INPUT);
+}
+
+unsigned char isTouched(){
+  if (getX() < MIN_TOUCH && getY() < MIN_TOUCH)
+    return 0;
+  return 1;
 }
 
 void initializeTS(){
@@ -386,12 +392,14 @@ void initializeDisplay() {
   // Test Program
   clearText();
   clearGraphic();
-  goToText(2, 7);
+  goToText(2, 4);
   printStr("HELLO WORLD!");
   goToText(2, 5);
   printNum(69);
   goToText(2, 6);
   printNum(-69);
+  //goToText(2, 6);
+  //printNum(getX());
   //setPixel(20, 20, 1);
   //drawLine(120, 0, 120, 127);
   //drawBox(9, 9, 219, 117);
