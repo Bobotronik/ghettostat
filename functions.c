@@ -25,37 +25,3 @@ unsigned char convertDecToBCD(unsigned char value) {
   result += ((value - result)/10 << 4);
   return result;  // Result is BCD
 }
-
-// Convert Celsius to Fahrenheit
-unsigned char convertCtoF(unsigned char * C) {
-  unsigned int F;
-  unsigned char temp;
-  
-  C[1] = C[1] >> 7;
-  F = (unsigned int) C[0]*90/5 + 9*C[1] + 320;
-  temp = F % 10;
-  if( temp < 5 )
-    temp = 0;
-  else
-    temp = 1;
-  F = F/10 + temp;
-  return (unsigned char) F;
-}
-
-// Convert Fahrenheit to Celsius
-void convertFtoC(unsigned char F, unsigned char * C) {
-  unsigned int Ctemp;
-  unsigned char temp;
-  
-  Ctemp = ((unsigned int) F - 32)*50/9;  
-  temp = Ctemp % 10;
-  C[0] = Ctemp / 10;
-  if( temp < 3 ) {
-    C[1] = 0;
-  } else if( temp > 6 ) {
-    C[1] = 0;
-    C[0]++;
-  } else {
-    C[1] = 0x80;
-  }
-}

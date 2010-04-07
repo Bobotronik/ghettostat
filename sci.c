@@ -1,8 +1,6 @@
 #include "derivative.h"
 #include "sci.h"
 
-//unsigned char SCI_DATA[4];
-
 void initSCI(void) {
     SCC1_LOOPS  = S_LOOPS;
     SCC1_ENSCI  = S_ENSCI;
@@ -30,46 +28,33 @@ unsigned char receiveByteSCI(void) {
   return SCDR;
 }
 
-// Output
-void sendDataSCI(void) {
+// Output a combination TYPE byte and DATA byte 
+void sendDataSCI(unsigned char type_byte, unsigned char data_byte) {
   unsigned char counter;
   // Output the dummy byte to ensure proper link
   for (counter=0;counter < NUM_DUMMY; counter++) {
-    sendByteSCI(DUMMY_TX);
+    sendByteSerial(DUMMY_TX);
   }
   
   // Output the next-valid byte
-  sendByteSCI(VALID_TX);
-  // Output the type byte
-  sendByteSCI(SCI_DATA[3]);
-  // If setting the temperature, output the data bytes
-  if( type_byte == TYPE_SETTEMP) {
-    sendByteSCI(SCI_DATA[0]);
-    sendByteSCI(SCI_DATA[1]);
-    //Output the command byte
-    sendByteSCI(SCI_DATA[2]);
-  } else {
-    sendByteSCI(DUMMY_TX);
-    sendByteSCI(DUMMY_TX);
-    sendByteSCI(DUMMY_TX);
-  }
-}
+  sendByteSerial(VALID_TX);
+  //Output the type indicator
+  sendByteSerial(type_byte);
+  //Output the data
+  sendByteSerial(data_byte);}
 
-void receiveDataSCI(void) {
+void receiveDataSCI(unsigned char* data_bytes) {
   unsigned char temp_byte;
   
   // Wait until reaching the next-valid byte
-  temp_byte = receiveByteSCI();
+  temp_byte = receiveByteSerial();
   while (temp_byte != VALID_TX) {
-    temp_byte = receiveByteSCI();
+    temp_byte = receiveByteSerial();
   }
- 
+  
   // Store the type byte
-  SCI_DATA[3] = receiveByteSCI();
-  // Store the temperature bytes
-  SCI_DATA[0] = receiveByteSCI();
-  SCI_DATA[1] = receiveByteSCI();
-  // Store the command byte
-  SCI_DATA[2] = receiveByteSCI();
+  data_bytes[0] = receiveByteSerial();
+  // Store the data byte
+  data_bytes[1] = receiveByteSerial();
 }
   
