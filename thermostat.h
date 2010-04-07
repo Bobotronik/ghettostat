@@ -15,6 +15,10 @@
 #define NUM_PERIODS   4
 #define NUM_PROGRAMS  5
 
+#define MAIN        0
+#define PROGRAM     1
+#define SETTINGS    2
+
 void initializeThermostat();
 
 void displayTime();

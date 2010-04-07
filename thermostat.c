@@ -203,8 +203,8 @@ void drawMainScreen() {
   unsigned char i;
   unsigned char startX = 6;
   unsigned char startY = 18;
-  unsigned char buttonWidth;
-  unsigned char buttonHeight;
+  unsigned char buttonWidth = 36;
+  unsigned char buttonHeight = 20;
   
   for (i = 0; i < 4; i++) {
     drawBox(startX, startY, buttonWidth, buttonHeight);

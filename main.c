@@ -7,15 +7,16 @@
 #include "i2c.h"
 #include "lcd.h"
 #include "functions.h"
+#include "thermostat.h"
 
 #pragma TRAP_PROC
-void thermometerISR(void) {
+void dummyISR(void) {
 
 }
 
 
 void main(void) {
-  unsigned char x, y;
+  unsigned char state, x, y;
   
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
@@ -26,6 +27,7 @@ void main(void) {
   initPortX();
   initializeDisplay();
   
+  drawMainScreen();
   /*
   General Algorightm
   -Check if touched
@@ -35,11 +37,12 @@ void main(void) {
   */
   for(;;) {
     // Poll clock
-    getTime();
-    //goToText(2, 6);
+    //getTime();
+    //clearText();
+    //goToText(20, 6);
     //printStr("X:          ");
     //printNum(getX());
-    //goToText(2, 7);
+    //goToText(20, 7);
     //printNum(getY());
     //printStr("Y:          ");
     // Poll touchscreen

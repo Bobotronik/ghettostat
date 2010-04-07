@@ -70,8 +70,10 @@
 #define NOTHING                   0x00
 
 // Touch stuff
-#define MIN_TOUCH     0x02
-#define MAX_TOUCH     0xd0
+#define MIN_X     13
+#define MAX_X     116
+#define MIN_Y     14
+#define MAX_Y     51
 
 unsigned char charAbs(short int);
 
@@ -99,7 +101,7 @@ void clearGraphic();
 void clearScreen();
 void clearCG();
 
-void setPixel(unsigned char, unsigned char);
+void setPixel(unsigned char, unsigned char, unsigned char);
 void line(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
