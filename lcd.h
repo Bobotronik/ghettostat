@@ -91,7 +91,8 @@ void goToGraphic(unsigned char, unsigned char);
 
 void display(unsigned char);
 void printChar(char);
-void printNum(unsigned char);
+void printNum(int);
+void printBCD(unsigned char);
 void printStr(char*);
 void clearText();
 void clearGraphic();
