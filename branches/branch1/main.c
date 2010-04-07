@@ -5,6 +5,7 @@
 
 #include "delay.h"
 #include "i2c.h"
+#include "i2cDevices.h"
 #include "lcd.h"
 #include "functions.h"
 
@@ -21,11 +22,8 @@ void main(void) {
   
   CONFIG1_COPD = 1;
   
-  i2c_init((unsigned char)2);
-  tempConfig();
-  tempSet((unsigned char)23);
-  tempStart();
-  portxInit();
+  initI2C();
+  initPortX();
   initializeDisplay();
   
   /*
@@ -40,10 +38,10 @@ void main(void) {
     getTime();
     
     // Poll touchscreen
-    if (isTouched()){
+    /*if (isTouched()){
       determineButton();
       updateScreen();
-    }
+    }     */
     __RESET_WATCHDOG(); /* feeds the dog */    
   } /* loop forever */
   /* please make sure that you never leave main */
