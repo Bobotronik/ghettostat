@@ -43,7 +43,7 @@ void sendDataSCI(void) {
   // Output the type byte
   sendByteSCI(SCI_DATA[3]);
   // If setting the temperature, output the data bytes
-  if( type_byte == TYPE_SETTEMP) {
+  if( SCI_DATA[3] == TYPE_SETTEMP) {
     sendByteSCI(SCI_DATA[0]);
     sendByteSCI(SCI_DATA[1]);
     //Output the command byte
