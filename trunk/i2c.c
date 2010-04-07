@@ -3,7 +3,8 @@
 
 //i2c_init - Initialize the MMIIC port
 void initI2C(void) {
-  MIMCR_MMBR = BAUD_DIVISOR;                // Set baud rate divisor
+  MIMCR_MMBR = BAUD_DIVISOR;        // Set baud rate divisor
+  CONFIG2_IICSEL = 1;               // IIC on PTA2,3
   MMCR_MMEN = 1;                    // Enable MMIIC
 }
 
