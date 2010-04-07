@@ -99,6 +99,7 @@ void clearScreen();
 void clearCG();
 
 void setPixel(unsigned char, unsigned char);
+void line(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
