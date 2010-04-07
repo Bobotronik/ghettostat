@@ -1,7 +1,7 @@
 #include "derivative.h"
 #include "sci.h"
 
-//unsigned char SCI_DATA[4];
+unsigned char SCI_DATA[4];
 
 void initSCI(void) {
     SCC1_LOOPS  = S_LOOPS;

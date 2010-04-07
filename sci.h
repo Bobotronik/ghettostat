@@ -28,7 +28,7 @@
 #define TYPE_GETTEMP  0x5C
 
 // Data
-//extern unsigned char SCI_DATA[4];
+extern unsigned char SCI_DATA[4];
  
 // Functions
 void initSCI(void);
@@ -36,7 +36,5 @@ void sendByteSCI(unsigned char);
 unsigned char receiveByteSCI(void);
 void sendDataSCI(void);
 void receiveDataSCI(void);
-void sendSettings(
-void receiveTemperature
 
 #endif
