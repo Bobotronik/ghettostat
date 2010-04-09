@@ -36,5 +36,7 @@ void sendByteSCI(unsigned char);
 unsigned char receiveByteSCI(void);
 void sendDataSCI(void);
 void receiveDataSCI(void);
+void receiveTempC(unsigned char * C);
+void sendTempC(void);
 
 #endif
