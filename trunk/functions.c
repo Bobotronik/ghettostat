@@ -73,18 +73,6 @@ unsigned char mapToYPixel(unsigned char data) {
   return pixel; 
 }
 
-void bubbleSort(unsigned char* array, unsigned char size) {
-  unsigned char temp, i, swapped;
-  
-  do {
-    swapped = 0;
-    for (i = 0; i < size - 1; i++) {  
-      if (array[i] > array[i + 1]) {
-        temp = array[i];
-        array[i] = array[i + 1];
-        array[i + 1] = temp;
-        swapped = 1;
-      }
-    }
-  } while (swapped); 
+char compare(unsigned char* a, unsigned char* b) {
+  return *a - *b;
 }

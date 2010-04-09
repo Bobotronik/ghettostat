@@ -4,6 +4,7 @@
 #include "functions.h"
 #include "pins.h"
 #include "i2cDevices.h"
+#include <stdlib.h>
 
 const unsigned char degree[] = {0x08, 0x14, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00};
 const unsigned char largeDegree[] = {0x0c, 0x12, 0x21, 0x21, 0x12, 0x0c, 0x00, 0x00};
@@ -11,16 +12,16 @@ const unsigned char upperLeftCorner[] = {0x00, 0x00, 0x03, 0x0c, 0x10, 0x10, 0x2
 const unsigned char upperRightCorner[] = {0x00, 0x00, 0x30, 0x0c, 0x02, 0x02, 0x01, 0x01};
 const unsigned char lowerLeftCorner[] = {0x20, 0x20, 0x10, 0x10, 0x0c, 0x03, 0x00, 0x00};
 const unsigned char lowerRightCorner[] = {0x01, 0x01, 0x02, 0x02, 0x0c, 0x30, 0x00, 0x00};
-const unsigned char largeZero[] = {};
-const unsigned char largeOne[] = {};
-const unsigned char largeTwo[] = {};
-const unsigned char largeThree[] = {};
-const unsigned char largeFour[] = {};
-const unsigned char largefive[] = {};
-const unsigned char largeSix[] = {};
-const unsigned char largeSeven[] = {};
-const unsigned char largeEight[] = {};
-const unsigned char largeNine[] = {};
+const unsigned char largeZero[] = {0x00};
+const unsigned char largeOne[] = {0x00};
+const unsigned char largeTwo[] = {0x00};
+const unsigned char largeThree[] = {0x00};
+const unsigned char largeFour[] = {0x00};
+const unsigned char largefive[] = {0x00};
+const unsigned char largeSix[] = {0x00};
+const unsigned char largeSeven[] = {0x00};
+const unsigned char largeEight[] = {0x00};
+const unsigned char largeNine[] = {0x00};
 
 unsigned char charAbs(int num) {
   unsigned char absNum;
@@ -118,6 +119,15 @@ void display(unsigned char data) {
 
 void printChar(char character) {
   display(character - 32);
+}
+
+void printLargeChar(unsigned char x, unsigned char y, char character) {
+  goToText(x, y);
+  display(character);
+  display(character + 1);
+  goToText(x, y+1);
+  display(character + 2);
+  display(character + 3);
 }
 
 void printCG(char character) {
@@ -367,7 +377,8 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
 }
 
 unsigned char getX(){
-  unsigned char x;
+  unsigned char x[9];
+  unsigned char i;
   
   TS_LEFT_DIR = 1;
   TS_RIGHT_DIR = 1;
@@ -379,8 +390,12 @@ unsigned char getX(){
    
   wait(100);
   
-  x = convertAD(TS_X_INPUT) >> 1;
-  return x;
+  for (i = 0; i < 9; i++) {
+    x[i] = convertAD(TS_X_INPUT) >> 1;  
+    wait(100);
+  }
+  qsort(x, 9, sizeof(unsigned char), compare);
+  return x[4];
 }
 
 unsigned char getY(){

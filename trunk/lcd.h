@@ -107,7 +107,7 @@ void goToGraphic(unsigned char, unsigned char);
 void display(unsigned char);
 void printChar(char);
 void printCG(char);
-void displayLargeChar(unsigned char);
+void printLargeChar(unsigned char);
 void printNum(int);
 void printBCD(unsigned char);
 void printStr(char*);
