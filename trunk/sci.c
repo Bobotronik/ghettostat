@@ -1,5 +1,6 @@
 #include "derivative.h"
 #include "sci.h"
+#include "i2cDevices.h"
 
 unsigned char SCI_DATA[4];
 
@@ -72,4 +73,21 @@ void receiveDataSCI(void) {
   // Store the command byte
   SCI_DATA[2] = receiveByteSCI();
 }
+
+void receiveTempC(unsigned char * C) {
+  // Tell the small board to send the temp back
+  SCI_DATA[3] = TYPE_GETTEMP;
+  sendDataSCI();
   
+  // Get back the temp from the smallboard
+  receiveDataSCI();
+  C[0] = SCI_DATA[0];
+  C[1] = SCI_DATA[1];
+}
+
+void sendTempC(void) {
+  getTempC(SCI_DATA);
+  SCI_DATA[3] = TYPE_SETTEMP;
+  sendDataSCI();
+}
+    
