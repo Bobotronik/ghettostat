@@ -30,4 +30,8 @@ void updateThermometer();
 void createProgram();
 void deleteProgram();
 
+void drawButton();
+void drawMainScreen();
+void drawProgramScreen();
+void drawSettingsScreen();
 

@@ -80,17 +80,21 @@
 // 1 6x8 pixel character = 2.7mm x 3.6mm
 
 // Special characters
-#define NOTHING                   0x00
-#define FULL                      
-#define UPPER_LEFT_CORNER         0x80
-#define UPPER_RIGHT_CORNER        0x81
-#define LOWER_LEFT_CORNER         0x82
-#define LOWER_RIGHT_CORNER        0x83
-#define DEGREE                    0x84
+#define BLOCK                     0x80
+#define DEGREE                    0x81
+#define LARGE_DEGREE              0x82      
+#define UPPER_LEFT_CORNER         0x83
+#define UPPER_RIGHT_CORNER        0x84
+#define LOWER_LEFT_CORNER         0x85
+#define LOWER_RIGHT_CORNER        0x86
+#define TOP                       0x87
+#define BOTTOM                    0x88
+#define LEFT                      0x89
+#define RIGHT                     0x90
 
 unsigned char charAbs(int);
 
-void wait(unsigned char);
+void wait(unsigned int);
 unsigned char readStatus();
 void writeData(unsigned char);
 unsigned char readData();
@@ -105,8 +109,8 @@ void goToText(unsigned char, unsigned char);
 void goToGraphic(unsigned char, unsigned char);
 
 void display(unsigned char);
-void printChar(char);
-void printCG(char);
+void printChar(unsigned char);
+void printCG(unsigned char);
 void printLargeChar(unsigned char);
 void printNum(int);
 void printBCD(unsigned char);

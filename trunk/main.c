@@ -72,8 +72,10 @@ void main(void) {
         }
       }
     }
+    if (justTouched) {
+      justTouched--;
+    }
     __RESET_WATCHDOG(); /* feeds the dog */   
-    justTouched--; 
   } /* loop forever */
   /* please make sure that you never leave main */
 }
