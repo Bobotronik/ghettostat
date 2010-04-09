@@ -66,8 +66,7 @@
 #define SCREEN_PEEK               0xe0
 #define SCREEN_COPY               0xe8
 
-// Special characters
-#define NOTHING                   0x00
+#define CHAR_SHIFT                3
 
 // Touch stuff
 #define MIN_X                     13
@@ -77,12 +76,24 @@
 #define X_DIFFERENCE              (MAX_X-MIN_X)
 #define Y_DIFFERENCE              (MAX_Y-MIN_Y)
 
-unsigned char charAbs(short int);
+// Dot pitch = 0.45mm
+// 1 6x8 pixel character = 2.7mm x 3.6mm
+
+// Special characters
+#define NOTHING                   0x00
+#define FULL                      
+#define UPPER_LEFT_CORNER         0x80
+#define UPPER_RIGHT_CORNER        0x81
+#define LOWER_LEFT_CORNER         0x82
+#define LOWER_RIGHT_CORNER        0x83
+#define DEGREE                    0x84
+
+unsigned char charAbs(int);
 
 void wait(unsigned char);
-unsigned char readStatus(void);
+unsigned char readStatus();
 void writeData(unsigned char);
-unsigned char readData(void);
+unsigned char readData();
 void writeCommand(unsigned char);
 
 void setADP(short unsigned int);
@@ -95,22 +106,25 @@ void goToGraphic(unsigned char, unsigned char);
 
 void display(unsigned char);
 void printChar(char);
+void printCG(char);
+void displayLargeChar(unsigned char);
 void printNum(int);
 void printBCD(unsigned char);
 void printStr(char*);
-void clearText(void);
-void clearGraphic(void);
-void clearScreen(void);
-void clearCG(void);
+void clearText();
+void clearGraphic();
+void clearScreen();
+void clearCG();
 
 void setPixel(unsigned char, unsigned char, unsigned char);
 void line(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
-unsigned char isTouched(void);
-unsigned char getX(void);
-unsigned char getY(void);
+unsigned char isTouched();
+unsigned char getX();
+unsigned char getY();
 
-void initializeDisplay(void);
-void initializeTS(void);
+void initializeCG();
+void initializeTS();
+void initializeDisplay();

@@ -5,7 +5,24 @@
 #include "pins.h"
 #include "i2cDevices.h"
 
-unsigned char charAbs(short int num) {
+const unsigned char degree[] = {0x08, 0x14, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00};
+const unsigned char largeDegree[] = {0x0c, 0x12, 0x21, 0x21, 0x12, 0x0c, 0x00, 0x00};
+const unsigned char upperLeftCorner[] = {0x00, 0x00, 0x03, 0x0c, 0x10, 0x10, 0x20, 0x20};
+const unsigned char upperRightCorner[] = {0x00, 0x00, 0x30, 0x0c, 0x02, 0x02, 0x01, 0x01};
+const unsigned char lowerLeftCorner[] = {0x20, 0x20, 0x10, 0x10, 0x0c, 0x03, 0x00, 0x00};
+const unsigned char lowerRightCorner[] = {0x01, 0x01, 0x02, 0x02, 0x0c, 0x30, 0x00, 0x00};
+const unsigned char largeZero[] = {};
+const unsigned char largeOne[] = {};
+const unsigned char largeTwo[] = {};
+const unsigned char largeThree[] = {};
+const unsigned char largeFour[] = {};
+const unsigned char largefive[] = {};
+const unsigned char largeSix[] = {};
+const unsigned char largeSeven[] = {};
+const unsigned char largeEight[] = {};
+const unsigned char largeNine[] = {};
+
+unsigned char charAbs(int num) {
   unsigned char absNum;
   
   if (num < 0) {
@@ -23,7 +40,7 @@ void wait(unsigned char cycles){
   for (; cycles != 0; cycles--);
 }
 
-unsigned char readStatus(void) {
+unsigned char readStatus() {
   unsigned char status;
   LCD_DB_DIR = 0x00;
   LCD_CD = 1;
@@ -52,7 +69,7 @@ void writeData(unsigned char data) {
   LCD_CE = 1;
 }
 
-unsigned char readData(void) {
+unsigned char readData() {
   unsigned char data;
   readStatus();
   LCD_DB_DIR = 0x00;
@@ -103,6 +120,10 @@ void printChar(char character) {
   display(character - 32);
 }
 
+void printCG(char character) {
+  display(character); 
+}
+
 void printNum(int num) {
   unsigned char dividend, remainder, neg;
   
@@ -136,14 +157,14 @@ void printStr(char* string) {
   }
 }
 
-void clearText(void) {
+void clearText() {
   short unsigned int i;
   setADP(TEXT_HOME);  
   for (i = 0; i < TEXT_SIZE; i++)
     display(0x00);
 }
 
-void clearGraphic(void) {
+void clearGraphic() {
   short unsigned int i;
   setADP(GRAPHIC_HOME);
   for (i = 0; i < GRAPHIC_SIZE; i++)
@@ -173,12 +194,12 @@ void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned c
 }
 */
 
-void clearScreen(void) {
+void clearScreen() {
   clearText();
   clearGraphic();
 }
     
-void clearCG(void) {
+void clearCG() {
   unsigned int i;
   setADP(CG_RAM_HOME);
   for(i = 0; i < 256; i++)
@@ -220,9 +241,9 @@ void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1
   }
   // m = [0:1]
   if ( dy >= -dx && 0 >= dy ) {
-    d = (dy << 1) - dx;
+    d = (dy << 1) + dx;
     delE = dy << 1;
-    delNE = (dy - dx) << 1;
+    delNE = (dy + dx) << 1;
 
     if (lessThan1) {
       while(x < x1) {
@@ -255,9 +276,9 @@ void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1
   }
   // m = [-1:0)
   else if (dy <= dx && 0 < dy) {
-    d = (dy << 1) + dx;
+    d = (dy << 1) - dx;
     delE = dy << 1;
-    delNE = (dy + dx) << 1;
+    delNE = (dy - dx) << 1;
 
     if (lessThan1) {
       while(x < x1) {
@@ -291,8 +312,8 @@ void line(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1
 }
 
 void drawLine(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1) {
-  short int dx, dy, y, i, absDy;
-  unsigned char lessThan1;
+  int dx, dy;
+  unsigned char lessThan1, y, i;
 
   if (y0 <= y1) {
     dx = x1 - x0;
@@ -345,7 +366,7 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
   drawLine(x0, y0+height-1, x0+width-1, y0+height-1);
 }
 
-unsigned char getX(void){
+unsigned char getX(){
   unsigned char x;
   
   TS_LEFT_DIR = 1;
@@ -362,7 +383,7 @@ unsigned char getX(void){
   return x;
 }
 
-unsigned char getY(void){
+unsigned char getY(){
   unsigned char y;
   
   TS_TOP_DIR = 1;
@@ -379,19 +400,53 @@ unsigned char getY(void){
   return y;
 }
 
-unsigned char isTouched(void){
+unsigned char isTouched(){
   if (getX() == 127)
     return 0;
   return 1;
 }
 
-void initializeTS(void){
+void initializeCG() {
+  unsigned char i;
+  
+  setADP(CG_RAM_HOME | (UPPER_LEFT_CORNER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(upperLeftCorner[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  
+  setADP(CG_RAM_HOME | (UPPER_RIGHT_CORNER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(upperRightCorner[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  
+  setADP(CG_RAM_HOME | (LOWER_LEFT_CORNER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(lowerLeftCorner[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  
+  setADP(CG_RAM_HOME | (LOWER_RIGHT_CORNER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(lowerRightCorner[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  
+  setADP(CG_RAM_HOME | (DEGREE << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(degree[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+}
+
+void initializeTS() {
   // Put ADC high speed mode, input clock / 1, internal clock, 8-bit mode,
   // short sample time, synchronous clock
   ADCLK = 0x10;
 }
 
-void initializeDisplay(void) {
+void initializeDisplay() {
 
   // Set control lines as output
   LCD_CD_DIR = 1;
@@ -424,17 +479,29 @@ void initializeDisplay(void) {
   writeData(0x00);
   writeCommand(SET_TEXT_AREA);  
   
+  writeData(OFFSET_REGISTER);
+  writeData(0x00);
+  writeCommand(SET_OFFSET_REGISTER);
+  
   // Mode Set
   writeCommand(OR_MODE);
   
   // Display Mode
   writeCommand(TEXT_ON_GRAPHIC_ON);
   
+  initializeCG();
+  
   // Test Program
   clearText();
   clearGraphic();
-  //goToText(2, 4);
-  //printStr("HELLO WORLD!");
+  goToText(1, 1);
+  printCG(UPPER_LEFT_CORNER);
+  goToText(2, 1);
+  printCG(UPPER_RIGHT_CORNER);
+  goToText(1, 2);
+  printCG(LOWER_LEFT_CORNER);
+  goToText(2, 2);
+  printCG(LOWER_RIGHT_CORNER);
   //goToText(2, 5);
   //printNum(69);
   //goToText(2, 6);
