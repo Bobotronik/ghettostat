@@ -14,5 +14,6 @@ void convertFtoC(unsigned char, unsigned char *);
 
 unsigned char mapToXPixel(unsigned char);
 unsigned char mapToYPixel(unsigned char);
+char compare(unsigned char*, unsigned char*);
 
 #endif

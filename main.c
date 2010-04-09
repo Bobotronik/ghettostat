@@ -16,7 +16,8 @@ void dummyISR(void) {
 
 
 void main(void) {
-  unsigned char state, x, y;
+  unsigned char state, x, y, 
+  unsigned int justTouched;
   
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
@@ -38,40 +39,41 @@ void main(void) {
   state = MAIN;
   for(;;) {
     // Poll clock
-    //getTime();
-    //clearText();
-    //goToText(20, 6);
-    //printStr("X:          ");
-    //printNum(getX());
-    //goToText(20, 7);
-    //printNum(getY());
-    //printStr("Y:          ");
+    
     // Poll touchscreen
     if (isTouched()){
-      x = getX();
-      y = getY();
-      x = mapToXPixel(x);
-      y = mapToYPixel(y);
-      
-      setPixel(x, y, 1);
-      switch (state) {
-        case MAIN:
-          if (x <= 42) {
-            if (y <= 16) {
-              break; 
+      if (justTouched) {
+           
+      } 
+      else { 
+        justTouched = 1000; 
+             
+        x = getX();
+        y = getY();
+        x = mapToXPixel(x);
+        y = mapToYPixel(y);
+        
+        setPixel(x, y, 1);
+        switch (state) {
+          case MAIN:
+            if (x <= 42) {
+              if (y <= 16) {
+                break; 
+              }
+              else if (y <= 12) {
+                  
+              }
             }
-            else if (y <= 12) {
-                
-            }
-          }
-          break;
-        case PROGRAM:
-          break;
-        case SETTINGS:
-          break;
+            break;
+          case PROGRAM:
+            break;
+          case SETTINGS:
+            break;
+        }
       }
     }
-    __RESET_WATCHDOG(); /* feeds the dog */    
+    __RESET_WATCHDOG(); /* feeds the dog */   
+    justTouched--; 
   } /* loop forever */
   /* please make sure that you never leave main */
 }
