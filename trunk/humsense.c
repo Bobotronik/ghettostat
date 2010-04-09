@@ -7,7 +7,8 @@
 unsigned char getHumidityDec(void) {
  int tempHumidity = convertAD(H_CH);
  // Convert ADC reading to Relative Humidity
- tempHumidity = (tempHumidity*253)/400 - 26;
+ //tempHumidity = (tempHumidity*253)/400 - 26;  //Seemed to overflow
+ tempHumidity = (tempHumidity*5)/8 - 26;
  if(tempHumidity < 0)
     tempHumidity = 0;
  return (unsigned char)tempHumidity; 
