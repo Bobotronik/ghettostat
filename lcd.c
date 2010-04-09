@@ -12,32 +12,21 @@ const unsigned char upperLeftCorner[] = {0x00, 0x00, 0x03, 0x0c, 0x10, 0x10, 0x2
 const unsigned char upperRightCorner[] = {0x00, 0x00, 0x30, 0x0c, 0x02, 0x02, 0x01, 0x01};
 const unsigned char lowerLeftCorner[] = {0x20, 0x20, 0x10, 0x10, 0x0c, 0x03, 0x00, 0x00};
 const unsigned char lowerRightCorner[] = {0x01, 0x01, 0x02, 0x02, 0x0c, 0x30, 0x00, 0x00};
-const unsigned char largeZero[] = {0x00};
-const unsigned char largeOne[] = {0x00};
-const unsigned char largeTwo[] = {0x00};
-const unsigned char largeThree[] = {0x00};
-const unsigned char largeFour[] = {0x00};
-const unsigned char largefive[] = {0x00};
-const unsigned char largeSix[] = {0x00};
-const unsigned char largeSeven[] = {0x00};
-const unsigned char largeEight[] = {0x00};
-const unsigned char largeNine[] = {0x00};
+const unsigned char top[] = {0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00};
+const unsigned char bottom[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00};
+const unsigned char left[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+const unsigned char right[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 
 unsigned char charAbs(int num) {
-  unsigned char absNum;
   
   if (num < 0) {
     num = -num;
-    absNum = num & 0xff;
-  }
-  else {
-    absNum = num & 0xff;
   }
   
-  return absNum;
+  return num 0xff;
 }
 
-void wait(unsigned char cycles){
+void wait(unsigned int cycles){
   for (; cycles != 0; cycles--);
 }
 
@@ -117,7 +106,7 @@ void display(unsigned char data) {
   writeCommand(DATA_WRITE_AND_INCREMENT);
 }
 
-void printChar(char character) {
+void printChar(unsigned char character) {
   display(character - 32);
 }
 
@@ -399,7 +388,8 @@ unsigned char getX(){
 }
 
 unsigned char getY(){
-  unsigned char y;
+  unsigned char y[9];
+  unsigned char i;
   
   TS_TOP_DIR = 1;
   TS_BOTTOM_DIR = 1;
@@ -411,8 +401,12 @@ unsigned char getY(){
   
   wait(100);
   
-  y = convertAD(TS_Y_INPUT) >> 2;
-  return y;
+  for (i = 0; i < 9; i++) {
+    y[i] = convertAD(TS_Y_INPUT) >> 1;  
+    wait(100);
+  }
+  qsort(y, 9, sizeof(unsigned char), compare);
+  return y[4];
 }
 
 unsigned char isTouched(){

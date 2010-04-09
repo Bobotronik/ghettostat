@@ -198,28 +198,53 @@ void updateThermometer() {
   setTemp(programs[day[currentDay]].periods[currentPeriod].temperature);
 }
 
+void drawButton(unsigned char x, unsigned char y, unsigned char width, unsigned char* label) {
+  unsigned char i;
+  
+  goToText(x, y);
+  printCG(UPPER_LEFT_CORNER);
+  for (i = 0; i < width; i++){
+    printCG(TOP);
+  }
+  printCG(UPPER_RIGHT_CORNER);
+  
+  goToText(x, y + 1);
+  printCG(LEFT);
+  printStr(label);
+  printCG(RIGHT);
+  
+  goToText(x, y + 2);
+  printCG(LOWER_LEFT_CORNER);
+  for (i = 0; i < width; i++){
+    printCG(BOTTOM);
+  }
+  printCG(LOWER_RIGHT_CORNER);
+}
+
 void drawMainScreen() {
   // Drawing mode buttons on left side
   unsigned char i;
-  unsigned char startX = 6;
-  unsigned char startY = 18;
-  unsigned char buttonWidth = 36;
-  unsigned char buttonHeight = 20;
   
-  for (i = 0; i < 4; i++) {
-    drawBox(startX, startY, buttonWidth, buttonHeight);
-    startY += 24;
-  }
+  drawButton(0, 3, 8, "  MODE  ");
+  drawButton(0, 6, 8, "PROGRAM ");
+  drawButton(0, 9, 8, "SETTINGS");
+  drawButton(12, 0, 4, "MAIN");
+  drawButton(21, 0, 4, "AUX");
   
-  goToText(2, 3);
-  printStr("OFF");
-  goToText(2, 6);
-  printStr("HEAT");
-  goToText(2, 9)  ;
-  printStr("COOL");
-  goToText(2, 12);
-  printStr("CIRC");
-   
+  goToText(15, 3);
+  printStr("Currently");
+  goToText(15, 9);
+  printStr("Set To");
+  goToText(15, 12);
+  printStr("Humidity");
+}
+
+void drawProgramScreen() {
+
+}
+
+void drawSettingsScreen() {
+
 }
 
 void determineButtons() {
