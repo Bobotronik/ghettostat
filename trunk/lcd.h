@@ -80,9 +80,9 @@
 unsigned char charAbs(short int);
 
 void wait(unsigned char);
-unsigned char readStatus();
+unsigned char readStatus(void);
 void writeData(unsigned char);
-unsigned char readData();
+unsigned char readData(void);
 void writeCommand(unsigned char);
 
 void setADP(short unsigned int);
@@ -98,19 +98,19 @@ void printChar(char);
 void printNum(int);
 void printBCD(unsigned char);
 void printStr(char*);
-void clearText();
-void clearGraphic();
-void clearScreen();
-void clearCG();
+void clearText(void);
+void clearGraphic(void);
+void clearScreen(void);
+void clearCG(void);
 
 void setPixel(unsigned char, unsigned char, unsigned char);
 void line(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 
-unsigned char isTouched();
-unsigned char getX();
-unsigned char getY();
+unsigned char isTouched(void);
+unsigned char getX(void);
+unsigned char getY(void);
 
-void initializeDisplay();
-void initializeTS();
+void initializeDisplay(void);
+void initializeTS(void);

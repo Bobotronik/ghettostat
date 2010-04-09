@@ -23,7 +23,7 @@ void wait(unsigned char cycles){
   for (; cycles != 0; cycles--);
 }
 
-unsigned char readStatus() {
+unsigned char readStatus(void) {
   unsigned char status;
   LCD_DB_DIR = 0x00;
   LCD_CD = 1;
@@ -52,7 +52,7 @@ void writeData(unsigned char data) {
   LCD_CE = 1;
 }
 
-unsigned char readData() {
+unsigned char readData(void) {
   unsigned char data;
   readStatus();
   LCD_DB_DIR = 0x00;
@@ -136,14 +136,14 @@ void printStr(char* string) {
   }
 }
 
-void clearText() {
+void clearText(void) {
   short unsigned int i;
   setADP(TEXT_HOME);  
   for (i = 0; i < TEXT_SIZE; i++)
     display(0x00);
 }
 
-void clearGraphic() {
+void clearGraphic(void) {
   short unsigned int i;
   setADP(GRAPHIC_HOME);
   for (i = 0; i < GRAPHIC_SIZE; i++)
@@ -173,12 +173,12 @@ void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned c
 }
 */
 
-void clearScreen() {
+void clearScreen(void) {
   clearText();
   clearGraphic();
 }
     
-void clearCG() {
+void clearCG(void) {
   unsigned int i;
   setADP(CG_RAM_HOME);
   for(i = 0; i < 256; i++)
@@ -345,7 +345,7 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
   drawLine(x0, y0+height-1, x0+width-1, y0+height-1);
 }
 
-unsigned char getX(){
+unsigned char getX(void){
   unsigned char x;
   
   TS_LEFT_DIR = 1;
@@ -362,7 +362,7 @@ unsigned char getX(){
   return x;
 }
 
-unsigned char getY(){
+unsigned char getY(void){
   unsigned char y;
   
   TS_TOP_DIR = 1;
@@ -379,19 +379,19 @@ unsigned char getY(){
   return y;
 }
 
-unsigned char isTouched(){
+unsigned char isTouched(void){
   if (getX() == 127)
     return 0;
   return 1;
 }
 
-void initializeTS(){
+void initializeTS(void){
   // Put ADC high speed mode, input clock / 1, internal clock, 8-bit mode,
   // short sample time, synchronous clock
   ADCLK = 0x10;
 }
 
-void initializeDisplay() {
+void initializeDisplay(void) {
 
   // Set control lines as output
   LCD_CD_DIR = 1;
