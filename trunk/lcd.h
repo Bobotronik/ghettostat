@@ -87,10 +87,10 @@
 #define UPPER_RIGHT_CORNER        0x84
 #define LOWER_LEFT_CORNER         0x85
 #define LOWER_RIGHT_CORNER        0x86
-#define TOP                       0x87
-#define BOTTOM                    0x88
-#define LEFT                      0x89
-#define RIGHT                     0x90
+#define TOP_BORDER                0x87
+#define BOTTOM_BORDER             0x88
+#define LEFT_BORDER               0x89
+#define RIGHT_BORDER              0x90
 
 unsigned char charAbs(int);
 
