@@ -101,7 +101,7 @@ void displayTime() {
   
   // Determine whether to display nothing or 1
   if ((temp & 0x10) == 0x00) {
-    display(NOTHING);
+    display(0x00);
   }
   else {
     printNum(1);
@@ -149,7 +149,7 @@ void displayTemps() {
   remainder = currentTemperature%100;
   
   if (quotient == 0) {
-    display(NOTHING);
+    display(0x00);
   }
   else {
     printNum(1);
@@ -204,19 +204,19 @@ void drawButton(unsigned char x, unsigned char y, unsigned char width, unsigned 
   goToText(x, y);
   printCG(UPPER_LEFT_CORNER);
   for (i = 0; i < width; i++){
-    printCG(TOP);
+    printCG(TOP_BORDER);
   }
   printCG(UPPER_RIGHT_CORNER);
   
   goToText(x, y + 1);
-  printCG(LEFT);
+  printCG(LEFT_BORDER);
   printStr(label);
-  printCG(RIGHT);
+  printCG(RIGHT_BORDER);
   
   goToText(x, y + 2);
   printCG(LOWER_LEFT_CORNER);
   for (i = 0; i < width; i++){
-    printCG(BOTTOM);
+    printCG(BOTTOM_BORDER);
   }
   printCG(LOWER_RIGHT_CORNER);
 }
@@ -228,14 +228,14 @@ void drawMainScreen() {
   drawButton(0, 3, 8, "  MODE  ");
   drawButton(0, 6, 8, "PROGRAM ");
   drawButton(0, 9, 8, "SETTINGS");
-  drawButton(12, 0, 4, "MAIN");
-  drawButton(21, 0, 4, "AUX");
+  drawButton(13, 0, 4, "MAIN");
+  drawButton(22, 0, 4, "AUX ");
   
-  goToText(15, 3);
+  goToText(16, 3);
   printStr("Currently");
-  goToText(15, 9);
+  goToText(16, 9);
   printStr("Set To");
-  goToText(15, 12);
+  goToText(16, 12);
   printStr("Humidity");
 }
 

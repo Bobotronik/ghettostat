@@ -16,8 +16,8 @@ void dummyISR(void) {
 
 
 void main(void) {
-  unsigned char state, x, y, 
-  unsigned int justTouched;
+  unsigned char state, x, y; 
+  unsigned int justTouched = 50;
   
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
@@ -28,7 +28,7 @@ void main(void) {
   initPortX();
   initializeDisplay();
   
-  //drawMainScreen();
+  drawMainScreen();
   /*
   General Algorightm
   -Check if touched
@@ -36,6 +36,7 @@ void main(void) {
   -Update state and LCD
   
   */
+  del1m(2000);
   state = MAIN;
   for(;;) {
     // Poll clock
@@ -46,7 +47,7 @@ void main(void) {
            
       } 
       else { 
-        justTouched = 1000; 
+        justTouched = 15; 
              
         x = getX();
         y = getY();

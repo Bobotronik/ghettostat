@@ -12,10 +12,34 @@ const unsigned char upperLeftCorner[] = {0x00, 0x00, 0x03, 0x0c, 0x10, 0x10, 0x2
 const unsigned char upperRightCorner[] = {0x00, 0x00, 0x30, 0x0c, 0x02, 0x02, 0x01, 0x01};
 const unsigned char lowerLeftCorner[] = {0x20, 0x20, 0x10, 0x10, 0x0c, 0x03, 0x00, 0x00};
 const unsigned char lowerRightCorner[] = {0x01, 0x01, 0x02, 0x02, 0x0c, 0x30, 0x00, 0x00};
-const unsigned char top[] = {0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00};
-const unsigned char bottom[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00};
-const unsigned char left[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
-const unsigned char right[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+const unsigned char topBorder[] = {0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00};
+const unsigned char bottomBorder[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00};
+const unsigned char leftBorder[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+const unsigned char rightBorder[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+const unsigned char upArrow[] = {
+0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x1f, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x3f, 0x80, 0x00, 0x00, 
+0x00, 0x00, 0x7f, 0xc0, 0x00, 0x00, 
+0x00, 0x00, 0xff, 0xe0, 0x00, 0x00, 
+0x00, 0x01, 0xff, 0xf0, 0x00, 0x00, 
+0x00, 0x03, 0xff, 0xf8, 0x00, 0x00, 
+0x00, 0x07, 0xff, 0xfc, 0x00, 0x00, 
+0x00, 0x0f, 0xff, 0xfe, 0x00, 0x00, 
+0x00, 0x1f, 0xff, 0xff, 0x00, 0x00, 
+0x00, 0x3f, 0xff, 0xff, 0x80, 0x00, 
+0x00, 0x7f, 0xff, 0xff, 0xc0, 0x00, 
+0x00, 0xff, 0xff, 0xff, 0xe0, 0x00, 
+0x01, 0xff, 0xff, 0xff, 0xf0, 0x80, 
+0x03, 0xff, 0xf1, 0xff, 0xf8, 0xc0, 
+0x07, 0xff, 0xc0, 0x7f, 0xfc, 0xe0, 
+0x0f, 0xff, 0x00, 0x1f, 0xfe, 0xf0, 
+0x1f, 0xfc, 0x00, 0x07, 0xff, 0xf8, 
+0x3f, 0xf0, 0x00, 0x01, 0xff, 0x9f, 
+0x7f, 0xc0, 0x00, 0x00, 0x7f, 0xdf, 
+0xff, 0x00, 0x00, 0x00, 0x1f, 0xff, 
+0xfc, 0x00, 0x00, 0x00, 0x07, 0xff, 
+0x70, 0x00, 0x00, 0x00, 0x01, 0xdf};
 
 unsigned char charAbs(int num) {
   
@@ -23,7 +47,7 @@ unsigned char charAbs(int num) {
     num = -num;
   }
   
-  return num 0xff;
+  return num & 0xff;
 }
 
 void wait(unsigned int cycles){
@@ -365,6 +389,22 @@ void drawBox(unsigned char x0, unsigned char y0, unsigned char width, unsigned c
   drawLine(x0, y0+height-1, x0+width-1, y0+height-1);
 }
 
+void drawArrow() {
+  unsigned char i, j;
+  unsigned char startX, startY;
+  unsigned char height, width;
+  startX = 140;
+  startY = 20;
+  height = 23;
+  width = 6;
+  for (i = 0; i < height; i++) { 
+    goToGraphic(startX, startY + i);
+    for (j = 0; j < width; j++) {
+      display(upArrow[i*width + j]);  
+    }  
+  }
+}
+
 unsigned char getX(){
   unsigned char x[9];
   unsigned char i;
@@ -381,7 +421,7 @@ unsigned char getX(){
   
   for (i = 0; i < 9; i++) {
     x[i] = convertAD(TS_X_INPUT) >> 1;  
-    wait(100);
+    wait(50);
   }
   qsort(x, 9, sizeof(unsigned char), compare);
   return x[4];
@@ -402,8 +442,8 @@ unsigned char getY(){
   wait(100);
   
   for (i = 0; i < 9; i++) {
-    y[i] = convertAD(TS_Y_INPUT) >> 1;  
-    wait(100);
+    y[i] = convertAD(TS_Y_INPUT) >> 2;  
+    wait(50);
   }
   qsort(y, 9, sizeof(unsigned char), compare);
   return y[4];
@@ -418,33 +458,58 @@ unsigned char isTouched(){
 void initializeCG() {
   unsigned char i;
   
+  setADP(CG_RAM_HOME | (DEGREE << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(degree[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  setADP(CG_RAM_HOME | (LARGE_DEGREE << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(largeDegree[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+
+  
   setADP(CG_RAM_HOME | (UPPER_LEFT_CORNER << CHAR_SHIFT));
   for (i = 0; i < 8; i++) {
     writeData(upperLeftCorner[i]);
     writeCommand(DATA_WRITE_AND_INCREMENT); 
-  }
-  
+  }  
   setADP(CG_RAM_HOME | (UPPER_RIGHT_CORNER << CHAR_SHIFT));
   for (i = 0; i < 8; i++) {
     writeData(upperRightCorner[i]);
     writeCommand(DATA_WRITE_AND_INCREMENT); 
   }
-  
   setADP(CG_RAM_HOME | (LOWER_LEFT_CORNER << CHAR_SHIFT));
   for (i = 0; i < 8; i++) {
     writeData(lowerLeftCorner[i]);
     writeCommand(DATA_WRITE_AND_INCREMENT); 
   }
-  
   setADP(CG_RAM_HOME | (LOWER_RIGHT_CORNER << CHAR_SHIFT));
   for (i = 0; i < 8; i++) {
     writeData(lowerRightCorner[i]);
     writeCommand(DATA_WRITE_AND_INCREMENT); 
   }
   
-  setADP(CG_RAM_HOME | (DEGREE << CHAR_SHIFT));
+  
+  setADP(CG_RAM_HOME | (TOP_BORDER << CHAR_SHIFT));
   for (i = 0; i < 8; i++) {
-    writeData(degree[i]);
+    writeData(topBorder[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  setADP(CG_RAM_HOME | (BOTTOM_BORDER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(bottomBorder[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  setADP(CG_RAM_HOME | (LEFT_BORDER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(leftBorder[i]);
+    writeCommand(DATA_WRITE_AND_INCREMENT); 
+  }
+  setADP(CG_RAM_HOME | (RIGHT_BORDER << CHAR_SHIFT));
+  for (i = 0; i < 8; i++) {
+    writeData(rightBorder[i]);
     writeCommand(DATA_WRITE_AND_INCREMENT); 
   }
 }
@@ -503,14 +568,15 @@ void initializeDisplay() {
   // Test Program
   clearText();
   clearGraphic();
-  goToText(1, 1);
+  //drawArrow();
+  /*goToText(1, 1);
   printCG(UPPER_LEFT_CORNER);
   goToText(2, 1);
   printCG(UPPER_RIGHT_CORNER);
   goToText(1, 2);
   printCG(LOWER_LEFT_CORNER);
   goToText(2, 2);
-  printCG(LOWER_RIGHT_CORNER);
+  printCG(LOWER_RIGHT_CORNER); */
   //goToText(2, 5);
   //printNum(69);
   //goToText(2, 6);
