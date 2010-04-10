@@ -41,12 +41,10 @@ const unsigned char upArrow[] = {
 0xfc, 0x00, 0x00, 0x00, 0x07, 0xff, 
 0x70, 0x00, 0x00, 0x00, 0x01, 0xdf};
 
-unsigned char charAbs(int num) {
-  
+unsigned char charAbs(int num) {  
   if (num < 0) {
     num = -num;
   }
-  
   return num & 0xff;
 }
 
@@ -193,40 +191,30 @@ void clearGraphic() {
   for (i = 0; i < GRAPHIC_SIZE; i++)
     display(0x00); 
 }
-/*
+
 void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
   unsigned char i, j;
-  unsigned char textWidth = width/FONT_WIDTH;
-  unsigned char textHeight = height/8;
+  unsigned char textWidth = (width+(FONT_WIDTH-1))/FONT_WIDTH;
+  unsigned char textHeight = (height+7)/8;
   
-  goToText(x/FONT_WIDTH,  y/8);
   for (i = 0; i < textHeight; i++) {
+    goToText(x/FONT_WIDTH, y/8+i);
     for (j = 0; j < textWidth; j++) {
       display(0x00);
     }
   } 
   
   for (i = 0; i < height; i++) {
-    for (j = 0; j < width; j++) {
+    goToGraphic(x, y+i);
+    for (j = 0; j < textWidth; j++) {
       display(0x00);
     }
   } 
-  
-  goToGraphic(x, y);
-  
 }
-*/
 
 void clearScreen() {
   clearText();
   clearGraphic();
-}
-    
-void clearCG() {
-  unsigned int i;
-  setADP(CG_RAM_HOME);
-  for(i = 0; i < 256; i++)
-    display(0x00);
 }
 
 void setPixel(unsigned char x, unsigned char y, unsigned char color) {
@@ -401,6 +389,18 @@ void drawArrow() {
     goToGraphic(startX, startY + i);
     for (j = 0; j < width; j++) {
       display(upArrow[i*width + j]);  
+    }  
+  }
+}
+
+void drawGraphic(unsigned char startX, unsigned char startY, unsigned char width, unsigned char height, unsigned char* graphic) {
+  unsigned char i, j;
+  unsigned char textWidth = (width+(FONT_WIDTH-1))/FONT_WIDTH;
+  
+  for (i = 0; i < height; i++) { 
+    goToGraphic(startX, startY + i);
+    for (j = 0; j < textWidth; j++) {
+      display(graphic[i*textWidth + j]);  
     }  
   }
 }
