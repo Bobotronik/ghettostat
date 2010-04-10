@@ -55,18 +55,48 @@ void main(void) {
         y = mapToYPixel(y);
         
         setPixel(x, y, 1);
+        
         switch (state) {
           case MAIN:
-            if (x <= 42) {
-              if (y <= 16) {
-                break; 
+            if (x <= 60) {
+              if (y <= 32) {
+                // Nothing
               }
-              else if (y <= 12) {
-                  
+              else if (y <= 56) {
+                // Mode  
+              }
+              else if (y <= 80) {
+                // Program
+                clearScreen();
+                drawProgramScreen();
+                state = PROGRAM;
+              }
+              else if (y <= 104) {
+                // Settings
+                clearScreen();
+                drawSettingsScreen();
+                state = SETTINGS;
               }
             }
             break;
           case PROGRAM:
+            if (x <= 60) {
+              if (y <= 32) {
+                break; 
+              }
+              else if (y <= 56) {
+                // Main  
+                clearScreen();
+                drawMainScreen();
+                state = MAIN;
+              }
+              else if (y <= 80) {
+                // Programs
+              }
+              else if (y <= 104) {
+                // Days
+              }
+            }
             break;
           case SETTINGS:
             break;

@@ -228,8 +228,8 @@ void drawMainScreen() {
   drawButton(0, 3, 8, "  MODE  ");
   drawButton(0, 6, 8, "PROGRAM ");
   drawButton(0, 9, 8, "SETTINGS");
-  drawButton(13, 0, 4, "MAIN");
-  drawButton(22, 0, 4, "AUX ");
+  drawButton(11, 0, 4, "MAIN");
+  drawButton(24, 0, 4, "AUX ");
   
   goToText(16, 3);
   printStr("Currently");
@@ -240,28 +240,33 @@ void drawMainScreen() {
 }
 
 void drawProgramScreen() {
+  unsigned char i, j;
 
+  drawButton(0, 3, 8, "  MAIN  ");
+  drawButton(0, 6, 8, "PROGRAMS");
+  drawButton(0, 9, 8, "  DAYS  ");
+  
+  goToText(11, 0);
+  for (i = 0; i < 4; i++) {
+    printCG(UPPER_LEFT_CORNER);
+    for (j = 0; j < 5; j++) {
+      printCG(TOP_BORDER);  
+    }
+    printCG(UPPER_LEFT_CORNER);
+    printChar(' ');
+  }
+  
+  goToText(11, 1);
+  for (i = 0; i < 4; i++) {
+    printCG(LEFT_BORDER);
+    for (j = 0; j < 5; j++) {
+      printChar(' ');  
+    }
+    printCG(RIGHT_BORDER);
+    printChar(' ');
+  }
 }
 
 void drawSettingsScreen() {
-
-}
-
-void determineButtons() {
-  unsigned char xTouch;
-  unsigned char yTouch;
-  
-  // Determin state, then button
-  /*if (state == MAIN) {
-    xTouch = getX();
-    if (xTouch < ) {
-    
-    }
-    
-    else if (xTouch > ) {
-    
-    }
-    
-    else
-  }  */
+  drawButton(0, 3, 8, "  MAIN  ");
 }
