@@ -75,6 +75,7 @@
 #define MAX_Y                     51
 #define X_DIFFERENCE              (MAX_X-MIN_X)
 #define Y_DIFFERENCE              (MAX_Y-MIN_Y)
+#define SAMPLE_SIZE               15
 
 // Dot pitch = 0.45mm
 // 1 6x8 pixel character = 2.7mm x 3.6mm
@@ -113,6 +114,7 @@ void printChar(unsigned char);
 void printCG(unsigned char);
 void printLargeChar(unsigned char);
 void printNum(int);
+void printDigit(unsigned char);
 void printBCD(unsigned char);
 void printStr(char*);
 void clearText();

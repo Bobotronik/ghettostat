@@ -88,45 +88,127 @@ void displayTime() {
   
   getTime();
   
-  // Determine whether AM or PM;
-  temp = RTC_TIME[2];
-  if ((temp & 0x20) == 0x00) {
-    pm = 0;
-    tempTime = 0;
+  // Day of week
+  temp = RTC_TIME[3];
+  switch (temp) {
+    case 1:
+      printStr("SUN ");
+      break;
+    case 2:
+      printStr("MON ");
+      break;
+    case 3:
+      printStr("TUE ");
+      break;
+    case 4:
+      printStr("WED ");
+      break;
+    case 5:
+      printStr("THU ");
+      break;
+    case 6:
+      printStr("FRI ");
+      break;
+    case 7:
+      printStr("SAT ");
+      break;
+  }
+  
+  // Month
+  temp = RTC_TIME[5];
+  //temp += (temp >> 4);
+  
+  printDigit(temp);
+
+  switch (temp) {
+    case 1:
+      printStr("JAN ");
+      break;
+    case 2:
+      printStr("FEB ");
+      break;
+    case 3:
+      printStr("MAR ");
+      break;
+    case 4:
+      printStr("APR ");
+      break;
+    case 5:
+      printStr("MAY ");
+      break;
+    case 6:
+      printStr("JUN ");
+      break;
+    case 7:
+      printStr("JUL ");
+      break;
+    case 8:
+      printStr("AUG ");
+      break;
+    case 9:
+      printStr("SEP ");
+      break;
+    case 10:
+      printStr("OCT ");
+      break;
+    case 11:
+      printStr("NOV ");
+      break;
+    case 12:
+      printStr("DEC ");
+      break;
+  }
+  
+  // Date
+  temp = RTC_TIME[4];
+  if (temp & 0xf0) { 
+    printDigit(temp >> 4);
   }
   else {
+    printChar(' ');  
+  }
+  printDigit(temp & 0x0f);
+  printStr("  ");
+  
+  // Determine whether AM or PM;
+  temp = RTC_TIME[2];
+  if (temp & 0x20) {
     pm = 1;
     tempTime = 48;
   }
+  else {
+    pm = 0;
+    tempTime = 0;
+  }
   
   // Determine whether to display nothing or 1
-  if ((temp & 0x10) == 0x00) {
-    display(0x00);
+  if (temp & 0x10) {
+    printDigit(1);
+    tempTime += 40;
   }
   else {
-    printNum(1);
-    tempTime += 40;
+    printChar(' ');
   }
   
   // Display hour (1's digit)
-  printNum(temp & 0x0f);
+  printDigit(temp & 0x0f);
   tempTime += (temp & 0x0f);
   printChar(':');
  
   // Display minutes
   temp = RTC_TIME[1];
-  printNum((temp & 0x70) >> 4);
-  printNum(temp & 0x0f);
+  printDigit(temp >> 4);
+  printDigit(temp & 0x0f);
   tempMinutes = ((temp & 0x70) >> 4)*10;
   tempMinutes += temp & 0x0f;
   tempTime += tempMinutes/15;
   currentTime = tempTime;
   
   if (pm == 0) {
-    printStr("AM");
+    printStr(" AM");
   }
   else {
-    printStr("PM");
+    printStr(" PM");
   }
   
   /* Check if new day
@@ -237,6 +319,8 @@ void drawMainScreen() {
   printStr("Set To");
   goToText(16, 12);
   printStr("Humidity");
+  goToText(10, 15);
+  displayTime();
 }
 
 void drawProgramScreen() {
@@ -246,25 +330,57 @@ void drawProgramScreen() {
   drawButton(0, 6, 8, "PROGRAMS");
   drawButton(0, 9, 8, "  DAYS  ");
   
-  goToText(11, 0);
+  goToText(12, 0);
   for (i = 0; i < 4; i++) {
     printCG(UPPER_LEFT_CORNER);
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 4; j++) {
       printCG(TOP_BORDER);  
     }
-    printCG(UPPER_LEFT_CORNER);
+    printCG(UPPER_RIGHT_CORNER);
     printChar(' ');
   }
   
-  goToText(11, 1);
+  goToText(12, 1);
   for (i = 0; i < 4; i++) {
     printCG(LEFT_BORDER);
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 4; j++) {
       printChar(' ');  
     }
     printCG(RIGHT_BORDER);
     printChar(' ');
   }
+  
+  goToText(12, 2);
+  for (i = 0; i < 4; i++) {
+    printCG(LEFT_BORDER);
+    for (j = 0; j < 4; j++) {
+      printChar(' ');  
+    }
+    printCG(RIGHT_BORDER);
+    printChar(' ');
+  }
+  
+  for (i = 4; i < 15; i++) {
+    goToText(11, i); 
+    printCG(LEFT_BORDER);
+    goToText(39, i);
+    printCG(RIGHT_BORDER);
+  }
+  
+  for (i = 12; i < 38; i++) {
+    goToText(i, 15);
+    printCG(BOTTOM_BORDER); 
+  }
+  
+  goToText(11,3);
+  printCG(UPPER_LEFT_CORNER);
+  goToText(39,3);
+  printCG(UPPER_RIGHT_CORNER);
+  goToText(11,15);
+  printCG(LOWER_LEFT_CORNER);
+  goToText(39,15);
+  printCG(LOWER_RIGHT_CORNER);
+  
 }
 
 void drawSettingsScreen() {
