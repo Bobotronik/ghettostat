@@ -168,8 +168,13 @@ void printNum(int num) {
     printChar('-');
 }
 
+void printDigit(unsigned char digit) {
+  display(digit + 16);
+}
+
 void printBCD(unsigned char bcd) {
-  display(bcd + 16);
+  display(((bcd & 0xf0) >> 4) + 16);
+  display((bcd & 0x0f) + 16);
 }
 
 void printStr(char* string) {
@@ -385,12 +390,14 @@ void drawArrow() {
   startY = 20;
   height = 23;
   width = 6;
-  for (i = 0; i < height; i++) { 
+  goToGraphic(140, 20);
+  /*for (i = 0; i < height; i++) { 
     goToGraphic(startX, startY + i);
     for (j = 0; j < width; j++) {
       display(upArrow[i*width + j]);  
     }  
-  }
+  }   */
+  display(0xff);
 }
 
 void drawGraphic(unsigned char startX, unsigned char startY, unsigned char width, unsigned char height, unsigned char* graphic) {
@@ -406,7 +413,7 @@ void drawGraphic(unsigned char startX, unsigned char startY, unsigned char width
 }
 
 unsigned char getX(){
-  unsigned char x[9];
+  unsigned char x[SAMPLE_SIZE];
   unsigned char i;
   
   TS_LEFT_DIR = 1;
@@ -419,16 +426,16 @@ unsigned char getX(){
    
   wait(100);
   
-  for (i = 0; i < 9; i++) {
+  for (i = 0; i < SAMPLE_SIZE; i++) {
     x[i] = convertAD(TS_X_INPUT) >> 1;  
     wait(50);
   }
-  qsort(x, 9, sizeof(unsigned char), compare);
-  return x[4];
+  qsort(x, SAMPLE_SIZE, sizeof(unsigned char), compare);
+  return x[SAMPLE_SIZE/2 - 1];
 }
 
 unsigned char getY(){
-  unsigned char y[9];
+  unsigned char y[SAMPLE_SIZE];
   unsigned char i;
   
   TS_TOP_DIR = 1;
@@ -441,12 +448,12 @@ unsigned char getY(){
   
   wait(100);
   
-  for (i = 0; i < 9; i++) {
+  for (i = 0; i < SAMPLE_SIZE; i++) {
     y[i] = convertAD(TS_Y_INPUT) >> 2;  
     wait(50);
   }
-  qsort(y, 9, sizeof(unsigned char), compare);
-  return y[4];
+  qsort(y, SAMPLE_SIZE, sizeof(unsigned char), compare);
+  return y[SAMPLE_SIZE/2 - 1];
 }
 
 unsigned char isTouched(){
@@ -568,7 +575,7 @@ void initializeDisplay() {
   // Test Program
   clearText();
   clearGraphic();
-  //drawArrow();
+  drawArrow();
   /*goToText(1, 1);
   printCG(UPPER_LEFT_CORNER);
   goToText(2, 1);
