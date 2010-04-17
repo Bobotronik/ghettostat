@@ -15,9 +15,18 @@
 #define NUM_PERIODS   4
 #define NUM_PROGRAMS  5
 
-#define MAIN        0
-#define PROGRAM     1
-#define SETTINGS    2
+#define MAIN              0
+#define MAIN_SET_TO       1
+#define MAIN_ROOM         2
+#define MAIN_FAN          3
+#define MAIN_MODE         4
+
+#define PROGRAM_PROGRAMS  5   
+#define PROGRAM_DAYS      6
+#define PROGRAM_PROGRAMMING 7
+#define PROGRAM_PROGRAM_DAYS 8
+
+#define SETTINGS          9
 
 void initializeThermostat();
 
@@ -30,8 +39,13 @@ void updateThermometer();
 void createProgram();
 void deleteProgram();
 
-void drawButton();
+void drawButton(unsigned char, unsigned char, unsigned char, unsigned char);
+void drawTopBar();
+void drawLeftBar();
 void drawMainScreen();
-void drawProgramScreen();
+void drawProgramsScreen();
+void drawDaysScreen();
+void drawProgrammingScreen();
+void drawProgramDaysScreen();
 void drawSettingsScreen();
 

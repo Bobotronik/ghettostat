@@ -16,30 +16,6 @@ const unsigned char topBorder[] = {0x00, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x0
 const unsigned char bottomBorder[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x00};
 const unsigned char leftBorder[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 const unsigned char rightBorder[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
-const unsigned char upArrow[] = {
-0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 
-0x00, 0x00, 0x1f, 0x00, 0x00, 0x00, 
-0x00, 0x00, 0x3f, 0x80, 0x00, 0x00, 
-0x00, 0x00, 0x7f, 0xc0, 0x00, 0x00, 
-0x00, 0x00, 0xff, 0xe0, 0x00, 0x00, 
-0x00, 0x01, 0xff, 0xf0, 0x00, 0x00, 
-0x00, 0x03, 0xff, 0xf8, 0x00, 0x00, 
-0x00, 0x07, 0xff, 0xfc, 0x00, 0x00, 
-0x00, 0x0f, 0xff, 0xfe, 0x00, 0x00, 
-0x00, 0x1f, 0xff, 0xff, 0x00, 0x00, 
-0x00, 0x3f, 0xff, 0xff, 0x80, 0x00, 
-0x00, 0x7f, 0xff, 0xff, 0xc0, 0x00, 
-0x00, 0xff, 0xff, 0xff, 0xe0, 0x00, 
-0x01, 0xff, 0xff, 0xff, 0xf0, 0x80, 
-0x03, 0xff, 0xf1, 0xff, 0xf8, 0xc0, 
-0x07, 0xff, 0xc0, 0x7f, 0xfc, 0xe0, 
-0x0f, 0xff, 0x00, 0x1f, 0xfe, 0xf0, 
-0x1f, 0xfc, 0x00, 0x07, 0xff, 0xf8, 
-0x3f, 0xf0, 0x00, 0x01, 0xff, 0x9f, 
-0x7f, 0xc0, 0x00, 0x00, 0x7f, 0xdf, 
-0xff, 0x00, 0x00, 0x00, 0x1f, 0xff, 
-0xfc, 0x00, 0x00, 0x00, 0x07, 0xff, 
-0x70, 0x00, 0x00, 0x00, 0x01, 0xdf};
 
 unsigned char charAbs(int num) {  
   if (num < 0) {
@@ -402,18 +378,18 @@ void drawArrow() {
 
 void drawGraphic(unsigned char startX, unsigned char startY, unsigned char width, unsigned char height, unsigned char* graphic) {
   unsigned char i, j;
-  unsigned char textWidth = (width+(FONT_WIDTH-1))/FONT_WIDTH;
+  //unsigned char textWidth// = (width+(FONT_WIDTH-1))/FONT_WIDTH;
   
   for (i = 0; i < height; i++) { 
     goToGraphic(startX, startY + i);
-    for (j = 0; j < textWidth; j++) {
-      display(graphic[i*textWidth + j]);  
+    for (j = 0; j < width; j++) {
+      display(graphic[i*width + j]);  
     }  
   }
 }
 
 unsigned char getX(){
-  unsigned char x[SAMPLE_SIZE];
+  //unsigned char x[SAMPLE_SIZE];
   unsigned char i;
   
   TS_LEFT_DIR = 1;
@@ -426,16 +402,17 @@ unsigned char getX(){
    
   wait(100);
   
-  for (i = 0; i < SAMPLE_SIZE; i++) {
+  /*for (i = 0; i < SAMPLE_SIZE; i++) {
     x[i] = convertAD(TS_X_INPUT) >> 1;  
     wait(50);
   }
   qsort(x, SAMPLE_SIZE, sizeof(unsigned char), compare);
-  return x[SAMPLE_SIZE/2 - 1];
+  return x[SAMPLE_SIZE/2 - 1];*/
+  return (convertAD(TS_X_INPUT) >> 1); 
 }
 
 unsigned char getY(){
-  unsigned char y[SAMPLE_SIZE];
+  //unsigned char y[SAMPLE_SIZE];
   unsigned char i;
   
   TS_TOP_DIR = 1;
@@ -448,17 +425,43 @@ unsigned char getY(){
   
   wait(100);
   
-  for (i = 0; i < SAMPLE_SIZE; i++) {
+  /*for (i = 0; i < SAMPLE_SIZE; i++) {
     y[i] = convertAD(TS_Y_INPUT) >> 2;  
     wait(50);
   }
   qsort(y, SAMPLE_SIZE, sizeof(unsigned char), compare);
-  return y[SAMPLE_SIZE/2 - 1];
+  return y[SAMPLE_SIZE/2 - 1];  */
+  return (convertAD(TS_Y_INPUT) >> 2);
 }
 
-unsigned char isTouched(){
-  if (getX() == 127)
-    return 0;
+unsigned char isTouched() {
+
+  unsigned char i, current, previous;
+  
+  
+  TS_LEFT_DIR = 1;
+  TS_RIGHT_DIR = 1;
+  TS_TOP_DIR = 0;
+  TS_BOTTOM_DIR = 0;
+  
+  TS_LEFT = 0;
+  TS_RIGHT = 1;
+   
+  wait(100);
+  
+  /* if touched 50 times in a row, return true
+     else return false
+  */
+  previous = convertAD(TS_X_INPUT) >> 1;
+  
+  for (i = 0; i < 50; i++) {
+    current = convertAD(TS_X_INPUT) >> 1;
+    if (charAbs(current - previous) > 3) {
+      return 0; 
+    }   
+    previous = current;
+    wait(50);
+  }
   return 1;
 }
 
@@ -565,7 +568,7 @@ void initializeDisplay() {
   writeCommand(SET_OFFSET_REGISTER);
   
   // Mode Set
-  writeCommand(OR_MODE);
+  writeCommand(XOR_MODE);
   
   // Display Mode
   writeCommand(TEXT_ON_GRAPHIC_ON);
@@ -575,7 +578,7 @@ void initializeDisplay() {
   // Test Program
   clearText();
   clearGraphic();
-  drawArrow();
+  //drawArrow();
   /*goToText(1, 1);
   printCG(UPPER_LEFT_CORNER);
   goToText(2, 1);

@@ -3,6 +3,8 @@
 
 #include "lcd.h"
 #include "i2cDevices.h"
+#include "humSense.h"
+#include "functions.h"
 
 /*
 ****Features****
@@ -18,6 +20,74 @@ update program setting
 check program setting
 
 */
+const unsigned char house[] = {
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x01, 0x20, 0x00, 0x00, 
+0x00, 0x00, 0x06, 0x18, 0x00, 0x00, 
+0x00, 0x00, 0x18, 0x06, 0x00, 0x00, 
+0x00, 0x01, 0x20, 0x01, 0x20, 0x00, 
+0x00, 0x06, 0x00, 0x00, 0x18, 0x00, 
+0x00, 0x18, 0x00, 0x00, 0x06, 0x00, 
+0x01, 0x20, 0x00, 0x00, 0x01, 0x20, 
+0x06, 0x00, 0x00, 0x00, 0x00, 0x18, 
+0x00, 0x10, 0x00, 0x00, 0x02, 0x00, 
+0x00, 0x10, 0x00, 0x00, 0x02, 0x00, 
+0x00, 0x10, 0x00, 0x00, 0x02, 0x00, 
+0x00, 0x10, 0x07, 0x38, 0x02, 0x00, 
+0x00, 0x10, 0x04, 0x08, 0x02, 0x00, 
+0x00, 0x10, 0x04, 0x08, 0x02, 0x00, 
+0x00, 0x10, 0x04, 0x08, 0x02, 0x00, 
+0x00, 0x10, 0x04, 0x08, 0x02, 0x00, 
+0x00, 0x10, 0x04, 0x08, 0x02, 0x00, 
+0x00, 0x1f, 0x3c, 0x0f, 0x3e, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+const unsigned char calendar[] = {
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x30, 0x3f, 0x3f, 0x3f, 0x30, 
+0x01, 0x08, 0x20, 0x00, 0x00, 0x10, 
+0x01, 0x28, 0x20, 0x00, 0x00, 0x10, 
+0x01, 0x08, 0x20, 0x00, 0x00, 0x10, 
+0x01, 0x28, 0x3f, 0x3f, 0x3f, 0x30, 
+0x01, 0x08, 0x20, 0x00, 0x00, 0x10, 
+0x01, 0x28, 0x2f, 0x3f, 0x3f, 0x10, 
+0x01, 0x08, 0x29, 0x09, 0x09, 0x10, 
+0x01, 0x38, 0x29, 0x09, 0x09, 0x10, 
+0x01, 0x08, 0x2f, 0x3f, 0x3f, 0x10, 
+0x01, 0x08, 0x29, 0x09, 0x09, 0x10, 
+0x01, 0x08, 0x29, 0x09, 0x09, 0x10, 
+0x01, 0x08, 0x2f, 0x3f, 0x3f, 0x10, 
+0x01, 0x08, 0x29, 0x09, 0x09, 0x10, 
+0x02, 0x04, 0x29, 0x09, 0x09, 0x10, 
+0x02, 0x04, 0x2f, 0x3f, 0x3f, 0x10, 
+0x01, 0x08, 0x20, 0x00, 0x00, 0x10, 
+0x00, 0x30, 0x3f, 0x3f, 0x3f, 0x30, 
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+
+const unsigned char wrench[] = {
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x0e, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 
+0x00, 0x08, 0x20, 0x00, 0x00, 0x00, 
+0x00, 0x04, 0x20, 0x00, 0x00, 0x00, 
+0x00, 0x04, 0x10, 0x00, 0x00, 0x00, 
+0x01, 0x08, 0x0c, 0x00, 0x00, 0x00, 
+0x02, 0x30, 0x03, 0x20, 0x00, 0x00, 
+0x02, 0x00, 0x00, 0x18, 0x00, 0x00, 
+0x01, 0x07, 0x20, 0x06, 0x07, 0x00, 
+0x00, 0x38, 0x18, 0x01, 0x38, 0x20, 
+0x00, 0x00, 0x07, 0x00, 0x00, 0x10, 
+0x00, 0x00, 0x00, 0x30, 0x03, 0x10, 
+0x00, 0x00, 0x00, 0x0c, 0x04, 0x20, 
+0x00, 0x00, 0x00, 0x02, 0x08, 0x00, 
+0x00, 0x00, 0x00, 0x01, 0x08, 0x00, 
+0x00, 0x00, 0x00, 0x01, 0x04, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x22, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
+
+extern unsigned char DEVICE_DATA[2];
+
 struct period {
   unsigned char startTime;
   unsigned char temperature;
@@ -92,70 +162,70 @@ void displayTime() {
   temp = RTC_TIME[3];
   switch (temp) {
     case 1:
-      printStr("SUN ");
+      printStr("Sun ");
       break;
     case 2:
-      printStr("MON ");
+      printStr("Mon ");
       break;
     case 3:
-      printStr("TUE ");
+      printStr("Tue ");
       break;
     case 4:
-      printStr("WED ");
+      printStr("Wed ");
       break;
     case 5:
-      printStr("THU ");
+      printStr("Thu ");
       break;
     case 6:
-      printStr("FRI ");
+      printStr("Fri ");
       break;
     case 7:
-      printStr("SAT ");
+      printStr("Sat ");
       break;
   }
   
   // Month
   temp = RTC_TIME[5];
-  //temp += (temp >> 4);
+  temp += (temp >> 4);
   
   printDigit(temp);
 
   switch (temp) {
     case 1:
-      printStr("JAN ");
+      printStr("Jan ");
       break;
     case 2:
-      printStr("FEB ");
+      printStr("Feb ");
       break;
     case 3:
-      printStr("MAR ");
+      printStr("Mar ");
       break;
     case 4:
-      printStr("APR ");
+      printStr("Apr ");
       break;
     case 5:
-      printStr("MAY ");
+      printStr("May ");
       break;
     case 6:
-      printStr("JUN ");
+      printStr("Jun ");
       break;
     case 7:
-      printStr("JUL ");
+      printStr("Jul ");
       break;
     case 8:
-      printStr("AUG ");
+      printStr("Aug ");
       break;
     case 9:
-      printStr("SEP ");
+      printStr("Sep ");
       break;
     case 10:
-      printStr("OCT ");
+      printStr("Oct ");
       break;
     case 11:
-      printStr("NOV ");
+      printStr("Nov ");
       break;
     case 12:
-      printStr("DEC ");
+      printStr("Dec ");
       break;
   }
   
@@ -168,7 +238,7 @@ void displayTime() {
     printChar(' ');  
   }
   printDigit(temp & 0x0f);
-  printStr("  ");
+  printChar(' ');
   
   // Determine whether AM or PM;
   temp = RTC_TIME[2];
@@ -218,7 +288,9 @@ void displayTime() {
 }
 
 void updateTemp() {
-
+  goToText(10, 5);
+  printNum(getTempF());
+  //goToText();
 }
 
 void displayTemps() {
@@ -280,109 +352,156 @@ void updateThermometer() {
   setTemp(programs[day[currentDay]].periods[currentPeriod].temperature);
 }
 
-void drawButton(unsigned char x, unsigned char y, unsigned char width, unsigned char* label) {
+void drawButton(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
   unsigned char i;
   
   goToText(x, y);
   printCG(UPPER_LEFT_CORNER);
-  for (i = 0; i < width; i++){
+  for (i = 0; i < width - 2; i++){
     printCG(TOP_BORDER);
   }
   printCG(UPPER_RIGHT_CORNER);
   
-  goToText(x, y + 1);
-  printCG(LEFT_BORDER);
-  printStr(label);
-  printCG(RIGHT_BORDER);
+  for (i = y + 1; i < y + height - 1; i++) {
+    goToText(x, i);
+    printCG(LEFT_BORDER);
+    goToText(x + width - 1, i);
+    printCG(RIGHT_BORDER); 
+  }
   
-  goToText(x, y + 2);
+  goToText(x, y + height - 1);
   printCG(LOWER_LEFT_CORNER);
-  for (i = 0; i < width; i++){
+  for (i = 0; i < width - 2; i++){
     printCG(BOTTOM_BORDER);
   }
   printCG(LOWER_RIGHT_CORNER);
 }
 
-void drawMainScreen() {
-  // Drawing mode buttons on left side
-  unsigned char i;
+void drawTopBar() {
+  unsigned char i, j;
   
-  drawButton(0, 3, 8, "  MODE  ");
-  drawButton(0, 6, 8, "PROGRAM ");
-  drawButton(0, 9, 8, "SETTINGS");
-  drawButton(11, 0, 4, "MAIN");
-  drawButton(24, 0, 4, "AUX ");
+  // Top Bar
+  for (i = 0; i < 8; i++) {
+    setADP(GRAPHIC_HOME + GRAPHIC_AREA*i);
+    for (j = 0; j < 40; j++) {
+      display(0x3f); 
+    }
+  }
   
-  goToText(16, 3);
-  printStr("Currently");
-  goToText(16, 9);
-  printStr("Set To");
-  goToText(16, 12);
-  printStr("Humidity");
-  goToText(10, 15);
+  goToText(0,0);
   displayTime();
+  goToText(28, 0);
+  printStr("Humidity   %");
+  goToText(38, 0);
+  printNum(getHumidityDec());
 }
 
-void drawProgramScreen() {
+void drawLeftBar() {
+  drawButton(0, 2, 6, 4);
+  drawGraphic(0, 22, 6, 20, house);
+  drawButton(0, 7, 6, 4);
+  drawGraphic(0, 62, 6, 20, calendar);
+  drawButton(0, 12, 6, 4); 
+  drawGraphic(0, 102, 6, 20, wrench);
+}
+
+void drawMainScreen() {
+  drawLeftBar();
+  
+  // Right Side
+  drawButton(34, 3, 6, 3);
+  goToText(35, 2);
+  printStr("ROOM");
+  
+  drawButton(34, 8, 6, 3);
+  goToText(35, 7);
+  printStr("FAN");
+  
+  drawButton(34, 13, 6, 3);
+  goToText(35, 12);
+  printStr("MODE");
+  
+  goToText(8, 4);
+  printStr("Currently");
+
+  goToText(20, 4);
+  printStr("Set To");
+  
+  drawButton(20, 5, 10, 7);
+}
+
+void drawProgramsScreen() {
   unsigned char i, j;
 
-  drawButton(0, 3, 8, "  MAIN  ");
-  drawButton(0, 6, 8, "PROGRAMS");
-  drawButton(0, 9, 8, "  DAYS  ");
-  
-  goToText(12, 0);
-  for (i = 0; i < 4; i++) {
+  drawLeftBar();
+  /*
+  for (i = 1; i < 5; i++) {
+    goToText(7, 1 + i*3);
     printCG(UPPER_LEFT_CORNER);
-    for (j = 0; j < 4; j++) {
-      printCG(TOP_BORDER);  
-    }
-    printCG(UPPER_RIGHT_CORNER);
-    printChar(' ');
+    printCG(TOP_BORDER);
+    printCG(TOP_BORDER);
+    
+    goToText(7, 1 + i*3 + 1);
+    printCG(LEFT_BORDER);
+    printDigit(i);
+    
+    goToText(7, 1 + i*3 + 2);
+    printCG(LOWER_LEFT_CORNER);
+    printCG(BOTTOM_BORDER);
+    printCG(BOTTOM_BORDER);
   }
   
-  goToText(12, 1);
+  goToText(11, 5);
+  printStr("Morning");
+  goToText(11, 8);
+  printStr("Afternoon");
+  goToText(11, 11);
+  printStr("Evening");
+  goToText(11, 14);
+  printStr("Night");
+  */
+  
+  drawButton(12, 1, 10, 3);
+  goToText(13, 2);
+  printStr("Programs");
+  drawButton(25, 1, 10, 3);
+  goToText(26, 2);
+  printStr("  Days  ");
+  
   for (i = 0; i < 4; i++) {
-    printCG(LEFT_BORDER);
-    for (j = 0; j < 4; j++) {
-      printChar(' ');  
-    }
-    printCG(RIGHT_BORDER);
-    printChar(' ');
+    drawButton(18, 4 + i*3, 11, 3);
+    goToText(19, 5 + i*3);
+    printStr("Program ");
+    printDigit(i); 
   }
-  
-  goToText(12, 2);
-  for (i = 0; i < 4; i++) {
-    printCG(LEFT_BORDER);
-    for (j = 0; j < 4; j++) {
-      printChar(' ');  
-    }
-    printCG(RIGHT_BORDER);
-    printChar(' ');
-  }
-  
-  for (i = 4; i < 15; i++) {
-    goToText(11, i); 
-    printCG(LEFT_BORDER);
-    goToText(39, i);
-    printCG(RIGHT_BORDER);
-  }
-  
-  for (i = 12; i < 38; i++) {
-    goToText(i, 15);
-    printCG(BOTTOM_BORDER); 
-  }
-  
-  goToText(11,3);
-  printCG(UPPER_LEFT_CORNER);
-  goToText(39,3);
-  printCG(UPPER_RIGHT_CORNER);
-  goToText(11,15);
-  printCG(LOWER_LEFT_CORNER);
-  goToText(39,15);
-  printCG(LOWER_RIGHT_CORNER);
   
 }
 
+void drawDaysScreen() {
+  unsigned char i, j;
+  
+  drawLeftBar();
+  
+  drawButton(12, 1, 10, 3);
+  goToText(13, 2);
+  printStr("Programs");
+  drawButton(25, 1, 10, 3);
+  goToText(26, 2);
+  printStr("  Days  ");
+  
+  for (i = 0; i < 9; i++) {
+    drawButton(9 + i*4, 9, 3, 3); 
+  }
+  
+}
+
+void drawProgrammingScreen() {
+  
+}
+
+void drawProgramDaysScreen() {
+  
+}
 void drawSettingsScreen() {
-  drawButton(0, 3, 8, "  MAIN  ");
+  drawLeftBar();
 }
