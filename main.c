@@ -64,79 +64,98 @@ void main(void) {
      
       switch (state) {
         case MAIN:
-          // 6*6 + 6
-          if (x <= 42) {
-            // 2*8 - 8
-            if (y <= 10) {
-              // Nothing
-            }
-            // 7*8 - 6
-            else if (y <= 48) {
-              // Main/Nothing  
-            }
-            // 12*8 - 6
-            else if (y <= 90) {
-              // Program
+        
+          // Left Bar
+          if (x <= 42) { // 6*6 + 6
+            if (y <= 10); // 2*8 - 6
+            // Since already in Main, do nothing
+            else if (y <= 48); // 7*8 - 6
+            // Program
+            else if (y <= 90) { // 12*8 - 6            
               clearScreen();
               drawProgramsScreen();
               state = PROGRAM_PROGRAMS;
             }
+            // Settings
             else {
-              // Settings
               clearScreen();
               drawSettingsScreen();
               state = SETTINGS;
             }
           } 
-          // 120 - 6
-          else if (x <= 114) {
-            // Nothing                   
-          }
-
-          else {
-            // 3*8 - 6
-            if (y <= 18) {
-              // Nothing  
-            }
-            // 8*8 - 6
-            else if (y <= 58) {
-              // Room  
-            } 
-            // 13*8 - 6
-            else if (y <= 98) {
-              // Fan  
-            } 
-            else {
-              // Mode    
+          else if (x <= 120); // 20*6 - 6
+          
+          // Set To
+          else if (x <= 180) { // 29*6 + 6
+            if (y <= 42); // 6*8 - 6
+            else if (y <= 94) { // 11*8 + 6
+              // Set To
             }
           }
           
-          break;
-        case PROGRAM_PROGRAMS:
-          // 6*6 + 6
-          if (x <= 42) {
-            // 2*8 - 8
-            if (y <= 10) {
-              // Nothing
+          else if (x <= 198); // 34*6 - 6
+          
+          // Right Bar
+          else {
+            if (y <= 14); // 8 + 6
+            else if (y <= 58) { // 8*8 - 6
+              drawMainRoomMenu(); 
+              state = MAIN_ROOM;
+            } 
+            else if (y <= 98) { // 13*8 - 6
+              drawMainFanMenu();
+              state = MAIN_FAN;
+            } 
+            else {
+              drawMainModeMenu();
+              state = MAIN_MODE;  
             }
-            // 7*8 - 6
-            else if (y <= 48) {
-              // Main
+          }
+          break;
+          
+        /****END MAIN****/
+          
+        case PROGRAM_PROGRAMS:
+        
+          // Left Bar
+          if (x <= 42) { // 6*6 + 6
+            if (y <= 10); // 2*8 - 8
+            // Main
+            else if (y <= 48) { // 7*8 - 6
               clearScreen();
               drawMainScreen();
               state = MAIN;  
             }
-            // 12*8 - 6
-            else if (y <= 90) {
-              // Program/Nothing
-            }
+            else if (y <= 90); // 12*8 - 6
+            // Settings
             else {
-              // Settings
               clearScreen();
               drawSettingsScreen();
               state = SETTINGS;
             }
           }
+          
+          // Right Side
+          else {
+            if (y < = 2); // 8-6
+            else if (y <= 32) { // 4*8
+              // check programs/days
+              if (x <= 66); // 12*6 - 6
+              else if (x <= 132) { // 21*6 + 6
+                // programs tab
+              } 
+              else if (x <= 144); // 25*6 -6
+              else if (x <= 210) { // 34*6 + 6
+                // days tab
+                drawDaysScreen();
+                state = PROGRAM_DAYS;
+              }
+            }
+            else if (y <= 56); // 7*8  
+            else if (y <= 80); // 10*8 
+            else if (y <= 104); // 13*8 
+          }
+          
           break;
         case SETTINGS:
             // 6*6 + 6

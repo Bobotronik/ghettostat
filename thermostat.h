@@ -40,12 +40,21 @@ void createProgram();
 void deleteProgram();
 
 void drawButton(unsigned char, unsigned char, unsigned char, unsigned char);
+
 void drawTopBar();
 void drawLeftBar();
+
 void drawMainScreen();
+
+void drawMainSetToMenu();
+void drawMainRoomMenu();
+void drawMainFanMenu();
+void drawMainModeMenu();
+
 void drawProgramsScreen();
 void drawDaysScreen();
 void drawProgrammingScreen();
 void drawProgramDaysScreen();
+
 void drawSettingsScreen();
 
