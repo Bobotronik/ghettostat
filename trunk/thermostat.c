@@ -187,8 +187,6 @@ void displayTime() {
   // Month
   temp = RTC_TIME[5];
   temp += (temp >> 4);
-  
-  printDigit(temp);
 
   switch (temp) {
     case 1:
@@ -231,14 +229,14 @@ void displayTime() {
   
   // Date
   temp = RTC_TIME[4];
-  if (temp & 0xf0) { 
+  
+  if (temp & 0xf0)
     printDigit(temp >> 4);
-  }
-  else {
+  else
     printChar(' ');  
-  }
+ 
   printDigit(temp & 0x0f);
-  printChar(' ');
+  printStr(", ");
   
   // Determine whether AM or PM;
   temp = RTC_TIME[2];
@@ -421,13 +419,54 @@ void drawMainScreen() {
   goToText(35, 12);
   printStr("MODE");
   
-  goToText(8, 4);
+  goToText(9, 5);
   printStr("Currently");
 
-  goToText(20, 4);
+  goToText(21, 5);
   printStr("Set To");
   
-  drawButton(20, 5, 10, 7);
+  drawButton(20, 6, 10, 6);
+}
+
+void drawMainSetToMenu() {
+
+}
+
+void drawMainRoomMenu() {
+
+}
+
+void drawMainFanMenu() {
+  drawButton(12, 7, 22, 5);
+  
+  drawButton(13, 8, 6, 3); 
+  goToText(14, 13);
+  printStr("Heat");
+  
+  drawButton(20, 8, 6, 3); 
+  goToText(21, 13);
+  printStr("Cool");
+  
+  drawButton(27, 8, 6, 3); 
+  goToText(28, 13);
+  printStr("Off");
+}
+
+// Heat, Cool, Off
+void drawMainModeMenu() {
+  drawButton(12, 12, 22, 5);
+  
+  drawButton(13, 13, 6, 3); 
+  goToText(14, 13);
+  printStr("Heat");
+  
+  drawButton(20, 13, 6, 3); 
+  goToText(21, 13);
+  printStr("Cool");
+  
+  drawButton(27, 13, 6, 3); 
+  goToText(28, 13);
+  printStr("Off");
 }
 
 void drawProgramsScreen() {
@@ -460,6 +499,18 @@ void drawProgramsScreen() {
   goToText(11, 14);
   printStr("Night");
   */
+  
+  goToText(8, 3);
+  for (i = 0; i < 31 ; i++) {
+    printCG(BOTTOM_BORDER);
+  }
+  
+  for (i = 4; i < 16; i++) {
+    goToText(7, i);
+    printCG(LEFT_BORDER);
+    goToText(39, i);
+    printCG(RIGHT_BORDER);
+  }
   
   drawButton(12, 1, 10, 3);
   goToText(13, 2);
