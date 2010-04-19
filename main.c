@@ -55,17 +55,13 @@ void main(void) {
       x = mapToXPixel(x);
       y = mapToYPixel(y);
      
-      setPixel(x, y, 1);
-     
       switch (state) {
         case MAIN:
           if (isButtonTouched(x, y, programButton)) {
-            clearScreen();
             drawProgramsTab();
             state = PROGRAMS_TAB;
           }
           else if (isButtonTouched(x, y, settingsButton)) {
-            clearScreen();
             drawSettingsScreen();
             state = SETTINGS;          
           }
@@ -91,85 +87,80 @@ void main(void) {
         case PROGRAMS_TAB:
         
           if (isButtonTouched(x, y, homeButton)) {
-            clearScreen();
             drawMainScreen();
             state = MAIN;
           }
           else if (isButtonTouched(x, y, settingsButton)) {
-            clearScreen();
             drawSettingsScreen();
             state = SETTINGS;          
           }
           else if (isButtonTouched(x, y, daysTab)) {
-            clearScreen();
             drawDaysTab();
             state = DAYS_TAB;
           }
           else if (isButtonTouched(x, y, program1Button)) {
-            clearScreen();
             drawProgrammingScreen();
           }
           else if (isButtonTouched(x, y, program2Button)) {
-            clearScreen();
             drawProgrammingScreen();
           }
           else if (isButtonTouched(x, y, program3Button)) {
-            clearScreen();
             drawProgrammingScreen();
           }
           else if (isButtonTouched(x, y, program4Button)) {
-            clearScreen();
             drawProgrammingScreen();
           }
           break;
           
         case DAYS_TAB:  
           if (isButtonTouched(x, y, homeButton)) {
-            clearScreen();
             drawMainScreen();
             state = MAIN;
           }
           else if (isButtonTouched(x, y, settingsButton)) {
-            clearScreen();
             drawSettingsScreen();
             state = SETTINGS;          
           }
           else if (isButtonTouched(x, y, programsTab)) {
-            clearScreen();
             drawProgramsTab();
             state = PROGRAMS_TAB;
           }
           else if (isButtonTouched(x, y, monButton)) {
-            
+            drawDaysMenu(monButton);
+            menuState = MONDAY;
           }
           else if (isButtonTouched(x, y, tueButton)) {
-            
+            drawDaysMenu(tueButton);
+            menuState = TUESDAY;
           }
           else if (isButtonTouched(x, y, wedButton)) {
-            
+            drawDaysMenu(wedButton);
+            menuState = WEDNESDAY;
           }
           else if (isButtonTouched(x, y, thuButton)) {
-            
+            drawDaysMenu(thuButton);
+            menuState = THURSDAY;
           }
           else if (isButtonTouched(x, y, friButton)) {
-            
+            drawDaysMenu(friButton);
+            menuState = FRIDAY;
           }
           else if (isButtonTouched(x, y, satButton)) {
-            
+            drawDaysMenu(satButton);
+            menuState = SATURDAY;
           }
           else if (isButtonTouched(x, y, sunButton)) {
-            
+            drawDaysMenu(sunButton);
+            menuState = SUNDAY;
           }
           break;
           
         case SETTINGS:
           if (isButtonTouched(x, y, homeButton)) {
-            clearScreen();
             drawMainScreen();
             state = MAIN;
           }
           else if (isButtonTouched(x, y, programButton)) {
-            clearScreen();
             drawProgramsTab();
             state = PROGRAMS_TAB;          
           }

@@ -16,8 +16,8 @@
 #define NUM_PROGRAMS  4
 
 #define MAIN              0
-#define PROGRAMS_TAB       1
-#define DAYS_TAB           2
+#define PROGRAMS_TAB      1
+#define DAYS_TAB          2
 #define SETTINGS          3
 
 #define NONE              0

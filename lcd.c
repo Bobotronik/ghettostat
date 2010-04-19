@@ -29,6 +29,8 @@ const unsigned char solidBottomBorder[] = {0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0
 
 const unsigned char hardLowerLeftCorner[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3f};
 const unsigned char hardLowerRightCorner[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x3f};
+const unsigned char hardUpperLeftCorner[] = {0x3f, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
+const unsigned char hardUpperRightCorner[] = {0x3f, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 
 unsigned char charAbs(int num) {  
   if (num < 0) {
@@ -204,6 +206,23 @@ void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned c
       display(0x00);
     }
   } 
+}
+
+void clearPartialScreen() {
+  unsigned char i, j;
+  for (i = 1; i < 16; i++) {
+    goToText(6, i);
+    for (j = 6; j < 40; j++) {
+      display(0x00);
+    }
+  }
+  
+  for (i = 8; i < 128; i++) {
+    goToGraphic(36, i);
+    for (j = 6; j < 40; j++) {
+      display(0x00);
+    }
+  }
 }
 
 void clearScreen() {
@@ -441,7 +460,7 @@ unsigned char isScreenTouched() {
     previous = current;
     wait(50);
   }
-  return 1;
+  return current;
 }
 
 void addCG(unsigned char* character, unsigned char address) {
