@@ -100,7 +100,8 @@
 #define SOLID_BOTTOM_BORDER       0x90
 #define HARD_LOWER_LEFT_CORNER    0x91
 #define HARD_LOWER_RIGHT_CORNER   0x92
-
+#define HARD_UPPER_LEFT_CORNER    0x93
+#define HARD_UPPER_RIGHT_CORNER   0x94
 
 unsigned char charAbs(int);
 
@@ -129,6 +130,7 @@ void printStr(char*);
 void clearText();
 void clearGraphic();
 void clearArea();
+void clearPartialScreen();
 void clearScreen();
 
 void setPixel(unsigned char, unsigned char, unsigned char);
