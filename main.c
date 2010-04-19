@@ -9,11 +9,11 @@
 #include "functions.h"
 #include "thermostat.h"
 
+
 #pragma TRAP_PROC
 void dummyISR(void) {
 
 }
-
 
 void main(void) {
   unsigned char state, x, y;
@@ -29,6 +29,7 @@ void main(void) {
   initializeDisplay();
  
   drawMainScreen();
+  drawSolidButton(homeButton);
   state = MAIN;
   
   for(;;) {
@@ -61,7 +62,7 @@ void main(void) {
           if (isButtonTouched(x, y, programButton)) {
             clearScreen();
             drawProgramsTab();
-            state = PROGRAM_TAB;
+            state = PROGRAMS_TAB;
           }
           else if (isButtonTouched(x, y, settingsButton)) {
             clearScreen();
@@ -69,25 +70,25 @@ void main(void) {
             state = SETTINGS;          
           }
           else if (isButtonTouched(x, y, setToButton)) {
-            drawSettingsMenu();
+            //drawSettingsMenu();
           }
           else if (isButtonTouched(x, y, roomButton)) {
             drawMainRoomMenu(); 
-            state = MAIN_ROOM;
+            //state = MAIN_ROOM;
           }
           else if (isButtonTouched(x, y, fanButton)) {
             drawMainFanMenu();
-            state = MAIN_FAN;
+            //state = MAIN_FAN;
           }
           else if (isButtonTouched(x, y, modeButton)) {
             drawMainModeMenu();
-            state = MAIN_MODE;
+            //state = MAIN_MODE;
           }
           break;
           
         /****END MAIN****/
           
-        case PROGRAM_TAB:
+        case PROGRAMS_TAB:
         
           if (isButtonTouched(x, y, homeButton)) {
             clearScreen();
@@ -162,15 +163,15 @@ void main(void) {
           break;
           
         case SETTINGS:
-          if (isButtonTouched(x, y, mainButton)) {
+          if (isButtonTouched(x, y, homeButton)) {
             clearScreen();
             drawMainScreen();
             state = MAIN;
           }
           else if (isButtonTouched(x, y, programButton)) {
             clearScreen();
-            drawProgramTab();
-            state = PROGRAM_TAB;          
+            drawProgramsTab();
+            state = PROGRAMS_TAB;          
           }
           break;
       }    
