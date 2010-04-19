@@ -4,8 +4,8 @@
 #include "functions.h"
 #include "pins.h"
 #include "i2cDevices.h"
-#include <stdlib.h>
 
+const unsigned char block[] = {0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f};
 const unsigned char degree[] = {0x08, 0x14, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00};
 const unsigned char largeDegree[] = {0x0c, 0x12, 0x21, 0x21, 0x12, 0x0c, 0x00, 0x00};
 
@@ -26,6 +26,9 @@ const unsigned char solidLowerRightCorner[] = {0x3f, 0x3f, 0x3e, 0x3e, 0x3c, 0x3
 
 const unsigned char solidTopBorder[] = {0x00, 0x00, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f};
 const unsigned char solidBottomBorder[] = {0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x3f, 0x00, 0x00};
+
+const unsigned char hardLowerLeftCorner[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3f};
+const unsigned char hardLowerRightCorner[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x3f};
 
 unsigned char charAbs(int num) {  
   if (num < 0) {
@@ -432,7 +435,7 @@ unsigned char isScreenTouched() {
   
   for (i = 0; i < 30; i++) {
     current = convertAD(TS_X_INPUT) >> 1;
-    if (charAbs(current - previous) > 3) {
+    if (charAbs(current - previous) > 2) {
       return 0; 
     }   
     previous = current;
@@ -452,6 +455,7 @@ void addCG(unsigned char* character, unsigned char address) {
 void initializeCG() {
   unsigned char i;
   
+  addCG(block, BLOCK);
   addCG(degree, DEGREE);
   addCG(largeDegree, LARGE_DEGREE);
   
@@ -463,7 +467,7 @@ void initializeCG() {
   addCG(topBorder, TOP_BORDER);
   addCG(bottomBorder, BOTTOM_BORDER);
   addCG(leftBorder, LEFT_BORDER);
-  addCG(rightBorder, right_BORDER);
+  addCG(rightBorder, RIGHT_BORDER);
   
   addCG(solidUpperLeftCorner, SOLID_UPPER_LEFT_CORNER);
   addCG(solidUpperRightCorner, SOLID_UPPER_RIGHT_CORNER);
@@ -472,6 +476,14 @@ void initializeCG() {
 
   addCG(solidTopBorder, SOLID_TOP_BORDER);
   addCG(solidBottomBorder, SOLID_BOTTOM_BORDER);
+  
+  addCG(menuDivider, MENU_DIVIDER);
+  addCG(leftMenuDivider, LEFT_MENU_DIVIDER);
+  addCG(rightMenuDivider, RIGHT_MENU_DIVIDER);
+  addCG(topLeftMenuDivider, TOP_LEFT_MENU_DIVIDER);
+  addCG(topRightMenuDivider, TOP_RIGHT_MENU_DIVIDER);
+  addCG(bottomLeftMenuDivider, BOTTOM_LEFT_MENU_DIVIDER);
+  addCG(bottomRightMenuDivider, BOTTOM_RIGHT_MENU_DIVIDER);
 }
 
 void initializeTS() {

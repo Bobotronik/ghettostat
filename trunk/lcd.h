@@ -98,6 +98,9 @@
 #define SOLID_LOWER_RIGHT_CORNER  0x8e
 #define SOLID_TOP_BORDER          0x8f
 #define SOLID_BOTTOM_BORDER       0x90
+#define HARD_LOWER_LEFT_CORNER    0x91
+#define HARD_LOWER_RIGHT_CORNER   0x92
+
 
 unsigned char charAbs(int);
 
