@@ -29,14 +29,6 @@ void main(void) {
   initializeDisplay();
  
   drawMainScreen();
-  /*
-  General Algorightm
-  -Check if touched
-  -If touched, check state and decide which button was touched
-  -Update state and LCD
- 
-  */
-  del1m(2000);
   state = MAIN;
   
   for(;;) {
@@ -47,13 +39,15 @@ void main(void) {
       case MAIN:
         updateTemp();
         break;
-      case PROGRAM_PROGRAMS:
+      case PROGRAMS_TAB:
+        break;
+      case DAYS_TAB:
         break;
       case SETTINGS:
         break;
     }
     // Poll touchscreen
-    if (isTouched()) {
+    if (isScreenTouched()) {
              
       x = getX();
       y = getY();
@@ -64,124 +58,120 @@ void main(void) {
      
       switch (state) {
         case MAIN:
-        
-          // Left Bar
-          if (x <= 42) { // 6*6 + 6
-            if (y <= 10); // 2*8 - 6
-            // Since already in Main, do nothing
-            else if (y <= 48); // 7*8 - 6
-            // Program
-            else if (y <= 90) { // 12*8 - 6            
-              clearScreen();
-              drawProgramsScreen();
-              state = PROGRAM_PROGRAMS;
-            }
-            // Settings
-            else {
-              clearScreen();
-              drawSettingsScreen();
-              state = SETTINGS;
-            }
-          } 
-          else if (x <= 120); // 20*6 - 6
-          
-          // Set To
-          else if (x <= 180) { // 29*6 + 6
-            if (y <= 42); // 6*8 - 6
-            else if (y <= 94) { // 11*8 + 6
-              // Set To
-            }
+          if (isButtonTouched(x, y, programButton)) {
+            clearScreen();
+            drawProgramsTab();
+            state = PROGRAM_TAB;
           }
-          
-          else if (x <= 198); // 34*6 - 6
-          
-          // Right Bar
-          else {
-            if (y <= 14); // 8 + 6
-            else if (y <= 58) { // 8*8 - 6
-              drawMainRoomMenu(); 
-              state = MAIN_ROOM;
-            } 
-            else if (y <= 98) { // 13*8 - 6
-              drawMainFanMenu();
-              state = MAIN_FAN;
-            } 
-            else {
-              drawMainModeMenu();
-              state = MAIN_MODE;  
-            }
+          else if (isButtonTouched(x, y, settingsButton)) {
+            clearScreen();
+            drawSettingsScreen();
+            state = SETTINGS;          
+          }
+          else if (isButtonTouched(x, y, setToButton)) {
+            drawSettingsMenu();
+          }
+          else if (isButtonTouched(x, y, roomButton)) {
+            drawMainRoomMenu(); 
+            state = MAIN_ROOM;
+          }
+          else if (isButtonTouched(x, y, fanButton)) {
+            drawMainFanMenu();
+            state = MAIN_FAN;
+          }
+          else if (isButtonTouched(x, y, modeButton)) {
+            drawMainModeMenu();
+            state = MAIN_MODE;
           }
           break;
           
         /****END MAIN****/
           
-        case PROGRAM_PROGRAMS:
+        case PROGRAM_TAB:
         
-          // Left Bar
-          if (x <= 42) { // 6*6 + 6
-            if (y <= 10); // 2*8 - 8
-            // Main
-            else if (y <= 48) { // 7*8 - 6
-              clearScreen();
-              drawMainScreen();
-              state = MAIN;  
-            }
-            else if (y <= 90); // 12*8 - 6
-            // Settings
-            else {
-              clearScreen();
-              drawSettingsScreen();
-              state = SETTINGS;
-            }
+          if (isButtonTouched(x, y, homeButton)) {
+            clearScreen();
+            drawMainScreen();
+            state = MAIN;
           }
-          
-          // Right Side
-          else {
-            if (y < = 2); // 8-6
-            else if (y <= 32) { // 4*8
-              // check programs/days
-              if (x <= 66); // 12*6 - 6
-              else if (x <= 132) { // 21*6 + 6
-                // programs tab
-              } 
-              else if (x <= 144); // 25*6 -6
-              else if (x <= 210) { // 34*6 + 6
-                // days tab
-                drawDaysScreen();
-                state = PROGRAM_DAYS;
-              }
-            }
-            else if (y <= 56); // 7*8  
-            else if (y <= 80); // 10*8 
-            else if (y <= 104); // 13*8 
+          else if (isButtonTouched(x, y, settingsButton)) {
+            clearScreen();
+            drawSettingsScreen();
+            state = SETTINGS;          
           }
-          
+          else if (isButtonTouched(x, y, daysTab)) {
+            clearScreen();
+            drawDaysTab();
+            state = DAYS_TAB;
+          }
+          else if (isButtonTouched(x, y, program1Button)) {
+            clearScreen();
+            drawProgrammingScreen();
+          }
+          else if (isButtonTouched(x, y, program2Button)) {
+            clearScreen();
+            drawProgrammingScreen();
+          }
+          else if (isButtonTouched(x, y, program3Button)) {
+            clearScreen();
+            drawProgrammingScreen();
+          }
+          else if (isButtonTouched(x, y, program4Button)) {
+            clearScreen();
+            drawProgrammingScreen();
+          }
           break;
+          
+        case DAYS_TAB:  
+          if (isButtonTouched(x, y, homeButton)) {
+            clearScreen();
+            drawMainScreen();
+            state = MAIN;
+          }
+          else if (isButtonTouched(x, y, settingsButton)) {
+            clearScreen();
+            drawSettingsScreen();
+            state = SETTINGS;          
+          }
+          else if (isButtonTouched(x, y, programsTab)) {
+            clearScreen();
+            drawProgramsTab();
+            state = PROGRAMS_TAB;
+          }
+          else if (isButtonTouched(x, y, monButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, tueButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, wedButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, thuButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, friButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, satButton)) {
+            
+          }
+          else if (isButtonTouched(x, y, sunButton)) {
+            
+          }
+          break;
+          
         case SETTINGS:
-            // 6*6 + 6
-            if (x <= 42) {
-              // 2*8 - 8
-              if (y <= 10) {
-                // Nothing
-              }
-              // 7*8 - 6
-              else if (y <= 48) {
-                // Main
-                clearScreen();
-                drawMainScreen();
-                state = MAIN;  
-              }
-              // 12*8 - 6
-              else if (y <= 90) {
-                // Program
-                clearScreen();
-                drawProgramsScreen();
-                state = PROGRAM_PROGRAMS;
-              }
-              else {
-                // Settings/Nothing
-              }
-            }
+          if (isButtonTouched(x, y, mainButton)) {
+            clearScreen();
+            drawMainScreen();
+            state = MAIN;
+          }
+          else if (isButtonTouched(x, y, programButton)) {
+            clearScreen();
+            drawProgramTab();
+            state = PROGRAM_TAB;          
+          }
           break;
       }    
     }

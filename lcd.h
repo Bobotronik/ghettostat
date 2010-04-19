@@ -91,7 +91,13 @@
 #define TOP_BORDER                0x87
 #define BOTTOM_BORDER             0x88
 #define LEFT_BORDER               0x89
-#define RIGHT_BORDER              0x90
+#define RIGHT_BORDER              0x8a
+#define SOLID_UPPER_LEFT_CORNER   0x8b
+#define SOLID_UPPER_RIGHT_CORNER  0x8c
+#define SOLID_LOWER_LEFT_CORNER   0x8d
+#define SOLID_LOWER_RIGHT_CORNER  0x8e
+#define SOLID_TOP_BORDER          0x8f
+#define SOLID_BOTTOM_BORDER       0x90
 
 unsigned char charAbs(int);
 
@@ -128,7 +134,7 @@ void drawLine(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawGraphic(unsigned char, unsigned char, unsigned char, unsigned char, unsigned char*);
 
-unsigned char isTouched();
+unsigned char isScreenTouched();
 unsigned char getX();
 unsigned char getY();
 
