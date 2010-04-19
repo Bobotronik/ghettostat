@@ -13,20 +13,26 @@
 #define NIGHT       3
 
 #define NUM_PERIODS   4
-#define NUM_PROGRAMS  5
+#define NUM_PROGRAMS  4
 
 #define MAIN              0
-#define MAIN_SET_TO       1
-#define MAIN_ROOM         2
-#define MAIN_FAN          3
-#define MAIN_MODE         4
+#define PROGRAM_TAB       1
+#define DAY_TAB           2
+#define SETTINGS          3
 
-#define PROGRAM_PROGRAMS  5   
-#define PROGRAM_DAYS      6
-#define PROGRAM_PROGRAMMING 7
-#define PROGRAM_PROGRAM_DAYS 8
+#define NONE              0
+#define ROOM_MENU         1 
+#define FAN_MENU          2
+#define MODE_MENU         3
+#define SET_TO_MENU       4
 
-#define SETTINGS          9
+#define PROGRAMS_MENU     5
+#define DAYS_MENU         5
+
+#define HOURS_MENU
+#define MINUTES_MENU
+#define AM_PM_MENU
+#define TEMP_MENU
 
 void initializeThermostat();
 
@@ -40,19 +46,21 @@ void createProgram();
 void deleteProgram();
 
 void drawButton(unsigned char, unsigned char, unsigned char, unsigned char);
+void drawSolidButton(unsigned char, unsigned char, unsigned char, unsigned char);
+
+unsigned char isButtonTouched(unsigned char, unsigned char, unsigned char*);
 
 void drawTopBar();
 void drawLeftBar();
 
 void drawMainScreen();
-
 void drawMainSetToMenu();
 void drawMainRoomMenu();
 void drawMainFanMenu();
 void drawMainModeMenu();
 
-void drawProgramsScreen();
-void drawDaysScreen();
+void drawProgramsTab();
+void drawDaysTab();
 void drawProgrammingScreen();
 void drawProgramDaysScreen();
 
