@@ -31,6 +31,13 @@ const unsigned char hardLowerLeftCorner[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
 const unsigned char hardLowerRightCorner[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x3f};
 const unsigned char hardUpperLeftCorner[] = {0x3f, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20};
 const unsigned char hardUpperRightCorner[] = {0x3f, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+const unsigned char topMenuBorder[] = {0x3f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+const unsigned char bottomMenuBorder[] =  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3f};
+
+const unsigned char hardLowerLeftButtonCorner[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x3f, 0x00, 0x00};
+const unsigned char hardLowerRightButtonCorner[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x3f, 0x00, 0x00};
+const unsigned char leftTabIntersection[] = {0x20, 0x20, 0x20, 0x20, 0x20, 0x3f, 0x20, 0x20};
+const unsigned char rightTabIntersection[] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x3f, 0x01, 0x01};
 
 unsigned char charAbs(int num) {  
   if (num < 0) {
@@ -137,7 +144,8 @@ void printCG(char character) {
 }
 
 void printNum(int num) {
-  unsigned char dividend, remainder, neg;
+  unsigned char number[6];
+  unsigned char dividend, remainder, neg, i;
   
   if (num < 0) {
     dividend = -num;
@@ -147,7 +155,23 @@ void printNum(int num) {
     dividend = num;
     neg = 0;
   }
+  /*
+  for (i = 5; i >= 0; i--) {
+    remainder = dividend % 10;
+    dividend /= 10;
+    number[i] = remainder; 
+    if (dividend == 0)
+      break; 
+  }
   
+  if (neg)
+    printChar('-');
+  
+  for ( ; i < 6; i++) {
+    writeData(number[i] + 16);
+    writeCommand(DATA_WRITE_AND_INCREMENT);  
+  }
+  */
   do {
     remainder = dividend % 10;
     dividend /= 10;
@@ -496,13 +520,18 @@ void initializeCG() {
   addCG(solidTopBorder, SOLID_TOP_BORDER);
   addCG(solidBottomBorder, SOLID_BOTTOM_BORDER);
   
-  addCG(menuDivider, MENU_DIVIDER);
-  addCG(leftMenuDivider, LEFT_MENU_DIVIDER);
-  addCG(rightMenuDivider, RIGHT_MENU_DIVIDER);
-  addCG(topLeftMenuDivider, TOP_LEFT_MENU_DIVIDER);
-  addCG(topRightMenuDivider, TOP_RIGHT_MENU_DIVIDER);
-  addCG(bottomLeftMenuDivider, BOTTOM_LEFT_MENU_DIVIDER);
-  addCG(bottomRightMenuDivider, BOTTOM_RIGHT_MENU_DIVIDER);
+  addCG(hardUpperLeftCorner, HARD_UPPER_LEFT_CORNER);
+  addCG(hardUpperRightCorner, HARD_UPPER_RIGHT_CORNER);
+  addCG(hardLowerLeftCorner, HARD_LOWER_LEFT_CORNER);
+  addCG(hardLowerRightCorner, HARD_LOWER_RIGHT_CORNER);
+  
+  addCG(topMenuBorder, TOP_MENU_BORDER);
+  addCG(bottomMenuBorder, BOTTOM_MENU_BORDER);
+  
+  addCG(hardLowerLeftButtonCorner, HARD_LOWER_LEFT_BUTTON_CORNER);
+  addCG(hardLowerRightButtonCorner, HARD_LOWER_RIGHT_BUTTON_CORNER);
+  addCG(leftTabIntersection, LEFT_TAB_INTERSECTION);
+  addCG(rightTabIntersection, RIGHT_TAB_INTERSECTION);
 }
 
 void initializeTS() {

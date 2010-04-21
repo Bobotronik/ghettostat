@@ -87,6 +87,20 @@ const unsigned char wrench[] = {
 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
 
+const unsigned char check[] = {
+0x00, 0x02, 
+0x00, 0x06, 
+0x00, 0x0c, 
+0x00, 0x0c, 
+0x00, 0x18, 
+0x00, 0x18, 
+0x00, 0x18, 
+0x00, 0x38, 
+0x1c, 0x38, 
+0x0f, 0x30, 
+0x07, 0x30, 
+0x01, 0x30};
+
 // Buttons
 // Format: {X, Y, width, height}
 
@@ -107,16 +121,16 @@ const unsigned char rightBarY = 3;
 const unsigned char rightBarOffset = 5;
 const unsigned char rightBarWidth = 6;
 const unsigned char rightBarHeight = 3;
-const unsigned char roomButton[] = {rightBarX, rightBarX, rightBarWidth, rightBarHeight};
-const unsigned char fanButton[] = {rightBarX, rightBarX + rightBarOffset, rightBarWidth, rightBarHeight};
-const unsigned char modeButton[] = {rightBarX, rightBarX + 2*rightBarOffset, rightBarWidth, rightBarHeight};
+const unsigned char roomButton[] = {rightBarX, rightBarY, rightBarWidth, rightBarHeight};
+const unsigned char fanButton[] = {rightBarX, rightBarY + rightBarOffset, rightBarWidth, rightBarHeight};
+const unsigned char modeButton[] = {rightBarX, rightBarY + 2*rightBarOffset, rightBarWidth, rightBarHeight};
 
 // Program Screen
 const unsigned char tabY = 1;
-const unsigned char tabWidth = 10;
+const unsigned char tabWidth = 16;
 const unsigned char tabHeight = 3;
-const unsigned char programsTab[] = {11, tabY, tabWidth, tabHeight};
-const unsigned char daysTab[] = {26, tabY, tabWidth, tabHeight};
+const unsigned char programsTab[] = {7, tabY, tabWidth, tabHeight};
+const unsigned char daysTab[] = {24, tabY, tabWidth, tabHeight};
 
 const unsigned char programsButtonX = 18;
 const unsigned char programsButtonY = 4;
@@ -164,13 +178,13 @@ const unsigned char amPm4Button[] = {22, programsButtonsY + 3*programsButtonsOff
   
 const unsigned char temp1Button[] = {28, programsButtonsY, programsButtonsWidth, programsButtonsHeight};
 const unsigned char temp2Button[] = {28, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char temp3Button[] = {28, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char temp4Button[] = {28, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
+const unsigned char temp3Button[] = {28, programsButtonsY + 2*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
+const unsigned char temp4Button[] = {28, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
   
 const unsigned char mode1Button[] = {34, programsButtonsY, 6, programsButtonsHeight};
 const unsigned char mode2Button[] = {34, programsButtonsY + programsButtonsOffset, 6, programsButtonsHeight};
-const unsigned char mode3Button[] = {34, programsButtonsY + programsButtonsOffset, 6, programsButtonsHeight};
-const unsigned char mode4Button[] = {34, programsButtonsY + programsButtonsOffset, 6, programsButtonsHeight};
+const unsigned char mode3Button[] = {34, programsButtonsY + 2*programsButtonsOffset, 6, programsButtonsHeight};
+const unsigned char mode4Button[] = {34, programsButtonsY + 3*programsButtonsOffset, 6, programsButtonsHeight};
   
 extern unsigned char DEVICE_DATA[2];
 
@@ -226,6 +240,47 @@ void initializeThermostat() {
   
   for (i = 0; i < 7; i++) {
     day[i] = 0;
+  }
+}
+
+void printHours(unsigned char temp) {
+  if (temp <= 12*4 + 3) {
+    printNum(temp/4);  
+  }
+  else {
+    printNum((temp - 48) / 4);  
+  }   
+}
+
+void printMinutes(unsigned char temp) {
+  if ((temp % 4) * 15)
+    printNum((temp % 4) * 15);  
+  else {
+    printNum(0);
+    printNum(0);
+  }
+}
+
+void printAmPm(unsigned char temp) {
+  if (temp < 48) {
+    printStr("AM");
+  }
+  else {
+    printStr("PM");
+  }  
+}
+
+void printMode(unsigned char temp) {
+  switch (temp) {
+    case HEAT:
+      printStr("HEAT");
+      break;
+    case COOL:
+      printStr("COOL");
+      break;
+    case OFF:
+      printStr("OFF");
+      break;   
   }
 }
 
@@ -369,7 +424,7 @@ void displayTime() {
 }
 
 void updateTemp() {
-  goToText(10, 5);
+  goToText(10, 6);
   printNum(getTempF());
   //goToText();
 }
@@ -434,7 +489,7 @@ void updateThermometer() {
 }
 
 void drawButton(unsigned char button[]) {
-  unsigned char i;
+  unsigned char i, j;
   
   goToText(button[0], button[1]);
   printCG(UPPER_LEFT_CORNER);
@@ -509,8 +564,7 @@ void drawTopBar() {
   
   goToText(0,0);
   displayTime();
-  goToText(28, 0);
-  printStr("Humidity   %");
+  printStr("            Humidity   %");
   goToText(38, 0);
   printNum(getHumidityDec());
 }
@@ -608,13 +662,42 @@ void drawProgramsTab() {
   drawLeftBar();
   drawSolidButton(programButton);
   
-  drawButton(programsTab);
-  goToText(12, 2);
+  // Draw top stuff
+  drawSolidButton(programsTab);
+  goToText(11, 2);
   printStr("Programs");
+  
   drawButton(daysTab);
-  goToText(27, 2);
+  goToText(28, 2);
   printStr("  Days  ");
   
+  // Draw border
+  for (i = 4; i < 16; i++) {
+    goToText(7, i);
+    printCG(LEFT_BORDER);
+    goToText(39, i);
+    printCG(RIGHT_BORDER);
+  }
+  
+  // Make top pretty
+  goToText(programsTab[0], programsTab[1] + programsTab[3] - 1);
+  printCG(SOLID_BOTTOM_BORDER);    
+  goToText(programsTab[0] + programsTab[2] - 1, programsTab[1] + programsTab[3] - 1);
+  printCG(SOLID_BOTTOM_BORDER);  
+  
+  for (i = 0; i < 8;i++) {
+    goToGraphic(11*6, 2*8 + i);
+    for (j = 0; j < 8;j++) {
+      display(0x3f); 
+    }
+  }
+  
+  goToText(programsTab[0] + programsTab[2], programsTab[1] + programsTab[3] - 1);
+  printCG(BOTTOM_BORDER);
+  printCG(HARD_LOWER_LEFT_BUTTON_CORNER);
+  goToText(daysTab[0] + daysTab[2] - 1, daysTab[1] + daysTab[3] - 1);
+  printCG(RIGHT_TAB_INTERSECTION);         
+           
   drawButton(program1Button);
   goToText(program1Button[0] + 1, program1Button[1] + 1);
   printStr("Program 1");
@@ -627,18 +710,12 @@ void drawProgramsTab() {
   drawButton(program4Button);
   goToText(program4Button[0] + 1, program4Button[1] + 1);
   printStr("Program 4");
-  
+  /*
   goToText(8, 3);
   for (i = 0; i < 31 ; i++) {
     printCG(BOTTOM_BORDER);
-  }
-  for (i = 4; i < 16; i++) {
-    goToText(7, i);
-    printCG(LEFT_BORDER);
-    goToText(39, i);
-    printCG(RIGHT_BORDER);
-  }
-  
+  } */
+  /*
   goToText(programsTab[0] - 1, programsTab[1] + programsTab[3] - 1);
   printCG(LOWER_RIGHT_CORNER);
   goToText(programsTab[0] + programsTab[2], programsTab[1] + programsTab[3] - 1);
@@ -646,7 +723,7 @@ void drawProgramsTab() {
   goToText(daysTab[0] - 1, daysTab[1] + daysTab[3] - 1);
   printCG(LOWER_RIGHT_CORNER);
   goToText(daysTab[0] + daysTab[2], daysTab[1] + daysTab[3] - 1);
-  printCG(LOWER_LEFT_CORNER);
+  printCG(LOWER_LEFT_CORNER);   */
 }
 
 void drawDaysTab() {
@@ -656,13 +733,43 @@ void drawDaysTab() {
   drawLeftBar();
   drawSolidButton(programButton);
   
+  // Draw top stuff
   drawButton(programsTab);
-  goToText(12, 2);
+  goToText(11, 2);
   printStr("Programs");
-  drawButton(daysTab);
-  goToText(27, 2);
+  
+  drawSolidButton(daysTab);
+  goToText(28, 2);
   printStr("  Days  ");
   
+  // Draw border
+  for (i = 3; i < 16; i++) {
+    goToText(7, i);
+    printCG(LEFT_BORDER);
+    goToText(39, i);
+    printCG(RIGHT_BORDER);
+  }
+  
+  // Make top pretty
+  goToText(daysTab[0], daysTab[1] + daysTab[3] - 1);
+  printCG(SOLID_BOTTOM_BORDER);    
+  goToText(daysTab[0] + daysTab[2] - 1, daysTab[1] + daysTab[3] - 1);
+  printCG(SOLID_BOTTOM_BORDER);  
+  
+  for (i = 0; i < 8;i++) {
+    goToGraphic(28*6, 2*8 + i);
+    for (j = 0; j < 8;j++) {
+      display(0x3f); 
+    }
+  }
+  
+  goToText(programsTab[0], programsTab[1] + programsTab[3] - 1);
+  printCG(LEFT_TAB_INTERSECTION);
+  goToText(programsTab[0] + programsTab[2] - 1, programsTab[1] + programsTab[3] - 1);
+  printCG(HARD_LOWER_RIGHT_BUTTON_CORNER);
+  printCG(BOTTOM_BORDER);
+  
+         
   drawButton(monButton);
   goToText(monButton[0] + 1, monButton[1] - 1);
   printStr("Mon");
@@ -685,18 +792,17 @@ void drawDaysTab() {
   drawButton(thuButton);
   goToText(thuButton[0] + 1, thuButton[1] + thuButton[3]);
   printStr("Thu");
+  /*
+  goToText(programsTab[0] + 1, programsTab[1] + programsTab[3] - 1);
+  for (i = 0; i < programsTab[2] - 2; i++) {
+    display(0x00); 
+  }
   
-  goToText(8, 3);
   for (i = 0; i < 31 ; i++) {
     printCG(BOTTOM_BORDER);
-  }
-  for (i = 4; i < 16; i++) {
-    goToText(7, i);
-    printCG(LEFT_BORDER);
-    goToText(39, i);
-    printCG(RIGHT_BORDER);
-  }
-  
+  } */
+
+  /*
   goToText(programsTab[0] - 1, programsTab[1] + programsTab[3] - 1);
   printCG(LOWER_RIGHT_CORNER);
   goToText(programsTab[0] + programsTab[2], programsTab[1] + programsTab[3] - 1);
@@ -704,21 +810,41 @@ void drawDaysTab() {
   goToText(daysTab[0] - 1, daysTab[1] + daysTab[3] - 1);
   printCG(LOWER_RIGHT_CORNER);
   goToText(daysTab[0] + daysTab[2], daysTab[1] + daysTab[3] - 1);
-  printCG(LOWER_LEFT_CORNER);
+  printCG(LOWER_LEFT_CORNER);   */
 }
 
-void drawProgrammingScreen() {
+void drawProgrammingScreen(unsigned char programIndex) {
+  unsigned char time, i, j;
+  
   clearPartialScreen();
   
   drawButton(okButton);
-  
-  goToText();
+  /*
+  for (i = 0; i < 12; i++) {
+    goToGraphic((okButton[0]+1)*6, (okButton[1]+1)*8 + i);
+    for (j = 0; j < 2; j++) {
+      display(check[i*2 + j]);
+    }
+}*/
+  drawGraphic((okButton[0]+1)*6, (okButton[1])*8 + 6, 2, 12, check);
+  goToText(17, 1);
   printStr("Program ");
   
   drawButton(hour1Button);
+  goToText(hour1Button[0] + 2, hour1Button[1] + 1);
+  printHours(programs[programIndex].periods[0].startTime);
+  
   drawButton(hour2Button);
+  goToText(hour2Button[0] + 2, hour2Button[1] + 1);
+  printHours(programs[programIndex].periods[1].startTime);
+  
   drawButton(hour3Button);
+  goToText(hour3Button[0] + 2, hour3Button[1] + 1);
+  printHours(programs[programIndex].periods[2].startTime);
+  
   drawButton(hour4Button);
+  goToText(hour4Button[0] + 2, hour4Button[1] + 1);
+  printHours(programs[programIndex].periods[3].startTime);
   
   goToText(hour1Button[0] + hour1Button[2], hour1Button[1] + 1);
   printChar(':');
@@ -730,43 +856,77 @@ void drawProgrammingScreen() {
   printChar(':');
   
   drawButton(minutes1Button);
+  goToText(minutes1Button[0] + 2, minutes1Button[1] + 1);
+  printMinutes(programs[programIndex].periods[0].startTime);
   drawButton(minutes2Button);
+  goToText(minutes2Button[0] + 2, minutes2Button[1] + 1);
+  printMinutes(programs[programIndex].periods[1].startTime);
   drawButton(minutes3Button);
+  goToText(minutes3Button[0] + 2, minutes3Button[1] + 1);
+  printMinutes(programs[programIndex].periods[2].startTime);
   drawButton(minutes4Button);
+  goToText(minutes4Button[0] + 2, minutes4Button[1] + 1);
+  printMinutes(programs[programIndex].periods[3].startTime);
   
   drawButton(amPm1Button);
+  goToText(amPm1Button[0] + 1, amPm1Button[1] + 1);
+  printAmPm(programs[programIndex].periods[0].startTime);
   drawButton(amPm2Button);
+  goToText(amPm2Button[0] + 1, amPm2Button[1] + 1);
+  printAmPm(programs[programIndex].periods[1].startTime);
   drawButton(amPm3Button);
+  goToText(amPm3Button[0] + 1, amPm3Button[1] + 1);
+  printAmPm(programs[programIndex].periods[2].startTime);
   drawButton(amPm4Button);
+  goToText(amPm4Button[0] + 1, amPm4Button[1] + 1);
+  printAmPm(programs[programIndex].periods[3].startTime);
   
   drawButton(temp1Button);
+  goToText(temp1Button[0] + 2, temp1Button[1] + 1);
+  printNum(programs[programIndex].periods[0].temperature);
   drawButton(temp2Button);
+  goToText(temp2Button[0] + 2, temp2Button[1] + 1);
+  printNum(programs[programIndex].periods[1].temperature);
   drawButton(temp3Button);
+  goToText(temp3Button[0] + 2, temp3Button[1] + 1);
+  printNum(programs[programIndex].periods[2].temperature);
   drawButton(temp4Button);
+  goToText(temp4Button[0] + 2, temp4Button[1] + 1);
+  printNum(programs[programIndex].periods[3].temperature);
   
   drawButton(mode1Button);
+  goToText(mode1Button[0] + 1, mode1Button[1] + 1);
+  printMode(programs[programIndex].periods[0].setting);
   drawButton(mode2Button);
+  goToText(mode2Button[0] + 1, mode2Button[1] + 1);
+  printMode(programs[programIndex].periods[1].setting);
   drawButton(mode3Button);
+  goToText(mode3Button[0] + 1, mode3Button[1] + 1);
+  printMode(programs[programIndex].periods[2].setting);
   drawButton(mode4Button);
+  goToText(mode4Button[0] + 1, mode4Button[1] + 1);
+  printMode(programs[programIndex].periods[3].setting);
   
-  goToText(minutes1Button[0] + 5, minutes1Button[1] - 1);
+  goToText(hour1Button[0] + 2, hour1Button[1] - 1);
   printStr("Start Time");
-  goToText(temp1Button[0] + 1, temp1Button[1] - 1);
+  goToText(temp1Button[0], temp1Button[1] - 1);
   printStr("Temp");
   goToText(mode1Button[0] + 1, mode1Button[1] - 1);
   printStr("Mode");
 }
 
-void printVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+void drawVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+  unsigned char i;
+  
   goToText(x, y);
   printCG(HARD_LOWER_LEFT_CORNER);
   for (i = 0; i < width - 2; i++){
-    printCG(BOTTOM_BORDER); 
+    printCG(BOTTOM_MENU_BORDER); 
   }
   printCG(HARD_LOWER_RIGHT_CORNER);  
 }
 
-void printHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+void drawHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
 /*
   goToText(x, y);
   printCG();
@@ -776,54 +936,84 @@ void printHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char 
   printCG(bottomRightMenuDivider);  */
 }
 
-void printVerticalMenuSection(unsigned char x, unsigned char y, unsigned char width) {
+void drawVerticalMenuSection(unsigned char x, unsigned char y, unsigned char width) {
+  unsigned char i;
+  
   goToText(x, y);
   printCG(LEFT_BORDER);
   for (i = 0; i < width - 2; i++){
-    printCG(' '); 
+    display(0x00); 
   }
   printCG(RIGHT_BORDER);     
 }
 
-void printHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
+void drawHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
   goToText(x, y - 1);
   printCG(BOTTOM_BORDER);
   goToText(x, y + height - 1);
   printCG(BOTTOM_BORDER);     
 }
 
-void drawDaysMenu(unsigned char* button[]) {
+void drawDaysMenu(unsigned char* button) {
   char i, j;
   
-  goToText(button[0], button[1] - 6);
+  if (button[1] > daysButtonY) {
+    j = -6;
+  }
+  else {
+    j = -3;
+  }
+    
+  goToText(button[0], button[1] + j);
   printCG(HARD_UPPER_LEFT_CORNER);
   for (i = 0; i < button[2] - 2; i++) {
-    printCG(BOTTOM_BORDER);
+    printCG(TOP_MENU_BORDER);
   }
+  
+  i = j;
   printCG(HARD_UPPER_RIGHT_CORNER);
-  drawVerticalMenuSection(button[0], button[1] + 5, button, button[2]);
-  drawVerticalMenuDivider(button[0], button[1] + 4, button, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuDivider(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuDivider(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuDivider(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuSection(button[0], button[1] + i, button[2]);
+  i++;
+  drawVerticalMenuDivider(button[0], button[1] + i, button[2]);
   
-  for (i = -3; i < 6; ){
-    drawVerticalMenuSection(button[0], button[1] + i, button, button[2]);
-    i++;
-    drawVerticalMenuSection(button[0], button[1] + i, button, button[2]);
-    i++
-    drawVerticalMenuDivider(button[0], button[1] + i, button, button[2]);
-    i++;
-  }
+  i = j + 1;
   
-  goToText(button[0] + 2, button[1] - 5);
+  goToText(button[0] + 2, button[1] + i);
   printNum(1);
-  goToText(button[0] + 2, button[1] - 2);
+  i += 3;
+  goToText(button[0] + 2, button[1] + i);
   printNum(2);
-  goToText(button[0] + 2, button[1] + 1);
+  i += 3;
+  goToText(button[0] + 2, button[1] + i);
   printNum(3);
-  goToText(button[0] + 2, button[1] + 4);
+  i += 3;
+  goToText(button[0] + 2, button[1] + i);
   printNum(4);
+  
 }
 
+
 void drawSettingsScreen() {
+  clearPartialScreen();
   drawLeftBar();
   drawSolidButton(settingsButton);
 }
