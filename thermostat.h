@@ -23,16 +23,20 @@
 #define NONE              0
 #define ROOM_MENU         1 
 #define FAN_MENU          2
-#define MODE_MENU         3
+#define MAIN_MODE_MENU    3
 #define SET_TO_MENU       4
-
-#define PROGRAMS_MENU     5
-#define DAYS_MENU         5
-
-#define HOURS_MENU
-#define MINUTES_MENU
-#define AM_PM_MENU
-#define TEMP_MENU
+#define MONDAY            5
+#define TUESDAY           6
+#define WEDNESDAY         7
+#define THURSDAY          8
+#define FRIDAY            9
+#define SATURDAY          10
+#define SUNDAY            11 
+#define HOURS1_MENU       12
+#define HOURS2_MENU       13
+#define MINUTES_MENU      14
+#define TEMP_MENU         15
+#define PROGRAM_MODE_MENU 16
 
 // Left Bar
 extern const unsigned char leftBarX;
@@ -105,7 +109,9 @@ void drawMainModeMenu();
 
 void drawProgramsTab();
 void drawDaysTab();
-void drawProgrammingScreen();
+void drawProgrammingScreen(unsigned char);
+void drawVerticalMenuSection(unsigned char, unsigned char, unsigned char);
+void drawVerticalMenuDivider(unsigned char, unsigned char, unsigned char);
 void drawDaysMenu(unsigned char*);
 
 void drawSettingsScreen();
