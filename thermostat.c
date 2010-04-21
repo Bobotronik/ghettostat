@@ -633,71 +633,96 @@ void drawMainSetToMenu() {
   
 }
 
+void drawTopBorder(unsigned char i) {
+  for (; i > 0; i--) {
+    printCG(TOP_MENU_BORDER);  
+  }
+}
+
+void drawNothing(unsigned char i) {
+  for (; i > 0; i--) {
+    display(0x00);  
+  }  
+}
+
+void drawBottomBorder(unsigned char i) {
+  for (; i > 0; i--) {
+    printCG(BOTTOM_MENU_BORDER);  
+  }  
+}
+
 void drawMainRoomMenu() {
   unsigned char i, j;
   
-  goToText(roomButton[0] - 6, roomButton[1]);
-  for (i = 0; i < 3; i++) {
-    printCG(HARD_UPPER_LEFT_CORNER);
-    printCG(TOP_BORDER);
-    printCG(TOP_BORDER);
-  }
+  goToText(roomButton[0] - 12, roomButton[1]);
+
   printCG(HARD_UPPER_LEFT_CORNER);
-  printCG(TOP_BORDER)
-  printCG(HARD_LOWER_RIGHT_CORNER);
+  drawTopBorder(5);
+
+  printCG(HARD_UPPER_LEFT_CORNER);
+  drawTopBorder(4);
+  printCG(HARD_UPPER_RIGHT_CORNER);
   
-  goToText(roomButton[0] - 6, roomButton[1] + 1);
-  for (i = 0; i < 3; i++) {
-    printCG(LEFT_BORDER);
-    display(0x00);
-    display(0x00);
-  }
+  goToText(roomButton[0] - 12, roomButton[1] + 1);
+
   printCG(LEFT_BORDER);
-  display(0x00);
+  drawNothing(5);
+
+  printCG(LEFT_BORDER);
+  drawNothing(4);
   printCG(RIGHT_BORDER);
   
-  goToText(roomButton[0] - 6, roomButton[1] + 2);
-  for (i = 0; i < 3; i++) {
-    printCG(HARD_LOWER_LEFT_CORNER);
-    printCG(BOTTOM_BORDER);
-    printCG(BOTTOM_BORDER);
-  }
+  goToText(roomButton[0] - 12, roomButton[1] + 2);
+
   printCG(HARD_LOWER_LEFT_CORNER);
-  printCG(BOTTOM_BORDER);
+  drawBottomBorder(5);
+
+  printCG(HARD_LOWER_LEFT_CORNER);
+  drawBottomBorder(4);
   printCG(HARD_LOWER_RIGHT_CORNER);
+  
+  goToText(roomButton[0] - 12, roomButton[1] + 1);
+  printStr("MAIN");
+  goToText(roomButton[0] - 7, roomButton[1] + 1);
+  printStr("AUX ");
 }
 
 void drawMainFanMenu() {
-
-  goToText(fanButton[0] - 9, fanButton[1]);
-  for (i = 0; i < 3; i++) {
+  unsigned char i;
+  
+  goToText(fanButton[0] - 18, fanButton[1]);
+  for (i = 0; i < 2; i++) {
     printCG(HARD_UPPER_LEFT_CORNER);
-    printCG(TOP_BORDER);
-    printCG(TOP_BORDER);
+    drawTopBorder(5);
   }
   printCG(HARD_UPPER_LEFT_CORNER);
-  printCG(TOP_BORDER)
-  printCG(HARD_LOWER_RIGHT_CORNER);
+  drawTopBorder(4);
+  printCG(HARD_UPPER_RIGHT_CORNER);
   
-  goToText(fanButton[0] - 9, fanButton[1] + 1);
-  for (i = 0; i < 3; i++) {
+  goToText(fanButton[0] - 18, fanButton[1] + 1);
+  for (i = 0; i < 2; i++) {
     printCG(LEFT_BORDER);
-    display(0x00);
-    display(0x00);
+    drawNothing(5);
   }
   printCG(LEFT_BORDER);
-  display(0x00);
+  drawNothing(4);
   printCG(RIGHT_BORDER);
   
-  goToText(fanButton[0] - 9, fanButton[1] + 2);
-  for (i = 0; i < 3; i++) {
+  goToText(fanButton[0] - 18, fanButton[1] + 2);
+  for (i = 0; i < 2; i++) {
     printCG(HARD_LOWER_LEFT_CORNER);
-    printCG(BOTTOM_BORDER);
-    printCG(BOTTOM_BORDER);
+    drawBottomBorder(5);
   }
   printCG(HARD_LOWER_LEFT_CORNER);
-  printCG(BOTTOM_BORDER);
+  drawBottomBorder(4);
   printCG(HARD_LOWER_RIGHT_CORNER);
+  
+  goToText(fanButton[0] - 17, fanButton[1] + 1);
+  printStr(" ON ");
+  goToText(fanButton[0] - 12, fanButton[1] + 1);
+  printStr("OFF ");
+  goToText(fanButton[0] - 7, fanButton[1] + 1);
+  printStr("COOL");
 }
 
 // Heat, Cool, Off
@@ -705,35 +730,39 @@ void drawMainFanMenu() {
 void drawMainModeMenu() {
   unsigned char i, j;
   
-  goToText(modeButton[0] - 9, modeButton[1]);
-  for (i = 0; i < 3; i++) {
+  goToText(modeButton[0] - 18, modeButton[1]);
+  for (i = 0; i < 2; i++) {
     printCG(HARD_UPPER_LEFT_CORNER);
-    printCG(TOP_BORDER);
-    printCG(TOP_BORDER);
+    drawTopBorder(5);
   }
   printCG(HARD_UPPER_LEFT_CORNER);
-  printCG(TOP_BORDER)
-  printCG(HARD_LOWER_RIGHT_CORNER);
+  drawTopBorder(4);
+  printCG(HARD_UPPER_RIGHT_CORNER);
   
-  goToText(modeButton[0] - 9, modeButton[1] + 1);
-  for (i = 0; i < 3; i++) {
+  goToText(modeButton[0] - 18, modeButton[1] + 1);
+  for (i = 0; i < 2; i++) {
     printCG(LEFT_BORDER);
-    display(0x00);
-    display(0x00);
+    drawNothing(5);
   }
   printCG(LEFT_BORDER);
-  display(0x00);
+  drawNothing(4);
   printCG(RIGHT_BORDER);
   
-  goToText(modeButton[0] - 9, modeButton[1] + 2);
-  for (i = 0; i < 3; i++) {
+  goToText(modeButton[0] - 18, modeButton[1] + 2);
+  for (i = 0; i < 2; i++) {
     printCG(HARD_LOWER_LEFT_CORNER);
-    printCG(BOTTOM_BORDER);
-    printCG(BOTTOM_BORDER);
+    drawBottomBorder(5);
   }
   printCG(HARD_LOWER_LEFT_CORNER);
-  printCG(BOTTOM_BORDER);
+  drawBottomBorder(4);
   printCG(HARD_LOWER_RIGHT_CORNER);
+  
+  goToText(modeButton[0] - 17, modeButton[1] + 1);
+  printStr(" ON ");
+  goToText(modeButton[0] - 12, modeButton[1] + 1);
+  printStr("OFF ");
+  goToText(modeButton[0] - 7, modeButton[1] + 1);
+  printStr("AUTO");
 }
 
 void drawProgramsTab() {
@@ -933,9 +962,11 @@ void drawVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char wid
 }
 
 void drawHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+  unsigned char i;
+  
   goToText(x, y);
   printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < height - 2; i++){
+  for (i = 0; i < width - 2; i++){
     goToText(x, y + i + 1);
     printCG(LEFT_BORDER); 
   }
@@ -955,7 +986,7 @@ void drawVerticalMenuSection(unsigned char x, unsigned char y, unsigned char wid
 
 void drawHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
   goToText(x, y);
-  printCG(TOP_MENU_BORDERR);
+  printCG(TOP_MENU_BORDER);
   goToText(x, y + height - 1);
   printCG(BOTTOM_MENU_BORDER);     
 }
