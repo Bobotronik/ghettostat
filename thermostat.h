@@ -18,13 +18,16 @@
 #define MAIN              0
 #define PROGRAMS_TAB      1
 #define DAYS_TAB          2
-#define SETTINGS          3
+#define PROGRAMMING_SCREEN  3
+#define SETTINGS          4
 
 #define NONE              0
+
 #define ROOM_MENU         1 
 #define FAN_MENU          2
 #define MAIN_MODE_MENU    3
 #define SET_TO_MENU       4
+
 #define MONDAY            5
 #define TUESDAY           6
 #define WEDNESDAY         7
@@ -32,11 +35,11 @@
 #define FRIDAY            9
 #define SATURDAY          10
 #define SUNDAY            11 
-#define HOURS1_MENU       12
-#define HOURS2_MENU       13
-#define MINUTES_MENU      14
-#define TEMP_MENU         15
-#define PROGRAM_MODE_MENU 16
+
+#define HOURS_MENU        12
+#define MINUTES_MENU      13
+#define TEMP_MENU         14
+#define PROGRAM_MODE_MENU 15
 
 // Left Bar
 extern const unsigned char leftBarX;
