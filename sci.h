@@ -19,7 +19,7 @@
 #define S_RE          0b1   // Enable reciever
 
 // Settings for Good Transmission
-#define DUMMY_TX      0x50
+#define DUMMY_TX      0x00
 #define VALID_TX      0xAA
 #define NUM_DUMMY     20
 
