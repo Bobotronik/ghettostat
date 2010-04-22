@@ -98,6 +98,12 @@ void deleteProgram();
 
 void drawButton(unsigned char*);
 void drawSolidButton(unsigned char*);
+void drawVerticalMenuSection(unsigned char, unsigned char, unsigned char);
+void drawVerticalMenuDivider(unsigned char, unsigned char, unsigned char);
+void drawHorizontalMenuDivider(unsigned char, unsigned char, unsigned char);
+void drawHorizontalMenuDivider(unsigned char, unsigned char, unsigned char);
+void drawVerticalMenu(unsigned char*);
+void drawHorizontalMenu(unsigned char*);
 
 unsigned char isButtonTouched(unsigned char, unsigned char, unsigned char*);
 
@@ -113,8 +119,7 @@ void drawMainModeMenu();
 void drawProgramsTab();
 void drawDaysTab();
 void drawProgrammingScreen(unsigned char);
-void drawVerticalMenuSection(unsigned char, unsigned char, unsigned char);
-void drawVerticalMenuDivider(unsigned char, unsigned char, unsigned char);
+);
 void drawDaysMenu(unsigned char*);
 
 void drawSettingsScreen();

@@ -567,6 +567,128 @@ void drawSolidButton(unsigned char* button) {
   
 }
 
+void drawTopBorder(unsigned char i) {
+  for (; i > 0; i--)
+    printCG(TOP_MENU_BORDER);  
+}
+
+void drawNothing(unsigned char i) {
+  for (; i > 0; i--)
+    display(0x00);  
+}
+
+void drawBottomBorder(unsigned char i) {
+  for (; i > 0; i--)
+    printCG(BOTTOM_MENU_BORDER);  
+}
+
+void drawVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+  unsigned char i;
+  
+  goToText(x, y);
+  printCG(HARD_LOWER_LEFT_CORNER);
+  for (i = 0; i < width - 2; i++){
+    printCG(BOTTOM_MENU_BORDER); 
+  }
+  printCG(HARD_LOWER_RIGHT_CORNER);  
+}
+
+void drawHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
+  goToText(x, y);
+  printCG(HARD_UPPER_LEFT_CORNER);
+  for (i = 0; i < height - 2; i++){
+    goToText(x, y + i + 1);
+    printCG(LEFT_BORDER); 
+  }
+  printCG(HARD_LOWER_LEFT_CORNER);
+}
+
+void drawVerticalMenuSection(unsigned char x, unsigned char y, unsigned char width) {
+  unsigned char i;
+  
+  goToText(x, y);
+  printCG(LEFT_BORDER);
+  for (i = 0; i < width - 2; i++){
+    display(0x00); 
+  }
+  printCG(RIGHT_BORDER);     
+}
+
+void drawHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
+  goToText(x, y);
+  printCG(TOP_MENU_BORDERR);
+  goToText(x, y + height - 1);
+  printCG(BOTTOM_MENU_BORDER);     
+}
+
+void drawVerticalMenu(unsigned char* menu) {
+  unsigned char y, i, j;
+  y = menu[1];
+  
+  goToText(menu[0], y++);
+  printCG(HARD_UPPER_LEFT_CORNER);
+  printTopBorder(menu[2] - 2);
+  printCG(HARD_UPPER_RIGHT_CORNER);
+  
+  for (i = 0; i < menu[3] - 2; i++) {
+    goToText(menu[0], y++);
+    printCG(LEFT_BORDER);
+    printNothing(menu[2] - 2);
+    printCG(RIGHT_BORDER);
+  }
+  goToText(menu[0], y++);
+  printCG(HARD_LOWER_LEFT_CORNER);
+  printBottomBorder(menu[2] - 2);
+  printCG(HARD_LOWER_RIGHT_CORNER);
+  
+  for (i = 0; i < menu[4] - 1; i++) {
+    for (j = 0; j < menu[3] - 1; j++) {
+      goToText(menu[0], y++);
+      printCG(LEFT_BORDER);
+      printNothing(menu[2] - 2);
+      printCG(RIGHT_BORDER);
+    }
+    goToText(menu[0], y++);
+    printCG(HARD_LOWER_LEFT_CORNER);
+    printBottomBorder(menu[2] - 2);
+    printCG(HARD_LOWER_RIGHT_CORNER);
+  }
+}
+
+void drawHorizontalMenu(unsigned char* menu) {
+  unsigned char y, i, j;
+  y = menu[1];
+  
+  goToText(menu[0], y++);
+  for (i = 0; i < menu[4]; i++) {
+    printCG(HARD_UPPER_LEFT_CORNER);
+    drawTopBorder(menu[2] - 1)
+  }
+  printCG(HARD_UPPER_LEFT_CORNER);
+  drawTopBorder(menu[2] - 2);
+  printCG(HARD_UPPER_RIGHT_CORNER);
+  
+  for (i = 0; i < menu[3] - 2; i++) {
+    goToText(menu[0], y++);
+    for (j = 0; j < menu[4]; j++) {
+      printCG(LEFT_BORDER);
+      drawNothing(menu[2] - 1);
+    }
+    printCG(LEFT_BORDER);
+    drawNothing(menu[2] - 2);
+    printCG(RIGHT_BORDER);
+  }
+  
+  goToText(menu[0], menu[1] + 2);
+  for (i = 0; i < menu[4]; y++) {
+    printCG(HARD_LOWER_LEFT_CORNER);
+    drawBottomBorder(menu[2] - 1);
+  }
+  printCG(HARD_LOWER_LEFT_CORNER);
+  drawBottomBorder(menu[2] - 2);
+  printCG(HARD_LOWER_RIGHT_CORNER);
+}
+
 unsigned char isButtonTouched(unsigned char x, unsigned char y, unsigned char* button) {
   if ( (x < button[0]*6) || (x > button[0]*6 + button[2]*6) )
     return 0;
@@ -633,27 +755,11 @@ void drawMainSetToMenu() {
   
 }
 
-void drawTopBorder(unsigned char i) {
-  for (; i > 0; i--) {
-    printCG(TOP_MENU_BORDER);  
-  }
-}
-
-void drawNothing(unsigned char i) {
-  for (; i > 0; i--) {
-    display(0x00);  
-  }  
-}
-
-void drawBottomBorder(unsigned char i) {
-  for (; i > 0; i--) {
-    printCG(BOTTOM_MENU_BORDER);  
-  }  
-}
-
 void drawMainRoomMenu() {
   unsigned char i, j;
   
+  drawHorizontalMenu( (unsigned char[]){roomButton[0] - 12, roomButton[1], 6, 3, 2} );
+  /*
   goToText(roomButton[0] - 12, roomButton[1]);
 
   printCG(HARD_UPPER_LEFT_CORNER);
@@ -680,16 +786,18 @@ void drawMainRoomMenu() {
   printCG(HARD_LOWER_LEFT_CORNER);
   drawBottomBorder(4);
   printCG(HARD_LOWER_RIGHT_CORNER);
-  
-  goToText(roomButton[0] - 12, roomButton[1] + 1);
+  */
+  goToText(roomButton[0] - 11, roomButton[1] + 1);
   printStr("MAIN");
-  goToText(roomButton[0] - 7, roomButton[1] + 1);
+  goToText(roomButton[0] - 5, roomButton[1] + 1);
   printStr("AUX ");
 }
 
 void drawMainFanMenu() {
   unsigned char i;
   
+  drawHorizontalMenu( (unsigned char[]){fanButton[0] - 18, fanButton[1], 6, 3, 4} );
+  /*
   goToText(fanButton[0] - 18, fanButton[1]);
   for (i = 0; i < 2; i++) {
     printCG(HARD_UPPER_LEFT_CORNER);
@@ -716,12 +824,12 @@ void drawMainFanMenu() {
   printCG(HARD_LOWER_LEFT_CORNER);
   drawBottomBorder(4);
   printCG(HARD_LOWER_RIGHT_CORNER);
-  
+  */
   goToText(fanButton[0] - 17, fanButton[1] + 1);
   printStr(" ON ");
-  goToText(fanButton[0] - 12, fanButton[1] + 1);
+  goToText(fanButton[0] - 11, fanButton[1] + 1);
   printStr("OFF ");
-  goToText(fanButton[0] - 7, fanButton[1] + 1);
+  goToText(fanButton[0] - 5, fanButton[1] + 1);
   printStr("COOL");
 }
 
@@ -729,6 +837,8 @@ void drawMainFanMenu() {
 
 void drawMainModeMenu() {
   unsigned char i, j;
+  
+  drawHorizontalMenu( (unsigned char[]){modeButton[0] - 18, modeButton[1], 6, 3, 4} );
   
   goToText(modeButton[0] - 18, modeButton[1]);
   for (i = 0; i < 2; i++) {
@@ -759,9 +869,9 @@ void drawMainModeMenu() {
   
   goToText(modeButton[0] - 17, modeButton[1] + 1);
   printStr(" ON ");
-  goToText(modeButton[0] - 12, modeButton[1] + 1);
+  goToText(modeButton[0] - 11, modeButton[1] + 1);
   printStr("OFF ");
-  goToText(modeButton[0] - 7, modeButton[1] + 1);
+  goToText(modeButton[0] - 5, modeButton[1] + 1);
   printStr("AUTO");
 }
 
@@ -948,47 +1058,6 @@ void drawProgrammingScreen(unsigned char programIndex) {
   printStr("Temp");
   goToText(mode1Button[0] + 1, mode1Button[1] - 1);
   printStr("Mode");
-}
-
-void drawVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
-  unsigned char i;
-  
-  goToText(x, y);
-  printCG(HARD_LOWER_LEFT_CORNER);
-  for (i = 0; i < width - 2; i++){
-    printCG(BOTTOM_MENU_BORDER); 
-  }
-  printCG(HARD_LOWER_RIGHT_CORNER);  
-}
-
-void drawHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
-  unsigned char i;
-  
-  goToText(x, y);
-  printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < width - 2; i++){
-    goToText(x, y + i + 1);
-    printCG(LEFT_BORDER); 
-  }
-  printCG(HARD_LOWER_LEFT_CORNER);
-}
-
-void drawVerticalMenuSection(unsigned char x, unsigned char y, unsigned char width) {
-  unsigned char i;
-  
-  goToText(x, y);
-  printCG(LEFT_BORDER);
-  for (i = 0; i < width - 2; i++){
-    display(0x00); 
-  }
-  printCG(RIGHT_BORDER);     
-}
-
-void drawHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
-  goToText(x, y);
-  printCG(TOP_MENU_BORDER);
-  goToText(x, y + height - 1);
-  printCG(BOTTOM_MENU_BORDER);     
 }
 
 void drawSmallMenu(unsigned char* button) {
