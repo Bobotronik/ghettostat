@@ -39,3 +39,19 @@ void temp_ISR(void)  {
     }
     del1m(1);
 }
+
+void setMode(unsigned char * new_settings) {
+  DisableInterrupts;
+  disableAuxFan();
+  disableAuxCool();
+  disableAuxHeat();
+  setTempC(new_settings);
+  mode = new_settings[2];
+  status = mode;
+  if( mode == FAN) {
+    enableAuxFan();
+  } else {
+    temp_ISR;
+  }
+  EnableInterrupts;   
+}
