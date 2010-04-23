@@ -16,8 +16,8 @@ void dummyISR(void) {
 }
 
 void main(void) {
-  unsigned char state, menuState, x, y;
-  unsigned int justTouched = 50;
+  unsigned char state, menuState, x, y, 
+                currentProgram, currentHour, currentMinute, currentTemp;
  
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
@@ -64,58 +64,194 @@ void main(void) {
           if (isButtonTouched(x, y, programButton)) {
             drawProgramsTab();
             state = PROGRAMS_TAB;
+            menuState = NONE;
           }
           else if (isButtonTouched(x, y, settingsButton)) {
             drawSettingsScreen();
-            state = SETTINGS;          
+            state = SETTINGS;
+            menuState = NONE;          
+          } 
+          else {  
+            switch (menuState) {
+              case NONE:
+                if (isButtonTouched(x, y, setToButton)) {
+                  //drawSettingsMenu();
+                }
+                else if (isButtonTouched(x, y, roomButton)) {
+                  drawMainRoomMenu(); 
+                  menuState = ROOM_MENU;
+                }
+                else if (isButtonTouched(x, y, fanButton)) {
+                  drawMainFanMenu();
+                  menuState = FAN_MENU;
+                }
+                else if (isButtonTouched(x, y, modeButton)) {
+                  drawMainModeMenu();
+                  menuState = MAIN_MODE_MENU;
+                }
+                break;
+              case ROOM_MENU:
+                if (isHorizontalMenuButtonTouched(x, y, roomMenu)) {
+                  drawMainScreen();
+                  menuState = NONE;  
+                }
+                break;
+              case FAN_MENU:
+                if (isHorizontalMenuButtonTouched(x, y, fanMenu)) {
+                  drawMainScreen();
+                  menuState = NONE;  
+                }
+                break;
+              case MAIN_MODE_MENU:
+                if (isHorizontalMenuButtonTouched(x, y, modeMenu)) {
+                  drawMainScreen();
+                  menuState = NONE;  
+                }
+                break;
+              }
           }
-          else if (isButtonTouched(x, y, setToButton)) {
-            //drawSettingsMenu();
-          }
-          else if (isButtonTouched(x, y, roomButton)) {
-            drawMainRoomMenu(); 
-            //state = MAIN_ROOM;
-          }
-          else if (isButtonTouched(x, y, fanButton)) {
-            drawMainFanMenu();
-            //state = MAIN_FAN;
-          }
-          else if (isButtonTouched(x, y, modeButton)) {
-            drawMainModeMenu();
-            //state = MAIN_MODE;
-          }
+          /****END MENUSTATE****/
           break;
           
         /****END MAIN****/
           
         case PROGRAMS_TAB:
-
-              if (isButtonTouched(x, y, homeButton)) {
-                drawMainScreen();
-                state = MAIN;
-              }
-              else if (isButtonTouched(x, y, settingsButton)) {
-                drawSettingsScreen();
-                state = SETTINGS;          
-              }
-              else if (isButtonTouched(x, y, daysTab)) {
-                drawDaysTab();
-                state = DAYS_TAB;
-              }
-              else if (isButtonTouched(x, y, program1Button)) {
-                drawProgrammingScreen(0);
-              }
-              else if (isButtonTouched(x, y, program2Button)) {
-                drawProgrammingScreen(1);
-              }
-              else if (isButtonTouched(x, y, program3Button)) {
-                drawProgrammingScreen(2);
-              }
-              else if (isButtonTouched(x, y, program4Button)) {
-                drawProgrammingScreen(3);
-              }
-
+          if (isButtonTouched(x, y, homeButton)) {
+            drawMainScreen();
+            state = MAIN;
+          }
+          else if (isButtonTouched(x, y, settingsButton)) {
+            drawSettingsScreen();
+            state = SETTINGS;          
+          }
+          else if (isButtonTouched(x, y, daysTab)) {
+            drawDaysTab();
+            state = DAYS_TAB;
+          }
+          else if (isButtonTouched(x, y, program1Button)) {
+            drawProgrammingScreen(0);
+            state = PROGRAMMING_SCREEN;
+          }
+          else if (isButtonTouched(x, y, program2Button)) {
+            drawProgrammingScreen(1);
+            state = PROGRAMMING_SCREEN;
+          }
+          else if (isButtonTouched(x, y, program3Button)) {
+            drawProgrammingScreen(2);
+            state = PROGRAMMING_SCREEN;
+          }
+          else if (isButtonTouched(x, y, program4Button)) {
+            drawProgrammingScreen(3);
+            state = PROGRAMMING_SCREEN;
+          }
           break;
+        
+        case PROGRAMMING_SCREEN:
+          if (isButtonTouched(x, y, homeButton)) {
+            drawMainScreen();
+            state = MAIN;
+          }
+          else if (isButtonTouched(x, y, settingsButton)) {
+            drawSettingsScreen();
+            state = SETTINGS;          
+          } 
+          else if (isButtonTouched(x, y, check)) {
+            drawProgramsTab();
+            state = PROGRAMS_TAB;
+          }
+          switch (menuState) {
+            case NONE:
+              if (isButtonTouched(x, y, hour1Button)) {
+                drawVerticalMenu(hoursMenu);
+                menuState = HOURS_MENU;
+              }                     
+              else if (isButtonTouched(x, y, hour2Button)) {
+                drawVerticalMenu(hoursMenu);
+                menuState = HOURS_MENU;
+              }
+              else if (isButtonTouched(x, y, hour3Button)) {
+                drawVerticalMenu(hoursMenu);
+                menuState = HOURS_MENU;
+              }
+              else if (isButtonTouched(x, y, hour4Button)) {
+                drawVerticalMenu(hoursMenu);
+                menuState = HOURS_MENU;
+              }
+              else if (isButtonTouched(x, y, minutes1Button)) {
+                drawVerticalMenu(minutesMenu);
+                menuState = MINUTES_MENU;
+              }
+              else if (isButtonTouched(x, y, minutes2Button)) {
+                drawVerticalMenu(minutesMenu);
+                menuState = MINUTES_MENU;
+              }
+              else if (isButtonTouched(x, y, minutes3Button)) {
+                drawVerticalMenu(minutesMenu);
+                menuState = MINUTES_MENU;
+              }
+              else if (isButtonTouched(x, y, minutes4Button)) {
+                drawVerticalMenu(minutesMenu);
+                menuState = MINUTES_MENU;
+              }
+              else if (isButtonTouched(x, y, amPm1Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, amPm2Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, amPm3Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, amPm4Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, temp1Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, temp2Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, temp3Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, temp1Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, mode1Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, mode2Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, mode3Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              else if (isButtonTouched(x, y, mode4Button)) {
+                drawProgrammingScreen(currentProgram);
+                menuState = NONE;
+              }
+              break;
+            case HOURS_MENU:
+              break;
+            case MINUTES_MENU:
+              break;
+            case TEMP_MENU:
+              break;
+            case PROGRAM_MODE_MENU;
+              break;
+          }
+          break;            
           
         case DAYS_TAB:
 
@@ -132,31 +268,31 @@ void main(void) {
                 state = PROGRAMS_TAB;
               }
               else if (isButtonTouched(x, y, monButton)) {
-                drawDaysMenu(monButton);
+                drawDaysMenu(monMenu);
                 menuState = MONDAY;
               }
               else if (isButtonTouched(x, y, tueButton)) {
-                drawDaysMenu(tueButton);
+                drawDaysMenu(tueMenu);
                 menuState = TUESDAY;
               }
               else if (isButtonTouched(x, y, wedButton)) {
-                drawDaysMenu(wedButton);
+                drawDaysMenu(wedMenu);
                 menuState = WEDNESDAY;
               }
               else if (isButtonTouched(x, y, thuButton)) {
-                drawDaysMenu(thuButton);
+                drawDaysMenu(thuMenu);
                 menuState = THURSDAY;
               }
               else if (isButtonTouched(x, y, friButton)) {
-                drawDaysMenu(friButton);
+                drawDaysMenu(friMenu);
                 menuState = FRIDAY;
               }
               else if (isButtonTouched(x, y, satButton)) {
-                drawDaysMenu(satButton);
+                drawDaysMenu(satMenu);
                 menuState = SATURDAY;
               }
               else if (isButtonTouched(x, y, sunButton)) {
-                drawDaysMenu(sunButton);
+                drawDaysMenu(sunMenu);
                 menuState = SUNDAY;
               }
               /*

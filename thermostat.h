@@ -21,6 +21,7 @@
 #define PROGRAMMING_SCREEN  3
 #define SETTINGS          4
 
+// For menuState
 #define NONE              0
 
 #define ROOM_MENU         1 
@@ -57,6 +58,9 @@ extern const unsigned char rightBarHeight;
 extern const unsigned char roomButton[];
 extern const unsigned char fanButton[];
 extern const unsigned char modeButton[];
+extern const unsigned char roomMenu[];
+extern const unsigned char fanMenu[];
+extern const unsigned char modeMenu[];
 
 // Program Screen
 extern const unsigned char tabY;
@@ -84,6 +88,13 @@ extern const unsigned char tueButton[];
 extern const unsigned char thuButton[];
 extern const unsigned char satButton[];
 extern const unsigned char sunButton[];
+extern const unsigned char monMenu[];
+extern const unsigned char tueMenu[];
+extern const unsigned char wedMenu[];
+extern const unsigned char thuMenu[];
+extern const unsigned char friMenu[];
+extern const unsigned char satMenu[];
+extern const unsigned char sunMenu[]; 
 
 void initializeThermostat();
 
@@ -96,16 +107,17 @@ void updateThermometer();
 void createProgram();
 void deleteProgram();
 
+void printTopBorder();
+void printBottomBorder();
+
 void drawButton(unsigned char*);
 void drawSolidButton(unsigned char*);
-void drawVerticalMenuSection(unsigned char, unsigned char, unsigned char);
-void drawVerticalMenuDivider(unsigned char, unsigned char, unsigned char);
-void drawHorizontalMenuDivider(unsigned char, unsigned char, unsigned char);
-void drawHorizontalMenuDivider(unsigned char, unsigned char, unsigned char);
 void drawVerticalMenu(unsigned char*);
 void drawHorizontalMenu(unsigned char*);
 
 unsigned char isButtonTouched(unsigned char, unsigned char, unsigned char*);
+unsigned char isVerticalMenuButtonTouched(unsigned char, unsigned char, unsigned char*);
+unsigned char isHorizontalMenuButtonTouched(unsigned char, unsigned char, unsigned char*);
 
 void drawTopBar();
 void drawLeftBar();
@@ -119,7 +131,7 @@ void drawMainModeMenu();
 void drawProgramsTab();
 void drawDaysTab();
 void drawProgrammingScreen(unsigned char);
-);
+
 void drawDaysMenu(unsigned char*);
 
 void drawSettingsScreen();
