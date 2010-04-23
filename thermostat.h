@@ -112,6 +112,7 @@ void printBottomBorder();
 
 void drawButton(unsigned char*);
 void drawSolidButton(unsigned char*);
+
 void drawVerticalMenu(unsigned char*);
 void drawHorizontalMenu(unsigned char*);
 
@@ -129,10 +130,22 @@ void drawMainFanMenu();
 void drawMainModeMenu();
 
 void drawProgramsTab();
+
 void drawDaysTab();
+void drawDaysMenu(unsigned char*);
+
 void drawProgrammingScreen(unsigned char);
 
-void drawDaysMenu(unsigned char*);
+unsigned char determineHoursMenu(unsigned char);
+void drawHoursMenu(unsigned char);
+
+void drawMinutesMenu();
+void toggleAmPm(unsigned char, unsigned char);
+
+unsigned char determineTempMenu(unsigned char);
+void drawProgrammingTempMenu();
+
+void drawProgrammingModeMenu();
 
 void drawSettingsScreen();
 
