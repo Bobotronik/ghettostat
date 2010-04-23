@@ -91,3 +91,13 @@ void sendTempC(void) {
   sendDataSCI();
 }
     
+
+void smallBoardReceive(void){
+  receiveDataSCI();
+  if SCI_DATA[3] == TYPE_GETTEMP{
+    sendTempC();
+  }
+  else if SCI_DATA[3] == TYPE_SETTEMP{
+    setMode(SCI_DATA);
+  }
+}

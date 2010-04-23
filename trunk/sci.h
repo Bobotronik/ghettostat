@@ -38,5 +38,6 @@ void sendDataSCI(void);
 void receiveDataSCI(void);
 void receiveTempC(unsigned char * C);
 void sendTempC(void);
+void smallBoardReceive(void);
 
 #endif
