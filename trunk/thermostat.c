@@ -124,7 +124,10 @@ const unsigned char rightBarHeight = 3;
 const unsigned char roomButton[] = {rightBarX, rightBarY, rightBarWidth, rightBarHeight};
 const unsigned char fanButton[] = {rightBarX, rightBarY + rightBarOffset, rightBarWidth, rightBarHeight};
 const unsigned char modeButton[] = {rightBarX, rightBarY + 2*rightBarOffset, rightBarWidth, rightBarHeight};
-
+const unsigned char roomMenu[] = {roomButton[0] - 12, roomButton[1], 6, 3, 2};
+const unsigned char fanMenu[] = {fanButton[0] - 18, fanButton[1], 6, 3, 3};
+const unsigned char modeMenu[] = {modeButton[0] - 18, modeButton[1], 6, 3, 3};
+                                         
 // Program Screen
 const unsigned char tabY = 1;
 const unsigned char tabWidth = 16;
@@ -153,6 +156,13 @@ const unsigned char tueButton[] = {11, daysButtonY + 4, daysButtonWidth, daysBut
 const unsigned char thuButton[] = {17, daysButtonY + 4, daysButtonWidth, daysButtonHeight};
 const unsigned char satButton[] = {28, daysButtonY, daysButtonWidth, daysButtonHeight};
 const unsigned char sunButton[] = {34, daysButtonY, daysButtonWidth, daysButtonHeight};
+const unsigned char monMenu[] = {monButton[0] - 6, monButton[1], 5, 3, 4};
+const unsigned char tueMenu[] = {tueButton[0] - 3, tueButton[1], 5, 3, 4};
+const unsigned char wedMenu[] = {wedButton[0] - 6, wedButton[1], 5, 3, 4};
+const unsigned char thuMenu[] = {thuButton[0] - 3, thuButton[1], 5, 3, 4};
+const unsigned char friMenu[] = {friButton[0] - 6, friButton[1], 5, 3, 4};
+const unsigned char satMenu[] = {satButton[0] - 3, satButton[1], 5, 3, 4};
+const unsigned char sunMenu[] = {sunButton[0] - 3, sunButton[1], 5, 3, 4};                                         
 
 const unsigned char okButton[] = {7, 2, 4, 3};
 
@@ -164,27 +174,27 @@ const unsigned char programsButtonsHeight = 3;
 const unsigned char hour1Button[] = {12, programsButtonsY, programsButtonsWidth, programsButtonsHeight};
 const unsigned char hour2Button[] = {12, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
 const unsigned char hour3Button[] = {12, programsButtonsY + 2*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char hour4Button[] = {12, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-  
+const unsigned char hour4Button[] = {12, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};  
 const unsigned char minutes1Button[] = {17, programsButtonsY, programsButtonsWidth, programsButtonsHeight};
 const unsigned char minutes2Button[] = {17, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
 const unsigned char minutes3Button[] = {17, programsButtonsY + 2*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char minutes4Button[] = {17, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-  
+const unsigned char minutes4Button[] = {17, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight}; 
 const unsigned char amPm1Button[] = {22, programsButtonsY, programsButtonsWidth, programsButtonsHeight};
 const unsigned char amPm2Button[] = {22, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
 const unsigned char amPm3Button[] = {22, programsButtonsY + 2*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char amPm4Button[] = {22, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-  
+const unsigned char amPm4Button[] = {22, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight}; 
 const unsigned char temp1Button[] = {28, programsButtonsY, programsButtonsWidth, programsButtonsHeight};
 const unsigned char temp2Button[] = {28, programsButtonsY + programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
 const unsigned char temp3Button[] = {28, programsButtonsY + 2*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-const unsigned char temp4Button[] = {28, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight};
-  
+const unsigned char temp4Button[] = {28, programsButtonsY + 3*programsButtonsOffset, programsButtonsWidth, programsButtonsHeight}; 
 const unsigned char mode1Button[] = {34, programsButtonsY, 6, programsButtonsHeight};
 const unsigned char mode2Button[] = {34, programsButtonsY + programsButtonsOffset, 6, programsButtonsHeight};
 const unsigned char mode3Button[] = {34, programsButtonsY + 2*programsButtonsOffset, 6, programsButtonsHeight};
 const unsigned char mode4Button[] = {34, programsButtonsY + 3*programsButtonsOffset, 6, programsButtonsHeight};
+const unsigned char hoursMenu[] = {7, 0 };
+const unsigned char minutesMenu[] = {};
+const unsigned char programmingTempMenu[] = {};
+const unsigned char programmingModeMenu[] = {};
   
 extern unsigned char DEVICE_DATA[2];
 
@@ -582,75 +592,36 @@ void drawBottomBorder(unsigned char i) {
     printCG(BOTTOM_MENU_BORDER);  
 }
 
-void drawVerticalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
-  unsigned char i;
-  
-  goToText(x, y);
-  printCG(HARD_LOWER_LEFT_CORNER);
-  for (i = 0; i < width - 2; i++){
-    printCG(BOTTOM_MENU_BORDER); 
-  }
-  printCG(HARD_LOWER_RIGHT_CORNER);  
-}
-
-void drawHorizontalMenuDivider(unsigned char x, unsigned char y, unsigned char width) {
-  goToText(x, y);
-  printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < height - 2; i++){
-    goToText(x, y + i + 1);
-    printCG(LEFT_BORDER); 
-  }
-  printCG(HARD_LOWER_LEFT_CORNER);
-}
-
-void drawVerticalMenuSection(unsigned char x, unsigned char y, unsigned char width) {
-  unsigned char i;
-  
-  goToText(x, y);
-  printCG(LEFT_BORDER);
-  for (i = 0; i < width - 2; i++){
-    display(0x00); 
-  }
-  printCG(RIGHT_BORDER);     
-}
-
-void drawHorizontalMenuSection(unsigned char x, unsigned char y, unsigned char height) {
-  goToText(x, y);
-  printCG(TOP_MENU_BORDERR);
-  goToText(x, y + height - 1);
-  printCG(BOTTOM_MENU_BORDER);     
-}
-
 void drawVerticalMenu(unsigned char* menu) {
   unsigned char y, i, j;
   y = menu[1];
   
   goToText(menu[0], y++);
   printCG(HARD_UPPER_LEFT_CORNER);
-  printTopBorder(menu[2] - 2);
+  drawTopBorder(menu[2] - 2);
   printCG(HARD_UPPER_RIGHT_CORNER);
   
   for (i = 0; i < menu[3] - 2; i++) {
     goToText(menu[0], y++);
     printCG(LEFT_BORDER);
-    printNothing(menu[2] - 2);
+    drawNothing(menu[2] - 2);
     printCG(RIGHT_BORDER);
   }
   goToText(menu[0], y++);
   printCG(HARD_LOWER_LEFT_CORNER);
-  printBottomBorder(menu[2] - 2);
+  drawBottomBorder(menu[2] - 2);
   printCG(HARD_LOWER_RIGHT_CORNER);
   
   for (i = 0; i < menu[4] - 1; i++) {
     for (j = 0; j < menu[3] - 1; j++) {
       goToText(menu[0], y++);
       printCG(LEFT_BORDER);
-      printNothing(menu[2] - 2);
+      drawNothing(menu[2] - 2);
       printCG(RIGHT_BORDER);
     }
     goToText(menu[0], y++);
     printCG(HARD_LOWER_LEFT_CORNER);
-    printBottomBorder(menu[2] - 2);
+    drawBottomBorder(menu[2] - 2);
     printCG(HARD_LOWER_RIGHT_CORNER);
   }
 }
@@ -660,9 +631,9 @@ void drawHorizontalMenu(unsigned char* menu) {
   y = menu[1];
   
   goToText(menu[0], y++);
-  for (i = 0; i < menu[4]; i++) {
+  for (i = 0; i < menu[4] - 1; i++) {
     printCG(HARD_UPPER_LEFT_CORNER);
-    drawTopBorder(menu[2] - 1)
+    drawTopBorder(menu[2] - 1);
   }
   printCG(HARD_UPPER_LEFT_CORNER);
   drawTopBorder(menu[2] - 2);
@@ -670,7 +641,7 @@ void drawHorizontalMenu(unsigned char* menu) {
   
   for (i = 0; i < menu[3] - 2; i++) {
     goToText(menu[0], y++);
-    for (j = 0; j < menu[4]; j++) {
+    for (j = 0; j < menu[4] - 1; j++) {
       printCG(LEFT_BORDER);
       drawNothing(menu[2] - 1);
     }
@@ -679,8 +650,8 @@ void drawHorizontalMenu(unsigned char* menu) {
     printCG(RIGHT_BORDER);
   }
   
-  goToText(menu[0], menu[1] + 2);
-  for (i = 0; i < menu[4]; y++) {
+  goToText(menu[0], y++);
+  for (i = 0; i < menu[4] - 1; i++) {
     printCG(HARD_LOWER_LEFT_CORNER);
     drawBottomBorder(menu[2] - 1);
   }
@@ -695,6 +666,23 @@ unsigned char isButtonTouched(unsigned char x, unsigned char y, unsigned char* b
   if ( (y < button[1]*8) || (y > button[1]*8 + button[3]*8) )
     return 0;
   return 1;  
+}
+
+unsigned char isVerticalMenuButtonTouched(unsigned char x, unsigned char y, unsigned char* menu) {
+  if ( (x < menu[0]*6) || (x > menu[0]*6 + menu[2]*6) )
+    return 0;
+  if ( (y < menu[1]*8) || (y > menu[1]*8 + menu[3]*menu[4]*8) )
+    return 0;
+  //   To Text Matrix    To Button Matrix Don't return 0 
+  return ((y - menu[1])/8)/menu[3] + 1;
+}
+
+unsigned char isHorizontalMenuButtonTouched(unsigned char x, unsigned char y, unsigned char* menu) {
+  if ( (x < menu[0]*6) || (x > menu[0]*6 + menu[2]*menu[4]*6) )
+    return 0;
+  if ( (y < menu[1]*8) || (y > menu[1]*8 + menu[3]*8) )
+    return 0;
+  return ((x - menu[0])/FONT_WIDTH)/menu[2] + 1;
 }
 
 void drawTopBar() {
@@ -758,35 +746,8 @@ void drawMainSetToMenu() {
 void drawMainRoomMenu() {
   unsigned char i, j;
   
-  drawHorizontalMenu( (unsigned char[]){roomButton[0] - 12, roomButton[1], 6, 3, 2} );
-  /*
-  goToText(roomButton[0] - 12, roomButton[1]);
+  drawHorizontalMenu(roomMenu);
 
-  printCG(HARD_UPPER_LEFT_CORNER);
-  drawTopBorder(5);
-
-  printCG(HARD_UPPER_LEFT_CORNER);
-  drawTopBorder(4);
-  printCG(HARD_UPPER_RIGHT_CORNER);
-  
-  goToText(roomButton[0] - 12, roomButton[1] + 1);
-
-  printCG(LEFT_BORDER);
-  drawNothing(5);
-
-  printCG(LEFT_BORDER);
-  drawNothing(4);
-  printCG(RIGHT_BORDER);
-  
-  goToText(roomButton[0] - 12, roomButton[1] + 2);
-
-  printCG(HARD_LOWER_LEFT_CORNER);
-  drawBottomBorder(5);
-
-  printCG(HARD_LOWER_LEFT_CORNER);
-  drawBottomBorder(4);
-  printCG(HARD_LOWER_RIGHT_CORNER);
-  */
   goToText(roomButton[0] - 11, roomButton[1] + 1);
   printStr("MAIN");
   goToText(roomButton[0] - 5, roomButton[1] + 1);
@@ -796,41 +757,14 @@ void drawMainRoomMenu() {
 void drawMainFanMenu() {
   unsigned char i;
   
-  drawHorizontalMenu( (unsigned char[]){fanButton[0] - 18, fanButton[1], 6, 3, 4} );
-  /*
-  goToText(fanButton[0] - 18, fanButton[1]);
-  for (i = 0; i < 2; i++) {
-    printCG(HARD_UPPER_LEFT_CORNER);
-    drawTopBorder(5);
-  }
-  printCG(HARD_UPPER_LEFT_CORNER);
-  drawTopBorder(4);
-  printCG(HARD_UPPER_RIGHT_CORNER);
-  
-  goToText(fanButton[0] - 18, fanButton[1] + 1);
-  for (i = 0; i < 2; i++) {
-    printCG(LEFT_BORDER);
-    drawNothing(5);
-  }
-  printCG(LEFT_BORDER);
-  drawNothing(4);
-  printCG(RIGHT_BORDER);
-  
-  goToText(fanButton[0] - 18, fanButton[1] + 2);
-  for (i = 0; i < 2; i++) {
-    printCG(HARD_LOWER_LEFT_CORNER);
-    drawBottomBorder(5);
-  }
-  printCG(HARD_LOWER_LEFT_CORNER);
-  drawBottomBorder(4);
-  printCG(HARD_LOWER_RIGHT_CORNER);
-  */
+  drawHorizontalMenu(fanMenu);
+
   goToText(fanButton[0] - 17, fanButton[1] + 1);
-  printStr(" ON ");
+  printStr("ON");
   goToText(fanButton[0] - 11, fanButton[1] + 1);
-  printStr("OFF ");
+  printStr("OFF");
   goToText(fanButton[0] - 5, fanButton[1] + 1);
-  printStr("COOL");
+  printStr("AUTO");
 }
 
 // Heat, Cool, Off
@@ -838,41 +772,14 @@ void drawMainFanMenu() {
 void drawMainModeMenu() {
   unsigned char i, j;
   
-  drawHorizontalMenu( (unsigned char[]){modeButton[0] - 18, modeButton[1], 6, 3, 4} );
-  
-  goToText(modeButton[0] - 18, modeButton[1]);
-  for (i = 0; i < 2; i++) {
-    printCG(HARD_UPPER_LEFT_CORNER);
-    drawTopBorder(5);
-  }
-  printCG(HARD_UPPER_LEFT_CORNER);
-  drawTopBorder(4);
-  printCG(HARD_UPPER_RIGHT_CORNER);
-  
-  goToText(modeButton[0] - 18, modeButton[1] + 1);
-  for (i = 0; i < 2; i++) {
-    printCG(LEFT_BORDER);
-    drawNothing(5);
-  }
-  printCG(LEFT_BORDER);
-  drawNothing(4);
-  printCG(RIGHT_BORDER);
-  
-  goToText(modeButton[0] - 18, modeButton[1] + 2);
-  for (i = 0; i < 2; i++) {
-    printCG(HARD_LOWER_LEFT_CORNER);
-    drawBottomBorder(5);
-  }
-  printCG(HARD_LOWER_LEFT_CORNER);
-  drawBottomBorder(4);
-  printCG(HARD_LOWER_RIGHT_CORNER);
+  drawHorizontalMenu(modeMenu);
   
   goToText(modeButton[0] - 17, modeButton[1] + 1);
-  printStr(" ON ");
+  printStr("HEAT");
   goToText(modeButton[0] - 11, modeButton[1] + 1);
-  printStr("OFF ");
+  printStr("COOL");
   goToText(modeButton[0] - 5, modeButton[1] + 1);
-  printStr("AUTO");
+  printStr("OFF");
 }
 
 void drawProgramsTab() {
@@ -1100,48 +1007,17 @@ void drawLargeMenu(unsigned char* button) {
   }
 }
 
-void drawDaysMenu(unsigned char* button) {
+void drawDaysMenu(unsigned char* menu) {
   char i, j;
   
-  if (button[1] > daysButtonY)
-    j = -6;
-  else
-    j = -3;
-    
-  goToText(button[0], button[1] + j);
-  printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < button[2] - 2; i++) {
-    printCG(TOP_MENU_BORDER);
+  drawVerticalMenu(menu);
+  
+  j = 2;
+  for (i = 0; i < menu[4]; i++) { 
+    goToText(menu[0] + 2, menu[1] + j);
+    printNum(i + 1);
+    j += menu[3];
   }
-  
-  i = j;
-  printCG(HARD_UPPER_RIGHT_CORNER);
-  i++;
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuDivider(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuDivider(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuDivider(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuSection(button[0], button[1] + i++, button[2]);
-  drawVerticalMenuDivider(button[0], button[1] + i++, button[2]);
-  
-  i = j + 1;
-  
-  goToText(button[0] + 2, button[1] + i);
-  printNum(1);
-  i += 3;
-  goToText(button[0] + 2, button[1] + i);
-  printNum(2);
-  i += 3;
-  goToText(button[0] + 2, button[1] + i);
-  printNum(3);
-  i += 3;
-  goToText(button[0] + 2, button[1] + i);
-  printNum(4);
 }
 
 void drawSettingsScreen() {
