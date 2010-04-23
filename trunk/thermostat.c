@@ -191,10 +191,10 @@ const unsigned char mode1Button[] = {34, programsButtonsY, 6, programsButtonsHei
 const unsigned char mode2Button[] = {34, programsButtonsY + programsButtonsOffset, 6, programsButtonsHeight};
 const unsigned char mode3Button[] = {34, programsButtonsY + 2*programsButtonsOffset, 6, programsButtonsHeight};
 const unsigned char mode4Button[] = {34, programsButtonsY + 3*programsButtonsOffset, 6, programsButtonsHeight};
-const unsigned char hoursMenu[] = {7, 0 };
-const unsigned char minutesMenu[] = {};
-const unsigned char programmingTempMenu[] = {};
-const unsigned char programmingModeMenu[] = {};
+const unsigned char hoursMenu[] = {12, 1, 4, 3, 5};
+const unsigned char minutesMenu[] = {17, 0, 4, 3, 4};
+const unsigned char programmingTempMenu[] = {28, 1, 4, 3, 5};
+const unsigned char programmingModeMenu[] = {34, 1, 4, 3, 3};
   
 extern unsigned char DEVICE_DATA[2];
 
@@ -254,12 +254,10 @@ void initializeThermostat() {
 }
 
 void printHours(unsigned char temp) {
-  if (temp <= 12*4 + 3) {
+  if (temp <= 51)
     printNum(temp/4);  
-  }
-  else {
+  else
     printNum((temp - 48) / 4);  
-  }   
 }
 
 void printMinutes(unsigned char temp) {
@@ -272,12 +270,10 @@ void printMinutes(unsigned char temp) {
 }
 
 void printAmPm(unsigned char temp) {
-  if (temp < 48) {
+  if (temp < 48)
     printStr("AM");
-  }
-  else {
+  else 
     printStr("PM");
-  }  
 }
 
 void printMode(unsigned char temp) {
@@ -767,8 +763,6 @@ void drawMainFanMenu() {
   printStr("AUTO");
 }
 
-// Heat, Cool, Off
-
 void drawMainModeMenu() {
   unsigned char i, j;
   
@@ -898,6 +892,22 @@ void drawDaysTab() {
   printStr("Thu");
 }
 
+void drawDaysMenu(unsigned char* menu) {
+  char i, j;
+  
+  drawVerticalMenu(menu);
+  
+  if (menu[1] > daysButtonY)
+    j = -6;
+  else
+    j = -3;
+  for (i = 0; i < menu[4]; i++) { 
+    goToText(menu[0] + 2, menu[1] + j);
+    printNum(i + 1);
+    j += menu[3];
+  }
+}
+
 void drawProgrammingScreen(unsigned char programIndex) {
   unsigned char time, i, j;
   
@@ -967,57 +977,97 @@ void drawProgrammingScreen(unsigned char programIndex) {
   printStr("Mode");
 }
 
-void drawSmallMenu(unsigned char* button) {
-  char i, j;
-  
-  goToText(button[0], 4);  
-  printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < button[2] - 2; i++) {
-    printCG(TOP_MENU_BORDER);
-  }
-  
-  i = 5;
-  drawVerticalMenuSection(button[0], i++, button[2]);
-  drawVerticalMenuDivider(button[0], i++, button[2]);
-    
-  for (j = 0; j < 3; j++) {
-    drawVerticalMenuSection(button[0], i++, button[2]);
-    drawVerticalMenuSection(button[0], i++, button[2]);
-    drawVerticalMenuDivider(button[0], i++, button[2]);
-  }
+unsigned char determineHoursMenu(unsigned char time) {
+  if (time > 48)
+    time -= 48;
+  if (time < 19)
+    return 1;
+  else if (time < 31)
+    return 2;
+  else if (time < 43)
+    return 3;
+  else
+    return 4;
+  return 0;
 }
 
-void drawLargeMenu(unsigned char* button) {
-  char i, j;
-  
-  goToText(button[0], 1);
-  printCG(HARD_UPPER_LEFT_CORNER);
-  for (i = 0; i < button[2] - 2; i++) {
-    printCG(TOP_MENU_BORDER);
+unsigned char drawHoursMenu(unsigned char menu) {
+  switch (menu) {
+    case 1:
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1);
+      printNum(1);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
+      printNum(2);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
+      printNum(3);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*3);
+      printNum(4);
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
+      printStr("MO");
+      return 1;
+    case 2:
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
+      printStr("MO");
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
+      printNum(5);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
+      printNum(6);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*3);
+      printNum(7);
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
+      printStr("MO");
+      return 2;
+    case 3:
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
+      printStr("MO");
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
+      printNum(8);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
+      printNum(9);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*3);
+      printNum(10);
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
+      printStr("MO");
+      return 3;
+    case 4:
+      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
+      printStr("MO");
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
+      printNum(11);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
+      printNum(12);
+      return 4;  
   }
-  
-  i = 2;
-  drawVerticalMenuSection(button[0], i++, button[2]);
-  drawVerticalMenuDivider(button[0], i++, button[2]);
-    
-  for (j = 0; j < 4; j++) {
-    drawVerticalMenuSection(button[0], i++, button[2]);
-    drawVerticalMenuSection(button[0], i++, button[2]);
-    drawVerticalMenuDivider(button[0], i++, button[2]);
-  }
+  return 0;
 }
 
-void drawDaysMenu(unsigned char* menu) {
-  char i, j;
-  
-  drawVerticalMenu(menu);
-  
-  j = 2;
-  for (i = 0; i < menu[4]; i++) { 
-    goToText(menu[0] + 2, menu[1] + j);
-    printNum(i + 1);
-    j += menu[3];
-  }
+void updateHours(unsigned char* startTime, unsigned char newHour) {
+  unsigned char tempTime = *startTime % 4;
+  *startTime = newHour*4 + tempTime;
+}
+
+void drawMinutesMenu(unsigned char* button) {
+
+}
+
+void update
+void toggleAmPm(unsigned char program, unsigned char period) {
+  if (programs[program].periods[period].startTime < 48)
+    programs[program].periods[period].startTime += 48;
+  else
+    programs[program].periods[period].startTime -= 48;
+}
+
+unsigned char determineTempMenu(unsigned char temp) {
+
+}
+
+void drawProgrammingTempMenu(unsigned char menu) {
+
+}
+
+void drawProgrammingModeMenu() {
+
 }
 
 void drawSettingsScreen() {
