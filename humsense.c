@@ -11,13 +11,12 @@ unsigned char getHumidityDec(void) {
  tempHumidity = (tempHumidity*5)/8 - 26;
  if(tempHumidity < 0)
     tempHumidity = 0;
+ else if(tempHumidity > 99)
+    tempHumidity = 99;
  return (unsigned char)tempHumidity; 
 }
 
-unsigned char getHumidityBCD(void) {
-  unsigned char tempHumidity = getHumidityDec();            
-  // Convert the RH reading to BCD format
-  if(tempHumidity > 99)
-    tempHumidity = 99;  
-  return convertDecToBCD(tempHumidity);
+// Convert the RH reading to BCD format 
+unsigned char getHumidityBCD(void) {            
+  return convertDecToBCD(getHumidityDec());
 }
