@@ -1,3 +1,6 @@
+#ifndef THERMOSTAT_H
+#define THERMOSTAT_H
+
 #define TIME_POSITION
 #define CURRENT_TEMP_POSITION
 #define SET_TEMP_POSITION
@@ -41,6 +44,17 @@
 #define MINUTES_MENU      13
 #define TEMP_MENU         14
 #define PROGRAM_MODE_MENU 15
+
+struct period {
+  unsigned char startTime;
+  unsigned char temperature;
+  unsigned char setting;
+};
+
+struct program {
+  struct period periods[NUM_PERIODS];
+};
+
 
 // Left Bar
 extern const unsigned char leftBarX;
@@ -96,6 +110,34 @@ extern const unsigned char friMenu[];
 extern const unsigned char satMenu[];
 extern const unsigned char sunMenu[]; 
 
+// Programming Screen
+extern const unsigned char okButton[];
+extern const unsigned char hour1Button[];
+extern const unsigned char hour2Button[];
+extern const unsigned char hour3Button[];
+extern const unsigned char hour4Button[];
+extern const unsigned char minutes1Button[];
+extern const unsigned char minutes2Button[];
+extern const unsigned char minutes3Button[];
+extern const unsigned char minutes4Button[];
+extern const unsigned char amPm1Button[];
+extern const unsigned char amPm2Button[];
+extern const unsigned char amPm3Button[];
+extern const unsigned char amPm4Button[];
+extern const unsigned char temp1Button[];
+extern const unsigned char temp2Button[];
+extern const unsigned char temp3Button[];
+extern const unsigned char temp4Button[];
+extern const unsigned char mode1Button[];
+extern const unsigned char mode2Button[];
+extern const unsigned char mode3Button[];
+extern const unsigned char mode4Button[];
+
+extern const unsigned char hoursMenu[];
+extern const unsigned char minutesMenu[];
+extern const unsigned char programmingTempMenu[];
+extern const unsigned char programmingModeMenu[];
+
 void initializeThermostat();
 
 void displayTime();
@@ -136,6 +178,7 @@ void drawDaysMenu(unsigned char*);
 
 void drawProgrammingScreen(unsigned char);
 
+void printMenuCells();
 unsigned char determineHoursMenu(unsigned char);
 void drawHoursMenu(unsigned char);
 
@@ -149,3 +192,4 @@ void drawProgrammingModeMenu();
 
 void drawSettingsScreen();
 
+#endif
