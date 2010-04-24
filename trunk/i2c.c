@@ -61,5 +61,9 @@ void readI2C(unsigned char deviceAddress, unsigned char command, unsigned char *
     n--;                          // Decrement total count
   }
   MIMCR_MMAST = 0;                  // Generate STOP bit
+  
+  // Eliminate hanging
+  MMCR_MMEN = 0;
+  MMCR_MMEN = 1;
 }
 
