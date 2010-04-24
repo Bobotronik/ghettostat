@@ -9,7 +9,9 @@
 extern unsigned char mode;
 extern unsigned char status;
 
-void temp_ISR(void);
-void setMode(unsigned char *);
+void tempISRAux(void);
+void tempISRMain(void);
+void setModeAux(unsigned char *);
+void setModeMain(unsigned char *);
 
 #endif

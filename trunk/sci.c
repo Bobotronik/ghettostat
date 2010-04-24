@@ -1,6 +1,7 @@
 #include "derivative.h"
 #include "sci.h"
 #include "i2cDevices.h"
+#include "int.h"
 
 unsigned char SCI_DATA[4];
 
@@ -18,6 +19,7 @@ void initSCI(void) {
     SCC2_TE     = S_TE;
     SCC2_RE     = S_RE;
 }
+// Basic Functions ----------------------------------------
 
 // Output a single byte
 void sendByteSCI(unsigned char data_byte) {
@@ -30,6 +32,8 @@ unsigned char receiveByteSCI(void) {
   while (SCS1_SCRF == 0); // Wait until receiver full
   return SCDR;
 }
+
+// Hardware Protocol --------------------------------------
 
 // Output
 void sendDataSCI(void) {
@@ -74,6 +78,9 @@ void receiveDataSCI(void) {
   SCI_DATA[2] = receiveByteSCI();
 }
 
+// Backend Functions --------------------------------------
+
+// Get the current temp from the aux board 
 void receiveTempC(unsigned char * C) {
   // Tell the small board to send the temp back
   SCI_DATA[3] = TYPE_GETTEMP;
@@ -85,19 +92,20 @@ void receiveTempC(unsigned char * C) {
   C[1] = SCI_DATA[1];
 }
 
+// Transmit the current temperature over SCI
 void sendTempC(void) {
   getTempC(SCI_DATA);
   SCI_DATA[3] = TYPE_SETTEMP;
   sendDataSCI();
 }
     
-
+// Small board receives SCI data and acts
 void smallBoardReceive(void){
   receiveDataSCI();
-  if SCI_DATA[3] == TYPE_GETTEMP{
+  if(SCI_DATA[3] == TYPE_GETTEMP) {
     sendTempC();
   }
-  else if SCI_DATA[3] == TYPE_SETTEMP{
-    setMode(SCI_DATA);
+  else if(SCI_DATA[3] == TYPE_SETTEMP) {
+    setModeAux(SCI_DATA);
   }
 }
