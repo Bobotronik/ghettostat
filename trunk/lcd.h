@@ -146,6 +146,7 @@ void drawBox(unsigned char, unsigned char, unsigned char, unsigned char);
 void drawGraphic(unsigned char, unsigned char, unsigned char, unsigned char, unsigned char*);
 
 unsigned char isScreenTouched();
+unsigned char isScreenReleased();
 unsigned char getX();
 unsigned char getY();
 

@@ -458,7 +458,6 @@ unsigned char getY(){
 }
 
 unsigned char isScreenTouched() {
-
   unsigned char i, current, previous;
   
   TS_LEFT_DIR = 1;
@@ -471,12 +470,12 @@ unsigned char isScreenTouched() {
    
   wait(100);
   
-  /* if touched 30 times in a row, return true
+  /* if touched 50 times in a row, return true
      else return false
   */
   previous = convertAD(TS_X_INPUT) >> 1;
   
-  for (i = 0; i < 30; i++) {
+  for (i = 0; i < 50; i++) {
     current = convertAD(TS_X_INPUT) >> 1;
     if (charAbs(current - previous) > 2) {
       return 0; 
@@ -484,6 +483,34 @@ unsigned char isScreenTouched() {
     previous = current;
     wait(50);
   }
+  return current;
+}
+
+unsigned char isScreenReleased() {
+  unsigned char i, current, previous;
+  
+  TS_LEFT_DIR = 1;
+  TS_RIGHT_DIR = 1;
+  TS_TOP_DIR = 0;
+  TS_BOTTOM_DIR = 0;
+  
+  TS_LEFT = 0;
+  TS_RIGHT = 1;
+   
+  wait(100);
+  
+  previous = convertAD(TS_X_INPUT) >> 1;
+  
+  for (i = 0; i < 50; i++) {
+    current = convertAD(TS_X_INPUT) >> 1;
+    if (charAbs(current - previous) > 3) {
+      break;
+    }   
+    previous = current;
+    wait(50);
+  }
+  if (i == 50)
+    return 0;
   return current;
 }
 
