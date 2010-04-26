@@ -21,8 +21,10 @@ void main(void) {
   unsigned char tempTime;
   char currentTempMenuViewing;
   
-  extern struct program programs[NUM_PROGRAMS];
-  extern unsigned char weeklySchedule[];
+  unsigned char released; // Semaphore
+  
+  extern struct program programs[NUM_PROGRAMS]; // For programs Tab
+  extern unsigned char weeklySchedule[]; // For days tab
   
   EnableInterrupts; /* enable interrupts */
   /* include your code here */
@@ -31,10 +33,10 @@ void main(void) {
  
   initI2C();
   initPortX();
-  initializeDisplay();
-  initializeThermostat();
   configureTemp();
   startTemp();
+  initializeDisplay();
+  initializeThermostat();
   
   drawMainScreen();
   drawSolidButton(homeButton);
@@ -57,8 +59,10 @@ void main(void) {
         break;
     }
     // Poll touchscreen
-    if (isScreenTouched()) {
-             
+    released = isScreenReleased();
+    
+    if (isScreenTouched() && released) {
+      released = 0;    
       x = getX();
       y = getY();
       x = mapToXPixel(x);

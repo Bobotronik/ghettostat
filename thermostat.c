@@ -8,10 +8,7 @@
 
 /*
 ****Features****
-4 time periods per day (fixed number of periods)
-7 day programmable
 manual override
-copy settings from one day to another
 
 general algorithm
 
@@ -197,17 +194,7 @@ const unsigned char programmingTempMenu[] = {28, 1, 4, 3, 5};
 const unsigned char programmingModeMenu[] = {34, 4, 6, 3, 3};
   
 extern unsigned char DEVICE_DATA[2];
-/*
-struct period {
-  unsigned char startTime;
-  unsigned char temperature;
-  unsigned char setting;
-};
 
-struct program {
-  struct period periods[NUM_PERIODS];
-};
- */
 struct program programs[NUM_PROGRAMS];
 
 unsigned char weeklySchedule[] = {1, 1, 1, 1, 1, 1, 1};
@@ -1000,14 +987,22 @@ void printMenuCells(unsigned char* menu, unsigned char mode, unsigned char num) 
     case 1:
       i = 0;
       j = 4;
+      goToText(menu[0] + 1, menu[1] + 1 + menu[3]*4);
+      printStr("MO");
       break;
     case 2:
       i = 1;
       j = 4;
+      goToText(menu[0] + 1, menu[1] + 1);
+      printStr("MO");
+      goToText(menu[0] + 1, menu[1] + 1 + menu[3]*4);
+      printStr("MO");
       break;
     case 3:
       i = 1;
       j = 5;
+      goToText(menu[0] + 1, menu[1] + 1);
+      printStr("MO");
       break;   
   }
   
@@ -1037,27 +1032,20 @@ void drawHoursMenu(unsigned char menu) {
   switch (menu) {
     case 1:
       printMenuCells(hoursMenu, 1, 1);
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
-      printStr("MO");
       break;
     case 2:
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
-      printStr("MO");
       printMenuCells(hoursMenu, 2, 5);
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
-      printStr("MO");
       break;
     case 3:
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
-      printStr("MO");
       printMenuCells(hoursMenu, 2, 8);
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1 + hoursMenu[3]*4);
-      printStr("MO");
       break;
     case 4:
       goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
       printStr("MO");
-      printMenuCells(hoursMenu, 3, 11);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
+      printNum(11);
+      goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
+      printNum(12);
       break;
   }
 }
@@ -1065,28 +1053,6 @@ void drawHoursMenu(unsigned char menu) {
 void updateHours(unsigned char* startTime, unsigned char newHour) {
   unsigned char tempTime = *startTime % 4;
   *startTime = newHour*4 + tempTime;
-}
-
-unsigned char determineMinutesMenu(unsigned char temp) {
-  if (temp < 64)
-    return 1;
-  else if (temp < 67)
-    return 2;
-  else if (temp < 70)
-    return 3;
-  else if (temp < 73)
-    return 4;
-  else if (temp < 76)
-    return 5;
-  else if (temp < 79)
-    return 6;
-  else if (temp < 82)
-    return 7;
-  else if (temp < 85)
-    return 8;
-  else if (temp >= 85)
-    return 9;
-  return 0;
 }
 
 void drawMinutesMenu(unsigned char startTime) {
@@ -1116,7 +1082,25 @@ void toggleAmPm(unsigned char program, unsigned char period) {
 }
 
 unsigned char determineTempMenu(unsigned char temp) {
-
+  if (temp < 64)
+    return 1;
+  else if (temp < 67)
+    return 2;
+  else if (temp < 70)
+    return 3;
+  else if (temp < 73)
+    return 4;
+  else if (temp < 76)
+    return 5;
+  else if (temp < 79)
+    return 6;
+  else if (temp < 82)
+    return 7;
+  else if (temp < 85)
+    return 8;
+  else if (temp >= 85)
+    return 9;
+  return 0;
 }
 
 void drawProgrammingTempMenu(unsigned char menu) {
