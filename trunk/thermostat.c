@@ -196,12 +196,13 @@ const unsigned char programmingModeMenu[] = {34, 4, 6, 3, 3};
 extern unsigned char DEVICE_DATA[2];
 
 struct program programs[NUM_PROGRAMS];
-
+struct room rooms[2];
 unsigned char weeklySchedule[] = {1, 1, 1, 1, 1, 1, 1};
 
 // Format of *Period
 // | 7  | 6  | 5  | 4  | 3  | 2  | 1  | 0  |
 //  PRO3 PRO2 PRO1 PRO0 PER3 PER2 PER1 PER0
+unsigned char currentRoom;
 
 unsigned char currentTemperature; 
 unsigned char currentTime;
@@ -283,6 +284,9 @@ void updateTime() {
 
 }
 
+/*
+Displays the time and updates currentTime;
+*/
 void displayTime() {
   unsigned char temp;
   unsigned char tempTime;
@@ -316,6 +320,7 @@ void displayTime() {
       printStr("Sat ");
       break;
   }
+  currentDay = temp - 1;
   
   // Month
   temp = RTC_TIME[5];
@@ -421,7 +426,6 @@ void displayTime() {
 void updateTemp() {
   goToText(10, 6);
   printNum(getTempF());
-  //goToText();
 }
 
 void displayTemps() {
@@ -446,6 +450,9 @@ void displayTemps() {
   printNum(remainder);
 }
 
+/*
+This is called anytime the thermostat rolls over to the next period
+*/
 void updatePeriods() {
   // Update only applicable if next period is on current day
   if (currentDay == dayOfNextPeriod) {
@@ -474,13 +481,37 @@ void updatePeriods() {
       }
       
       // Update thermometer
-      setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+      updateThermometer();
     }
   }
 }
 
 void updateThermometer() {
   setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+}
+
+/* 
+"Refreshes" the thermostat and finds the current period
+This will need to be called anytime a program is changed 
+*/
+void refreshThermostat() {
+  unsigned char i, day;
+  
+  for (i = 0; i < 4; i++) {
+    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime);
+      break;
+  }
+  if (i != 0)
+    currentPeriod = i - 1;
+  else {
+    currentPeriod = 3;
+    if (currentDay != 0)
+      day = currentDay - 1;
+    else 
+      day = 6;
+  }
+  // update sensors
+  setTemp(rooms[currentRoom].programs[weeklySchedule[day]].periods[currentPeriod].temperature);
 }
 
 void drawButton(unsigned char* button) {
@@ -683,6 +714,10 @@ void drawTopBar() {
   
   goToText(0,0);
   displayTime();
+  if (currentRoom == MAIN_ROOM)
+    printStr("  Main Room");
+  else if (currentRoom == AUX_ROOM)
+    printStr("  Auxilliary Room");
   printStr("        Humidity   %");
   goToText(38, 0);
   printNum(getHumidityDec());

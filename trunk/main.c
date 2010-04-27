@@ -112,7 +112,16 @@ void main(void) {
                 }
                 break;
               case MAIN_MODE_MENU:
-                if (isHorizontalMenuButtonTouched(x, y, modeMenu)) {
+                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, modeMenu);
+                if (menuButtonTouched) {
+                  switch (menuButtonTouched) {
+                    case 1:
+                      break;
+                    case 2:
+                      break;
+                    case 3:
+                      break;
+                  }
                   drawMainScreen();
                   menuState = NONE;  
                 }
