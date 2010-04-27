@@ -84,6 +84,48 @@ const unsigned char wrench[] = {
 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}; 
 
+const unsigned char upArrow[] = {
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x01, 0x20, 0x00, 
+0x00, 0x01, 0x20, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x07, 0x38, 0x00, 
+0x00, 0x07, 0x38, 0x00, 
+0x00, 0x0f, 0x3c, 0x00, 
+0x00, 0x0f, 0x3c, 0x00, 
+0x00, 0x1f, 0x3e, 0x00, 
+0x00, 0x1f, 0x3e, 0x00, 
+0x00, 0x3f, 0x3f, 0x00, 
+0x00, 0x3f, 0x3f, 0x00, 
+0x01, 0x3f, 0x3f, 0x20, 
+0x01, 0x3f, 0x3f, 0x20};
+
+const unsigned char downArrow[] = {
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x00, 0x00, 0x00, 0x00, 
+0x01, 0x3f, 0x3f, 0x20, 
+0x01, 0x3f, 0x3f, 0x20, 
+0x00, 0x3f, 0x3f, 0x00, 
+0x00, 0x3f, 0x3f, 0x00, 
+0x00, 0x1f, 0x3e, 0x00, 
+0x00, 0x1f, 0x3e, 0x00, 
+0x00, 0x0f, 0x3c, 0x00, 
+0x00, 0x0f, 0x3c, 0x00, 
+0x00, 0x07, 0x38, 0x00, 
+0x00, 0x07, 0x38, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x01, 0x20, 0x00, 
+0x00, 0x01, 0x20, 0x00};
+
 const unsigned char check[] = {
 0x00, 0x02, 
 0x00, 0x06, 
@@ -202,15 +244,18 @@ unsigned char weeklySchedule[] = {1, 1, 1, 1, 1, 1, 1};
 // Format of *Period
 // | 7  | 6  | 5  | 4  | 3  | 2  | 1  | 0  |
 //  PRO3 PRO2 PRO1 PRO0 PER3 PER2 PER1 PER0
+
 unsigned char currentRoom;
+unsigned char fanSetting;
 
-unsigned char currentTemperature; 
 unsigned char currentTime;
-unsigned char currentPeriod;
+unsigned char currentTemperature;
+ 
 unsigned char currentDay;
+unsigned char currentPeriod;
 
-unsigned char nextPeriod;
 unsigned char dayOfNextPeriod;
+unsigned char nextPeriod;
 
 struct period overridePeriod;
 unsigned char isOverride;
@@ -218,24 +263,24 @@ unsigned char isOverride;
 unsigned char mainState, menuState;
 
 void initializeThermostat() {
-  unsigned char i;
+  unsigned char i, j;
   
-  // Wakeup
-  programs[0].periods[MORNING].startTime = 24; //6*4
-  programs[0].periods[MORNING].temperature = 72;
-  programs[0].periods[MORNING].setting = HEAT;
-  // At work
-  programs[0].periods[WORK].startTime = 32; //8*4
-  programs[0].periods[WORK].setting = OFF;
-  // At home
-  programs[0].periods[EVENING].startTime = 68; //6*4 + 12*4
-  programs[0].periods[EVENING].temperature = 72;
-  programs[0].periods[EVENING].setting = HEAT;
-  // Asleep
-  programs[0].periods[NIGHT].startTime = 84; //10*4 + 12*4
-  programs[0].periods[NIGHT].temperature = 62;
-  programs[0].periods[NIGHT].setting = HEAT;
-  
+  for (i = 0; i < 4; i++) {
+    programs[i].periods[MORNING].startTime = 24; //6*4
+    programs[i].periods[MORNING].temperature = 72;
+    programs[i].periods[MORNING].setting = HEAT;
+    // At work
+    programs[i].periods[WORK].startTime = 32; //8*4
+    programs[i].periods[WORK].setting = OFF;
+    // At home
+    programs[i].periods[EVENING].startTime = 68; //6*4 + 12*4
+    programs[i].periods[EVENING].temperature = 72;
+    programs[i].periods[EVENING].setting = HEAT;
+    // Asleep
+    programs[i].periods[NIGHT].startTime = 84; //10*4 + 12*4
+    programs[i].periods[NIGHT].temperature = 62;
+    programs[i].periods[NIGHT].setting = HEAT;  
+  }
 }
 
 void printHours(unsigned char temp) {
@@ -454,6 +499,7 @@ void displayTemps() {
 This is called anytime the thermostat rolls over to the next period
 */
 void updatePeriods() {
+
   // Update only applicable if next period is on current day
   if (currentDay == dayOfNextPeriod) {
   
@@ -462,9 +508,8 @@ void updatePeriods() {
       
       // Updating period
       // Same day   
-      if (nextPeriod < NUM_PERIODS-1) {
+      if (nextPeriod < NUM_PERIODS-1)
         nextPeriod++;
-      }
       // New day
       else {
         nextPeriod = 0;
@@ -742,14 +787,28 @@ void drawMainScreen() {
   drawButton(roomButton);
   goToText(35, 2);
   printStr("Room");
+  goToText(35, 4);
   
   drawButton(fanButton);
   goToText(35, 7);
   printStr("Fan");
+  goToText(35, 9);
   
   drawButton(modeButton);
   goToText(35, 12);
   printStr("Mode");
+  goToText(35, 14);
+  switch (programs[weeklySchedule[currentDay]].periods[currentPeriod].setting) {
+    case HEAT:
+      printStr("HEAT");
+      break;
+    case COOL:
+      printStr("COOL");
+      break;
+    case OFF:
+      printStr("OFF");
+      break; 
+  }
   
   goToText(9, 5);
   printStr("Currently");
@@ -757,6 +816,8 @@ void drawMainScreen() {
   drawButton(setToButton);
   goToText(21, 5);
   printStr("Set To");
+  goToText(24, 8);
+  printNum(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
 }
 
 void drawMainSetToMenu() {
@@ -1022,22 +1083,20 @@ void printMenuCells(unsigned char* menu, unsigned char mode, unsigned char num) 
     case 1:
       i = 0;
       j = 4;
-      goToText(menu[0] + 1, menu[1] + 1 + menu[3]*4);
-      printStr("MO");
+      clearArea(menu[0]*FONT_WIDTH, menu[1]*8, 24, 24);
+      drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8 + menu[3]*4*8, 4, 19, downArrow);
       break;
     case 2:
       i = 1;
       j = 4;
-      goToText(menu[0] + 1, menu[1] + 1);
-      printStr("MO");
-      goToText(menu[0] + 1, menu[1] + 1 + menu[3]*4);
-      printStr("MO");
+      drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8, 4, 19, upArrow);
+      drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8 + menu[3]*4*8, 4, 19, downArrow);
       break;
     case 3:
       i = 1;
       j = 5;
-      goToText(menu[0] + 1, menu[1] + 1);
-      printStr("MO");
+      drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8, 4, 19, upArrow);
+      clearArea(menu[0]*FONT_WIDTH, menu[1]*8 + menu[3]*4*8, 24, 24);
       break;   
   }
   
@@ -1075,8 +1134,7 @@ void drawHoursMenu(unsigned char menu) {
       printMenuCells(hoursMenu, 2, 8);
       break;
     case 4:
-      goToText(hoursMenu[0] + 1, hoursMenu[1] + 1);
-      printStr("MO");
+      drawGraphic(hoursMenu[0]*FONT_WIDTH, hoursMenu[1]*8, 4, 19, upArrow);
       goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]);
       printNum(11);
       goToText(hoursMenu[0] + 2, hoursMenu[1] + 1 + hoursMenu[3]*2);
@@ -1170,6 +1228,10 @@ void drawProgrammingTempMenu(unsigned char menu) {
       printMenuCells(programmingTempMenu, 3, 85);
       break;
   }
+}
+
+void updateProgrammingTemp(unsigned char* temperature, unsigned char newTemperature) {
+  *temperature = newTemperature;
 }
 
 void drawProgrammingModeMenu() {

@@ -148,7 +148,7 @@ void initializeThermostat();
 void displayTime();
 void displayTemps();
 
-void updatePeriods();
+void updateCurrentPeriod();
 void updateThermometer();
 
 void createProgram();
@@ -194,6 +194,7 @@ unsigned char determineTempMenu(unsigned char);
 void drawProgrammingTempMenu();
 
 void drawProgrammingModeMenu();
+void updateProgrammingTemp(unsigned char*, unsigned char);
 
 void drawSettingsScreen();
 
