@@ -5,10 +5,12 @@
 #define CURRENT_TEMP_POSITION
 #define SET_TEMP_POSITION
 
+#define MAIN_ROOM   0
+#define AUX_ROOM    1
+
 #define OFF         0
 #define HEAT        1
 #define COOL        2
-#define CIRCULATE   3
 
 #define MORNING     0
 #define WORK        1
@@ -55,6 +57,9 @@ struct program {
   struct period periods[NUM_PERIODS];
 };
 
+struct room {
+  struct program programs[NUM_PROGRAMS];
+}
 
 // Left Bar
 extern const unsigned char leftBarX;
