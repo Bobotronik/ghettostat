@@ -503,14 +503,13 @@ unsigned char isScreenReleased() {
   
   for (i = 0; i < 50; i++) {
     current = convertAD(TS_X_INPUT) >> 1;
-    if (charAbs(current - previous) > 3) {
-      break;
+    // if change is too small, break and return 0;
+    if (charAbs(current - previous) < 2) {
+      return 0;
     }   
     previous = current;
     wait(50);
   }
-  if (i == 50)
-    return 0;
   return current;
 }
 

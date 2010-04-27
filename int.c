@@ -41,6 +41,10 @@ void tempISRAux(void)  {
     del1m(1);
 }
 
+void tempISR() {
+
+}
+
 void tempISRMain(void) {
    if (mode == HEAT) {      
       if(status != HEAT) {        //polarity is 1

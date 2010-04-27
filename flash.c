@@ -8,16 +8,16 @@ unsigned int  ADDR     @0x0062; /* Start address of FLASH to manipulate */
 unsigned char DATA[64] @0x0064; /* Data to program into FLASH */
 
 void loadFlash(void) {
-  asm(LDHX FILE_PTR);    /* Load address of RAM Data Block to H:X */
-  asm(JSR LDRNGE);       /* Call F_LOAD ROM Subroutine */
+  //asm{LDHX FILE_PTR}    /* Load address of RAM Data Block to H:X */
+  //asm{JSR LDRNGE}       /* Call F_LOAD ROM Subroutine */
 }
 
 void eraseFlash(void) {
-  asm(LDHX FILE_PTR);    /* Load address of RAM Data Block to H:X */
-  asm(JSR ERARNGE);      /* Call F_ERASE ROM Subroutine */
+  //asm{LDHX FILE_PTR}    /* Load address of RAM Data Block to H:X */
+  //asm{JSR ERARNGE}      /* Call F_ERASE ROM Subroutine */
 }
 
 void writeFlash(void) {
-  asm(LDHX FILE_PTR);    /* Load address of RAM Data Block to H:X */
-  asm(JSR PRGRNGE);      /* Call F_PROGRAM ROM Subroutine */        
+  //asm{LDHX FILE_PTR}    /* Load address of RAM Data Block to H:X */
+  //asm{JSR PRGRNGE}      /* Call F_PROGRAM ROM Subroutine */        
 }
