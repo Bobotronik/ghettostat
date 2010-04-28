@@ -256,6 +256,8 @@ unsigned char currentPeriodIndex;
 unsigned char dayOfNextPeriod;
 unsigned char nextPeriodIndex;
 
+unsigned char currentTemperature;
+
 struct period currentPeriod;
 struct period overridePeriod;
 
@@ -266,7 +268,7 @@ unsigned char mainState, menuState;
 void initializeThermostat() {
   unsigned char i, j;
   
-  displayTemp(); // must be called first to initialize time variables
+  displayTemps(); // must be called first to initialize time variables
   
   currentRoom = ROOM_MAIN;
   fanMode = FAN_OFF;
@@ -339,6 +341,7 @@ void printMode(unsigned char temp) {
 void displayTime() {
   unsigned char temp;
   unsigned char tempTime;
+  unsigned char tempHours;
   unsigned char tempMinutes;
   unsigned char pm;
   
@@ -349,28 +352,33 @@ void displayTime() {
   switch (temp) {
     case 1:
       printStr("Sun ");
+      currentDay = 6;
       break;
     case 2:
       printStr("Mon ");
+      currentDay = 0;
       break;
     case 3:
       printStr("Tue ");
+      currentDay = 1;
       break;
     case 4:
       printStr("Wed ");
+      currentDay = 2;
       break;
     case 5:
       printStr("Thu ");
+      currentDay = 3;
       break;
     case 6:
       printStr("Fri ");
+      currentDay = 4;
       break;
     case 7:
       printStr("Sat ");
+      currentDay = 5;
       break;
   }
-  
-  currentDay = temp - 1;
   
   // Month
   temp = RTC_TIME[5];
@@ -440,7 +448,7 @@ void displayTime() {
   // Determine whether to display nothing or 1
   if (temp & 0x10) {
     printDigit(1);
-    tempTime += 40;
+    //tempTime += 40;
   }
   else {
     printChar(' ');
@@ -448,15 +456,15 @@ void displayTime() {
   
   // Display hour (1's digit)
   printDigit(temp & 0x0f);
-  tempTime += (temp & 0x0f);
+  //tempTime += (temp & 0x0f);
+  tempTime += (((temp & 0x10) >> 4)*10 + (temp & 0x0f)) << 2;
   printChar(':');
  
   // Display minutes
   temp = RTC_TIME[1];
   printDigit(temp >> 4);
   printDigit(temp & 0x0f);
-  tempMinutes = ((temp & 0x70) >> 4)*10;
-  tempMinutes += temp & 0x0f;
+  tempMinutes = ((temp & 0x70) >> 4)*10 + (temp & 0x0f);
   tempTime += tempMinutes/15;
   currentTime = tempTime;
   
@@ -483,7 +491,7 @@ void displayTemps() {
   unsigned char quotient;
   unsigned char remainder;
   
-  getTemp();
+  getTempF();
   
   quotient = currentTemperature/100;
   remainder = currentTemperature%100;
@@ -542,7 +550,7 @@ void refreshThermostat() {
   unsigned char i, day;
     
   for (i = 0; i < 4; i++) {
-    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime;
+    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime);
       break;
   }
   // Need to set dayOfCurrentPeriod, dayOfNextPeriod, currentPeriodIndex, nextPeriodIndex
@@ -579,6 +587,20 @@ void refreshThermostat() {
   
   // update sensors
   currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
+  
+  goToText(5, 1);
+  printNum(dayOfCurrentPeriod);
+  goToText(10, 1);
+  printNum(currentPeriodIndex);
+  goToText(15, 1);
+  printNum(dayOfNextPeriod);
+  goToText(20, 1);
+  printNum(nextPeriodIndex);
+  goToText(25, 1);
+  printNum(currentRoom);
+  
+  goToText(30, 1);
+  printNum(currentTime);
 }
 
 void updateThermometer() {
@@ -1048,10 +1070,10 @@ void drawProgrammingScreen(unsigned char programIndex) {
   goToText(17, 1);
   printStr("Program ");
   
-  drawButtonPrintHours(hour1Button, programs[programIndex].periods[0].startTime);
-  drawButtonPrintHours(hour2Button, programs[programIndex].periods[1].startTime);
-  drawButtonPrintHours(hour3Button, programs[programIndex].periods[2].startTime);
-  drawButtonPrintHours(hour4Button, programs[programIndex].periods[3].startTime);
+  drawButtonPrintHours(hour1Button, rooms[currentRoom].programs[programIndex].periods[0].startTime);
+  drawButtonPrintHours(hour2Button, rooms[currentRoom].programs[programIndex].periods[1].startTime);
+  drawButtonPrintHours(hour3Button, rooms[currentRoom].programs[programIndex].periods[2].startTime);
+  drawButtonPrintHours(hour4Button, rooms[currentRoom].programs[programIndex].periods[3].startTime);
   
   goToText(hour1Button[0] + hour1Button[2], hour1Button[1] + 1);
   printChar(':');
@@ -1062,41 +1084,41 @@ void drawProgrammingScreen(unsigned char programIndex) {
   goToText(hour4Button[0] + hour4Button[2], hour4Button[1] + 1);
   printChar(':');
   
-  drawButtonPrintMinutes(minutes1Button, programs[programIndex].periods[0].startTime);
-  drawButtonPrintMinutes(minutes2Button, programs[programIndex].periods[1].startTime);
-  drawButtonPrintMinutes(minutes3Button, programs[programIndex].periods[2].startTime);
-  drawButtonPrintMinutes(minutes4Button, programs[programIndex].periods[3].startTime);
+  drawButtonPrintMinutes(minutes1Button, rooms[currentRoom].programs[programIndex].periods[0].startTime);
+  drawButtonPrintMinutes(minutes2Button, rooms[currentRoom].programs[programIndex].periods[1].startTime);
+  drawButtonPrintMinutes(minutes3Button, rooms[currentRoom].programs[programIndex].periods[2].startTime);
+  drawButtonPrintMinutes(minutes4Button, rooms[currentRoom].programs[programIndex].periods[3].startTime);
 
   drawButton(amPm1Button);
   goToText(amPm1Button[0] + 1, amPm1Button[1] + 1);
-  printAmPm(programs[programIndex].periods[0].startTime);
+  printAmPm(rooms[currentRoom].programs[programIndex].periods[0].startTime);
   drawButton(amPm2Button);
   goToText(amPm2Button[0] + 1, amPm2Button[1] + 1);
-  printAmPm(programs[programIndex].periods[1].startTime);
+  printAmPm(rooms[currentRoom].programs[programIndex].periods[1].startTime);
   drawButton(amPm3Button);
   goToText(amPm3Button[0] + 1, amPm3Button[1] + 1);
-  printAmPm(programs[programIndex].periods[2].startTime);
+  printAmPm(rooms[currentRoom].programs[programIndex].periods[2].startTime);
   drawButton(amPm4Button);
   goToText(amPm4Button[0] + 1, amPm4Button[1] + 1);
-  printAmPm(programs[programIndex].periods[3].startTime);
+  printAmPm(rooms[currentRoom].programs[programIndex].periods[3].startTime);
   
-  drawButtonPrintNumber(temp1Button, programs[programIndex].periods[0].temperature);
-  drawButtonPrintNumber(temp2Button, programs[programIndex].periods[1].temperature);
-  drawButtonPrintNumber(temp3Button, programs[programIndex].periods[2].temperature);
-  drawButtonPrintNumber(temp4Button, programs[programIndex].periods[3].temperature);
+  drawButtonPrintNumber(temp1Button, rooms[currentRoom].programs[programIndex].periods[0].temperature);
+  drawButtonPrintNumber(temp2Button, rooms[currentRoom].programs[programIndex].periods[1].temperature);
+  drawButtonPrintNumber(temp3Button, rooms[currentRoom].programs[programIndex].periods[2].temperature);
+  drawButtonPrintNumber(temp4Button, rooms[currentRoom].programs[programIndex].periods[3].temperature);
   
   drawButton(mode1Button);
   goToText(mode1Button[0] + 1, mode1Button[1] + 1);
-  printMode(programs[programIndex].periods[0].mode);
+  printMode(rooms[currentRoom].programs[programIndex].periods[0].mode);
   drawButton(mode2Button);
   goToText(mode2Button[0] + 1, mode2Button[1] + 1);
-  printMode(programs[programIndex].periods[1].mode);
+  printMode(rooms[currentRoom].programs[programIndex].periods[1].mode);
   drawButton(mode3Button);
   goToText(mode3Button[0] + 1, mode3Button[1] + 1);
-  printMode(programs[programIndex].periods[2].mode);
+  printMode(rooms[currentRoom].programs[programIndex].periods[2].mode);
   drawButton(mode4Button);
   goToText(mode4Button[0] + 1, mode4Button[1] + 1);
-  printMode(programs[programIndex].periods[3].mode);
+  printMode(rooms[currentRoom].programs[programIndex].periods[3].mode);
   
   goToText(hour1Button[0] + 2, hour1Button[1] - 1);
   printStr("Start Time");
@@ -1199,10 +1221,10 @@ void updateMinutes(unsigned char* startTime, unsigned char newMinute) {
 }
 
 void toggleAmPm(unsigned char program, unsigned char period) {
-  if (programs[program].periods[period].startTime < 48)
-    programs[program].periods[period].startTime += 48;
+  if (rooms[currentRoom].programs[program].periods[period].startTime < 48)
+    rooms[currentRoom].programs[program].periods[period].startTime += 48;
   else
-    programs[program].periods[period].startTime -= 48;
+    rooms[currentRoom].programs[program].periods[period].startTime -= 48;
 }
 
 unsigned char determineTempMenu(unsigned char temp) {

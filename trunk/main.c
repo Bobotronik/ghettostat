@@ -24,7 +24,7 @@ void main(void) {
   unsigned char released = 1; // Semaphore
   unsigned char touched = 0;
   
-  extern struct program programs[NUM_PROGRAMS]; // For programs Tab
+  extern struct room rooms[2]; // For programs Tab
   extern unsigned char weeklySchedule[]; // For days tab
   
   EnableInterrupts; /* enable interrupts */
@@ -228,46 +228,46 @@ void main(void) {
             case NONE:
               if (isButtonTouched(x, y, hour1Button)) {
                 currentPeriodEditing = 1;
-                currentMenuViewing = determineHoursMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                currentMenuViewing = determineHoursMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 drawHoursMenu(currentMenuViewing);
                 menuState = HOURS_MENU;
               }                     
               else if (isButtonTouched(x, y, hour2Button)) {
                 currentPeriodEditing = 2;
-                currentMenuViewing = determineHoursMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                currentMenuViewing = determineHoursMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 drawHoursMenu(currentMenuViewing);
                 menuState = HOURS_MENU;
               }
               else if (isButtonTouched(x, y, hour3Button)) {
                 currentPeriodEditing = 3;
-                currentMenuViewing = determineHoursMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                currentMenuViewing = determineHoursMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 drawHoursMenu(currentMenuViewing);
                 menuState = HOURS_MENU;
               }
               else if (isButtonTouched(x, y, hour4Button)) {
                 currentPeriodEditing = 4;
-                currentMenuViewing = determineHoursMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                currentMenuViewing = determineHoursMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 drawHoursMenu(currentMenuViewing);
                 menuState = HOURS_MENU;
               }
               else if (isButtonTouched(x, y, minutes1Button)) {
                 currentPeriodEditing = 1;
-                drawMinutesMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                drawMinutesMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 menuState = MINUTES_MENU;
               }
               else if (isButtonTouched(x, y, minutes2Button)) {
                 currentPeriodEditing = 2;
-                drawMinutesMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                drawMinutesMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 menuState = MINUTES_MENU;
               }
               else if (isButtonTouched(x, y, minutes3Button)) {
                 currentPeriodEditing = 3;
-                drawMinutesMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                drawMinutesMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 menuState = MINUTES_MENU;
               }
               else if (isButtonTouched(x, y, minutes4Button)) {
                 currentPeriodEditing = 4;
-                drawMinutesMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
+                drawMinutesMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime);
                 menuState = MINUTES_MENU;
               }
               else if (isButtonTouched(x, y, amPm1Button)) {
@@ -292,25 +292,25 @@ void main(void) {
               }
               else if (isButtonTouched(x, y, temp1Button)) {
                 currentPeriodEditing = 1;
-                currentMenuViewing = determineTempMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
+                currentMenuViewing = determineTempMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
                 drawProgrammingTempMenu(currentMenuViewing);
                 menuState = TEMP_MENU;
               }
               else if (isButtonTouched(x, y, temp2Button)) {
                 currentPeriodEditing = 2;
-                currentMenuViewing = determineTempMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
+                currentMenuViewing = determineTempMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
                 drawProgrammingTempMenu(currentMenuViewing);
                 menuState = TEMP_MENU;
               }
               else if (isButtonTouched(x, y, temp3Button)) {
                 currentPeriodEditing = 3;
-                currentMenuViewing = determineTempMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
+                currentMenuViewing = determineTempMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
                 drawProgrammingTempMenu(currentMenuViewing);
                 menuState = TEMP_MENU;
               }
               else if (isButtonTouched(x, y, temp4Button)) {
                 currentPeriodEditing = 4;
-                currentMenuViewing = determineTempMenu(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
+                currentMenuViewing = determineTempMenu(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature);
                 drawProgrammingTempMenu(currentMenuViewing);
                 menuState = TEMP_MENU;
               }
@@ -344,7 +344,7 @@ void main(void) {
                       drawHoursMenu(++currentMenuViewing);
                     }
                     else {
-                      updateHours(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched);
+                      updateHours(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -355,7 +355,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawHoursMenu(++currentMenuViewing);
                     else {
-                      updateHours(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched + 3);
+                      updateHours(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched + 3);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -366,7 +366,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawHoursMenu(++currentMenuViewing);
                     else {
-                      updateHours(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched + 6);
+                      updateHours(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched + 6);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -375,12 +375,12 @@ void main(void) {
                     if (menuButtonTouched == 1)
                       drawHoursMenu(--currentMenuViewing);
                     else if (menuButtonTouched == 2) {
-                      updateHours(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), 11);
+                      updateHours(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), 11);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     else if (menuButtonTouched == 3) {
-                      updateHours(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), 12);
+                      updateHours(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), 12);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -391,7 +391,7 @@ void main(void) {
             case MINUTES_MENU:
               menuButtonTouched = isVerticalMenuButtonTouched(x, y, minutesMenu);
               if(menuButtonTouched) {
-                updateMinutes(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched - 1);
+                updateMinutes(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].startTime), menuButtonTouched - 1);
                 drawProgrammingScreen(currentProgramEditing);
                 menuState = NONE;
               }
@@ -404,7 +404,7 @@ void main(void) {
                     if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 59 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 59 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -415,7 +415,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 62 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 62 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
@@ -426,7 +426,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 65 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 65 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing);                                                
                       menuState = NONE;
                     }
@@ -437,7 +437,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 68 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 68 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -448,7 +448,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 71 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 71 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -459,7 +459,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 74 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 74 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -470,7 +470,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 77 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 77 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -482,7 +482,7 @@ void main(void) {
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 80 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 80 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -492,7 +492,7 @@ void main(void) {
                       drawProgrammingTempMenu(--currentMenuViewing);
                     }
                     else {
-                      updateProgrammingTemp(&(programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 83 + menuButtonTouched);
+                      updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 83 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
@@ -505,17 +505,17 @@ void main(void) {
               menuButtonTouched = isHorizontalMenuButtonTouched(x, y, programmingModeMenu);
               switch (menuButtonTouched) {
                 case 1:
-                  programs[currentProgramEditing].periods[currentPeriodEditing - 1].setting = HEAT;
+                  rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].mode = HEAT;
                   drawProgrammingScreen(currentProgramEditing);
                   menuState = NONE;
                   break;
                 case 2:
-                  programs[currentProgramEditing].periods[currentPeriodEditing - 1].setting = COOL;
+                  rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].mode = COOL;
                   drawProgrammingScreen(currentProgramEditing);
                   menuState = NONE;
                   break;
                 case 3:
-                  programs[currentProgramEditing].periods[currentPeriodEditing - 1].setting = OFF;
+                  rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].mode = OFF;
                   drawProgrammingScreen(currentProgramEditing);
                   menuState = NONE;
                   break;
