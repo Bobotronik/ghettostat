@@ -5,12 +5,10 @@
 #define CURRENT_TEMP_POSITION
 #define SET_TEMP_POSITION
 
-#define MAIN_ROOM   0
-#define AUX_ROOM    1
-
 #define OFF         0
 #define HEAT        1
 #define COOL        2
+#define CIRCULATE   3
 
 #define MORNING     0
 #define WORK        1
@@ -57,9 +55,7 @@ struct program {
   struct period periods[NUM_PERIODS];
 };
 
-struct room {
-  struct program programs[NUM_PROGRAMS];
-}
+extern unsigned char currentRoom;
 
 // Left Bar
 extern const unsigned char leftBarX;
@@ -141,7 +137,7 @@ extern const unsigned char mode4Button[];
 extern const unsigned char hoursMenu[];
 extern const unsigned char minutesMenu[];
 extern const unsigned char programmingTempMenu[];
-extern const unsigned char programmingModeMenu[];
+extern unsigned char programmingModeMenu[];
 
 void initializeThermostat();
 
@@ -193,7 +189,7 @@ void toggleAmPm(unsigned char, unsigned char);
 unsigned char determineTempMenu(unsigned char);
 void drawProgrammingTempMenu();
 
-void drawProgrammingModeMenu();
+void drawProgrammingModeMenu(unsigned char);
 void updateProgrammingTemp(unsigned char*, unsigned char);
 
 void drawSettingsScreen();

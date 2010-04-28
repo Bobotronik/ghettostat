@@ -17,7 +17,7 @@ void dummyISR(void) {
 void main(void) {
   unsigned char state, menuState, x, y, menuButtonTouched,
                 currentProgramEditing, currentPeriodEditing,
-                currentMenuViewing;
+                currentMenuViewing = 0;
   unsigned char tempTime;
   char currentTempMenuViewing;
   
@@ -47,7 +47,7 @@ void main(void) {
   for(;;) {
     // Poll clock
     drawTopBar();
-    
+   
     switch (state) {
       case MAIN:
         updateTemp();
@@ -73,6 +73,7 @@ void main(void) {
      
       switch (state) {
         case MAIN:
+          
           if (isButtonTouched(x, y, programButton)) {
             drawProgramsTab();
             state = PROGRAMS_TAB;
@@ -103,10 +104,17 @@ void main(void) {
                 }
                 break;
               case ROOM_MENU:
-                if (isHorizontalMenuButtonTouched(x, y, roomMenu)) {
-                  drawMainScreen();
-                  menuState = NONE;  
+                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, roomMenu);
+                switch (menuButtonTouched) {
+                  case 1:
+                    currentRoom = 0;
+                    break;
+                  case 2:
+                    currentRoom = 1;
+                    break;
                 }
+                drawMainScreen();
+                menuState = NONE; 
                 break;
               case FAN_MENU:
                 if (isHorizontalMenuButtonTouched(x, y, fanMenu)) {
@@ -115,16 +123,7 @@ void main(void) {
                 }
                 break;
               case MAIN_MODE_MENU:
-                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, modeMenu);
-                if (menuButtonTouched) {
-                  switch (menuButtonTouched) {
-                    case 1:
-                      break;
-                    case 2:
-                      break;
-                    case 3:
-                      break;
-                  }
+                if (isHorizontalMenuButtonTouched(x, y, modeMenu)) {
                   drawMainScreen();
                   menuState = NONE;  
                 }
@@ -282,22 +281,22 @@ void main(void) {
               }
               else if (isButtonTouched(x, y, mode1Button)) {
                 currentPeriodEditing = 1;
-                drawProgrammingModeMenu(currentProgramEditing);
+                drawProgrammingModeMenu(currentPeriodEditing);
                 menuState = PROGRAM_MODE_MENU;
               }
               else if (isButtonTouched(x, y, mode2Button)) {
                 currentPeriodEditing = 2;
-                drawProgrammingModeMenu(currentProgramEditing);
+                drawProgrammingModeMenu(currentPeriodEditing);
                 menuState = PROGRAM_MODE_MENU;
               }
               else if (isButtonTouched(x, y, mode3Button)) {
                 currentPeriodEditing = 3;
-                drawProgrammingModeMenu(currentProgramEditing);
+                drawProgrammingModeMenu(currentPeriodEditing);
                 menuState = PROGRAM_MODE_MENU;
               }
               else if (isButtonTouched(x, y, mode4Button)) {
                 currentPeriodEditing = 4;
-                drawProgrammingModeMenu(currentProgramEditing);
+                drawProgrammingModeMenu(currentPeriodEditing);
                 menuState = PROGRAM_MODE_MENU;
               }
               break;
@@ -350,7 +349,7 @@ void main(void) {
                       drawProgrammingScreen(currentProgramEditing - 1);
                       menuState = NONE;
                     }
-                  break;
+                    break;
                 }
               }
               break;
@@ -367,9 +366,8 @@ void main(void) {
               if(menuButtonTouched) {
                 switch (currentMenuViewing) {
                   case 1:
-                    if (menuButtonTouched == 5) {
+                    if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
-                    }
                     else {
                       updateProgrammingTemp(&(programs[currentProgramEditing - 1].periods[currentPeriodEditing - 1].temperature), 59 + menuButtonTouched);
                       drawProgrammingScreen(currentProgramEditing - 1);
@@ -377,9 +375,8 @@ void main(void) {
                     }
                     break;
                   case 2:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -389,9 +386,8 @@ void main(void) {
                     }
                     break;
                   case 3:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -401,9 +397,8 @@ void main(void) {
                     }
                     break;
                   case 4:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -413,9 +408,8 @@ void main(void) {
                     }
                     break;
                   case 5:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -425,9 +419,8 @@ void main(void) {
                     }
                     break;
                   case 6:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -437,9 +430,8 @@ void main(void) {
                     }
                     break;
                   case 7:
-                    if (menuButtonTouched == 1) {
+                    if (menuButtonTouched == 1)
                       drawProgrammingTempMenu(--currentMenuViewing);
-                    }
                     else if (menuButtonTouched == 5)
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
@@ -474,6 +466,26 @@ void main(void) {
               }
               break;
             case PROGRAM_MODE_MENU:
+              programmingModeMenu[1] = (1 + 3*currentPeriodEditing);
+              menuButtonTouched = isHorizontalMenuButtonTouched(x, y, programmingModeMenu);
+              switch (menuButtonTouched) {
+                case 1:
+                  programs[currentProgramEditing - 1].periods[currentPeriodEditing - 1].setting = HEAT;
+                  drawProgrammingScreen(currentProgramEditing - 1);
+                  menuState = NONE;
+                  break;
+                case 2:
+                  programs[currentProgramEditing - 1].periods[currentPeriodEditing - 1].setting = COOL;
+                  drawProgrammingScreen(currentProgramEditing - 1);
+                  menuState = NONE;
+                  break;
+                case 3:
+                  programs[currentProgramEditing - 1].periods[currentPeriodEditing - 1].setting = OFF;
+                  drawProgrammingScreen(currentProgramEditing - 1);
+                  menuState = NONE;
+                  break;
+              }
+              programmingModeMenu[1] = 1;
               break;
           }
           break;            
@@ -592,6 +604,9 @@ void main(void) {
             drawProgramsTab();
             state = PROGRAMS_TAB;          
           }
+          break;
+        default:
+          refreshThermostat();
           break;
       }    
     }
