@@ -212,24 +212,22 @@ void clearGraphic() {
     display(0x00); 
 }
 
-void clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
+unsigned char clearArea(unsigned char x, unsigned char y, unsigned char width, unsigned char height) {
   unsigned char i, j;
-  unsigned char textWidth = (width+(FONT_WIDTH-1))/FONT_WIDTH;
-  unsigned char textHeight = (height+7)/8;
-  
-  for (i = 0; i < textHeight; i++) {
-    goToText(x/FONT_WIDTH, y/8+i);
-    for (j = 0; j < textWidth; j++) {
-      display(0x00);
-    }
-  } 
   
   for (i = 0; i < height; i++) {
-    goToGraphic(x, y+i);
-    for (j = 0; j < textWidth; j++) {
+    goToText(x, y + i);
+    for (j = 0; j < width; j++) {
       display(0x00);
     }
   } 
+  
+  for (i = 0; i < (height << 3); i++) {
+    goToGraphic(x*FONT_WIDTH, (y << 3) + i);
+    for (j = 0; j < width; j++) {
+      display(0x00);
+    }
+  }
 }
 
 void clearPartialScreen() {

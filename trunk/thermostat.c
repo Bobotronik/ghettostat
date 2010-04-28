@@ -233,30 +233,33 @@ const unsigned char mode4Button[] = {34, programsButtonsY + 3*programsButtonsOff
 const unsigned char hoursMenu[] = {12, 1, 4, 3, 5};
 const unsigned char minutesMenu[] = {17, 4, 4, 3, 4};
 const unsigned char programmingTempMenu[] = {28, 1, 4, 3, 5};
-const unsigned char programmingModeMenu[] = {34, 4, 6, 3, 3};
+unsigned char programmingModeMenu[] = {16, 1, 6, 3, 3};
+
   
 extern unsigned char DEVICE_DATA[2];
 
 struct program programs[NUM_PROGRAMS];
-struct room rooms[2];
-unsigned char weeklySchedule[] = {1, 1, 1, 1, 1, 1, 1};
+
+unsigned char weeklySchedule[] = {0, 0, 0, 0, 0, 0, 0};
 
 // Format of *Period
 // | 7  | 6  | 5  | 4  | 3  | 2  | 1  | 0  |
 //  PRO3 PRO2 PRO1 PRO0 PER3 PER2 PER1 PER0
+unsigned char currentTime;
 
 unsigned char currentRoom;
 unsigned char fanSetting;
+unsigned char currentMode; 
 
-unsigned char currentTime;
 unsigned char currentTemperature;
- 
+unsigned char currentSetTo;
 unsigned char currentDay;
 unsigned char currentPeriod;
 
 unsigned char dayOfNextPeriod;
 unsigned char nextPeriod;
 
+///struct period currentPeriod;
 struct period overridePeriod;
 unsigned char isOverride;
 
@@ -329,9 +332,6 @@ void updateTime() {
 
 }
 
-/*
-Displays the time and updates currentTime;
-*/
 void displayTime() {
   unsigned char temp;
   unsigned char tempTime;
@@ -365,7 +365,6 @@ void displayTime() {
       printStr("Sat ");
       break;
   }
-  currentDay = temp - 1;
   
   // Month
   temp = RTC_TIME[5];
@@ -471,6 +470,7 @@ void displayTime() {
 void updateTemp() {
   goToText(10, 6);
   printNum(getTempF());
+  //goToText();
 }
 
 void displayTemps() {
@@ -495,11 +495,7 @@ void displayTemps() {
   printNum(remainder);
 }
 
-/*
-This is called anytime the thermostat rolls over to the next period
-*/
-void updatePeriods() {
-
+void updateCurrentPeriod() {
   // Update only applicable if next period is on current day
   if (currentDay == dayOfNextPeriod) {
   
@@ -526,37 +522,35 @@ void updatePeriods() {
       }
       
       // Update thermometer
-      updateThermometer();
+      setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
     }
   }
 }
 
-void updateThermometer() {
-  setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
-}
-
-/* 
-"Refreshes" the thermostat and finds the current period
-This will need to be called anytime a program is changed 
-*/
 void refreshThermostat() {
   unsigned char i, day;
-  
+    
   for (i = 0; i < 4; i++) {
-    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime);
+    //if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime;
       break;
   }
-  if (i != 0)
+  if (i != 0) 
     currentPeriod = i - 1;
   else {
     currentPeriod = 3;
     if (currentDay != 0)
       day = currentDay - 1;
-    else 
-      day = 6;
+    else
+      day = 0;
   }
   // update sensors
-  setTemp(rooms[currentRoom].programs[weeklySchedule[day]].periods[currentPeriod].temperature);
+  currentSetTo = programs[weeklySchedule[day]].periods[currentPeriod].temperature;
+  currentMode = programs[weeklySchedule[day]].periods[currentPeriod].setting;
+  setTempF(currentSetTo);
+}
+
+void updateThermometer() {
+  
 }
 
 void drawButton(unsigned char* button) {
@@ -730,12 +724,12 @@ unsigned char isButtonTouched(unsigned char x, unsigned char y, unsigned char* b
 }
 
 unsigned char isVerticalMenuButtonTouched(unsigned char x, unsigned char y, unsigned char* menu) {
-  if ( (x < menu[0]*6) || (x > menu[0]*6 + menu[2]*6) )
+  if ( (x < menu[0]*FONT_WIDTH) || (x > menu[0]*FONT_WIDTH + menu[2]*FONT_WIDTH) )
     return 0;
   if ( (y < menu[1]*8) || (y > menu[1]*8 + menu[3]*menu[4]*8) )
     return 0;
   //   To Text Matrix    To Button Matrix Don't return 0 
-  return ((y - menu[1])/8)/menu[3] + 1;
+  return ((y >> 3) - menu[1]) / menu[3] + 1;
 }
 
 unsigned char isHorizontalMenuButtonTouched(unsigned char x, unsigned char y, unsigned char* menu) {
@@ -743,7 +737,7 @@ unsigned char isHorizontalMenuButtonTouched(unsigned char x, unsigned char y, un
     return 0;
   if ( (y < menu[1]*8) || (y > menu[1]*8 + menu[3]*8) )
     return 0;
-  return ((x - menu[0])/FONT_WIDTH)/menu[2] + 1;
+  return ((x/FONT_WIDTH) - menu[0]) / menu[2] + 1;
 }
 
 void drawTopBar() {
@@ -759,10 +753,6 @@ void drawTopBar() {
   
   goToText(0,0);
   displayTime();
-  if (currentRoom == MAIN_ROOM)
-    printStr("  Main Room");
-  else if (currentRoom == AUX_ROOM)
-    printStr("  Auxilliary Room");
   printStr("        Humidity   %");
   goToText(38, 0);
   printNum(getHumidityDec());
@@ -788,6 +778,14 @@ void drawMainScreen() {
   goToText(35, 2);
   printStr("Room");
   goToText(35, 4);
+  switch (currentRoom) {
+    case 0:
+      printStr("MAIN");
+      break;
+    case 1:
+      printStr("AUX");
+      break;
+  }
   
   drawButton(fanButton);
   goToText(35, 7);
@@ -798,7 +796,7 @@ void drawMainScreen() {
   goToText(35, 12);
   printStr("Mode");
   goToText(35, 14);
-  switch (programs[weeklySchedule[currentDay]].periods[currentPeriod].setting) {
+  switch (currentMode) {
     case HEAT:
       printStr("HEAT");
       break;
@@ -817,7 +815,7 @@ void drawMainScreen() {
   goToText(21, 5);
   printStr("Set To");
   goToText(24, 8);
-  printNum(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+  printNum(currentSetTo);
 }
 
 void drawMainSetToMenu() {
@@ -955,43 +953,43 @@ void drawDaysTab() {
          
   drawButton(monButton);
   goToText(monButton[0] + 2, monButton[1] + 1);
-  printNum(weeklySchedule[0]);
+  printNum(weeklySchedule[0] + 1);
   goToText(monButton[0] + 1, monButton[1] - 1);
   printStr("Mon");
   
   drawButton(wedButton);
   goToText(wedButton[0] + 2, wedButton[1] + 1);
-  printNum(weeklySchedule[2]);
+  printNum(weeklySchedule[2] + 1);
   goToText(wedButton[0] + 1, wedButton[1] - 1);
   printStr("Wed");
   
   drawButton(friButton);
   goToText(friButton[0] + 2, friButton[1] + 1);
-  printNum(weeklySchedule[4]);
+  printNum(weeklySchedule[4] + 1);
   goToText(friButton[0] + 1, friButton[1] - 1);
   printStr("Fri");
   
   drawButton(satButton);
   goToText(satButton[0] + 2, satButton[1] + 1);
-  printNum(weeklySchedule[5]);
+  printNum(weeklySchedule[5] + 1);
   goToText(satButton[0] + 1, satButton[1] - 1);
   printStr("Sat");
   
   drawButton(sunButton);
   goToText(sunButton[0] + 2, sunButton[1] + 1);
-  printNum(weeklySchedule[6]);
+  printNum(weeklySchedule[6] + 1);
   goToText(sunButton[0] + 1, sunButton[1] - 1);
   printStr("Sun");
   
   drawButton(tueButton);
   goToText(tueButton[0] + 2, tueButton[1] + 1);
-  printNum(weeklySchedule[1]);
+  printNum(weeklySchedule[1] + 1);
   goToText(tueButton[0] + 1, tueButton[1] + tueButton[3]);
   printStr("Tue");
   
   drawButton(thuButton);
   goToText(thuButton[0] + 2, thuButton[1] + 1);
-  printNum(weeklySchedule[3]);
+  printNum(weeklySchedule[3] + 1);
   goToText(thuButton[0] + 1, thuButton[1] + thuButton[3]);
   printStr("Thu");
 }
@@ -1076,14 +1074,13 @@ void drawProgrammingScreen(unsigned char programIndex) {
   printStr("Mode");
 }
 
-void printMenuCells(unsigned char* menu, unsigned char mode, unsigned char num) {
+void printMenuCells(unsigned char* menu, unsigned char menuMode, unsigned char num) {
   unsigned char i, j;
   
-  switch (mode) {
+  switch (menuMode) {
     case 1:
       i = 0;
       j = 4;
-      clearArea(menu[0]*FONT_WIDTH, menu[1]*8, 24, 24);
       drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8 + menu[3]*4*8, 4, 19, downArrow);
       break;
     case 2:
@@ -1096,7 +1093,6 @@ void printMenuCells(unsigned char* menu, unsigned char mode, unsigned char num) 
       i = 1;
       j = 5;
       drawGraphic(menu[0]*FONT_WIDTH, menu[1]*8, 4, 19, upArrow);
-      clearArea(menu[0]*FONT_WIDTH, menu[1]*8 + menu[3]*4*8, 24, 24);
       break;   
   }
   
@@ -1109,11 +1105,11 @@ void printMenuCells(unsigned char* menu, unsigned char mode, unsigned char num) 
 unsigned char determineHoursMenu(unsigned char time) {
   if (time > 48)
     time -= 48;
-  if (time < 19)
+  if (time < 20)
     return 1;
-  else if (time < 31)
+  else if (time < 32)
     return 2;
-  else if (time < 43)
+  else if (time < 44)
     return 3;
   else
     return 4;
@@ -1121,6 +1117,9 @@ unsigned char determineHoursMenu(unsigned char time) {
 }
 
 void drawHoursMenu(unsigned char menu) {
+
+  clearArea(hoursMenu[0], hoursMenu[1], hoursMenu[2], hoursMenu[3]);
+  clearArea(hoursMenu[0], hoursMenu[1] + hoursMenu[3]*(hoursMenu[4] - 1), hoursMenu[2], hoursMenu[3]);
   drawVerticalMenu(hoursMenu);
   
   switch (menu) {
@@ -1141,6 +1140,7 @@ void drawHoursMenu(unsigned char menu) {
       printNum(12);
       break;
   }
+
 }
 
 void updateHours(unsigned char* startTime, unsigned char newHour) {
@@ -1164,7 +1164,6 @@ void drawMinutesMenu(unsigned char startTime) {
 void updateMinutes(unsigned char* startTime, unsigned char newMinute) {
   *startTime -= (*startTime % 4);
   *startTime += newMinute;
-  (*startTime)--;
 }
 
 void toggleAmPm(unsigned char program, unsigned char period) {
@@ -1234,8 +1233,21 @@ void updateProgrammingTemp(unsigned char* temperature, unsigned char newTemperat
   *temperature = newTemperature;
 }
 
-void drawProgrammingModeMenu() {
-  drawVerticalMenu(programmingModeMenu);
+void drawProgrammingModeMenu(unsigned char currentPeriodEditing) {
+  unsigned char menu[5];
+  menu[0] = programmingModeMenu[0];
+  menu[1] = programmingModeMenu[1] + 3*currentPeriodEditing;
+  menu[2] = programmingModeMenu[2];
+  menu[3] = programmingModeMenu[3];
+  menu[4] = programmingModeMenu[4];
+  drawHorizontalMenu(menu);
+  
+  goToText(menu[0] + 1, menu[1] + 1);
+  printStr("HEAT");
+  goToText(menu[0] + 7, menu[1] + 1);
+  printStr("COOL");
+  goToText(menu[0] + 13, menu[1] + 1);
+  printStr("OFF");
 }
 
 void drawSettingsScreen() {

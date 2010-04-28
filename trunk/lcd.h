@@ -135,7 +135,7 @@ void printBCD(unsigned char);
 void printStr(char*);
 void clearText();
 void clearGraphic();
-void clearArea();
+unsigned char clearArea(unsigned char, unsigned char, unsigned char, unsigned char);
 void clearPartialScreen();
 void clearScreen();
 
