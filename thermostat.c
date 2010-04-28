@@ -238,29 +238,27 @@ unsigned char programmingModeMenu[] = {16, 1, 6, 3, 3};
   
 extern unsigned char DEVICE_DATA[2];
 
-struct program programs[NUM_PROGRAMS];
+struct room rooms[2];
 
 unsigned char weeklySchedule[] = {0, 0, 0, 0, 0, 0, 0};
 
 // Format of *Period
 // | 7  | 6  | 5  | 4  | 3  | 2  | 1  | 0  |
 //  PRO3 PRO2 PRO1 PRO0 PER3 PER2 PER1 PER0
+unsigned char currentDay;
 unsigned char currentTime;
 
-unsigned char currentRoom;
-unsigned char fanSetting;
-unsigned char currentMode; 
+unsigned char currentRoom; // Manually controlled
+unsigned char fanSetting; // Manually controlled
 
-unsigned char currentTemperature;
-unsigned char currentSetTo;
-unsigned char currentDay;
-unsigned char currentPeriod;
-
+unsigned char dayOfCurrentPeriod;
+unsigned char currentPeriodIndex;
 unsigned char dayOfNextPeriod;
-unsigned char nextPeriod;
+unsigned char nextPeriodIndex;
 
-///struct period currentPeriod;
+struct period currentPeriod;
 struct period overridePeriod;
+
 unsigned char isOverride;
 
 unsigned char mainState, menuState;
@@ -268,22 +266,32 @@ unsigned char mainState, menuState;
 void initializeThermostat() {
   unsigned char i, j;
   
-  for (i = 0; i < 4; i++) {
-    programs[i].periods[MORNING].startTime = 24; //6*4
-    programs[i].periods[MORNING].temperature = 72;
-    programs[i].periods[MORNING].setting = HEAT;
-    // At work
-    programs[i].periods[WORK].startTime = 32; //8*4
-    programs[i].periods[WORK].setting = OFF;
-    // At home
-    programs[i].periods[EVENING].startTime = 68; //6*4 + 12*4
-    programs[i].periods[EVENING].temperature = 72;
-    programs[i].periods[EVENING].setting = HEAT;
-    // Asleep
-    programs[i].periods[NIGHT].startTime = 84; //10*4 + 12*4
-    programs[i].periods[NIGHT].temperature = 62;
-    programs[i].periods[NIGHT].setting = HEAT;  
+  displayTemp(); // must be called first to initialize time variables
+  
+  currentRoom = ROOM_MAIN;
+  fanMode = FAN_OFF;
+  
+  for (i = 0; i < 2; i++) {
+    for (j = 0; j < 4; j++) {
+      rooms[i].programs[j].periods[MORNING].startTime = 24; //6*4
+      rooms[i].programs[j].periods[MORNING].temperature = 72;
+      rooms[i].programs[j].periods[MORNING].mode = HEAT;
+      // At work
+      rooms[i].programs[j].periods[WORK].startTime = 32; //8*4
+      rooms[i].programs[j].periods[WORK].temperature = 72;
+      rooms[i].programs[j].periods[WORK].mode = OFF;
+      // At home
+      rooms[i].programs[j].periods[EVENING].startTime = 68; //6*4 + 12*4
+      rooms[i].programs[j].periods[EVENING].temperature = 72;
+      rooms[i].programs[j].periods[EVENING].mode = HEAT;
+      // Asleep
+      rooms[i].programs[j].periods[NIGHT].startTime = 84; //10*4 + 12*4
+      rooms[i].programs[j].periods[NIGHT].temperature = 62;
+      rooms[i].programs[j].periods[NIGHT].mode = HEAT;  
+    }
   }
+  
+  refreshThermostat();
 }
 
 void printHours(unsigned char temp) {
@@ -328,10 +336,6 @@ void printMode(unsigned char temp) {
   }
 }
 
-void updateTime() {
-
-}
-
 void displayTime() {
   unsigned char temp;
   unsigned char tempTime;
@@ -365,6 +369,8 @@ void displayTime() {
       printStr("Sat ");
       break;
   }
+  
+  currentDay = temp - 1;
   
   // Month
   temp = RTC_TIME[5];
@@ -496,19 +502,20 @@ void displayTemps() {
 }
 
 void updateCurrentPeriod() {
+
   // Update only applicable if next period is on current day
-  if (currentDay == dayOfNextPeriod) {
+  if (dayOfNextPeriod == currentDay) {
   
-    if(currentTime >= programs[weeklySchedule[dayOfNextPeriod]].periods[nextPeriod].startTime) {
-      currentPeriod = nextPeriod;
+    if(currentTime >= rooms[currentRoom].programs[weeklySchedule[dayOfNextPeriod]].periods[nextPeriodIndex].startTime) {
+      currentPeriodIndex = nextPeriodIndex;
       
       // Updating period
       // Same day   
-      if (nextPeriod < NUM_PERIODS-1)
-        nextPeriod++;
+      if (nextPeriodIndex < NUM_PERIODS-1)
+        nextPeriodIndex++;
       // New day
       else {
-        nextPeriod = 0;
+        nextPeriodIndex = 0;
         
         // Updating day
         // Same week
@@ -521,32 +528,57 @@ void updateCurrentPeriod() {
         }
       }
       
+      currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
       // Update thermometer
-      setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+      //setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
     }
   }
 }
 
+/*
+"Refreshes the thermostat by finding the current period with only the current day and time
+*/
 void refreshThermostat() {
   unsigned char i, day;
     
   for (i = 0; i < 4; i++) {
-    //if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime;
+    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime;
       break;
   }
-  if (i != 0) 
-    currentPeriod = i - 1;
-  else {
-    currentPeriod = 3;
-    if (currentDay != 0)
-      day = currentDay - 1;
-    else
-      day = 0;
+  // Need to set dayOfCurrentPeriod, dayOfNextPeriod, currentPeriodIndex, nextPeriodIndex
+  // Current day
+  if (i != 0) {
+    currentPeriodIndex = i - 1;
+    dayOfCurrentPeriod = currentDay;
+    if (i != 4) {
+      nextPeriodIndex = i;
+      dayOfNextPeriod = currentDay;
+    }
+    // Next day
+    else {
+      nextPeriodIndex = 0;
+      if (currentDay != 6) {
+        dayOfNextPeriod = currentDay + 1;
+      }
+      else {
+        dayOfNextPeriod = 0;
+      }
+    }
   }
+  
+  // Previous day
+  else {
+    currentPeriodIndex = 3;
+    nextPeriodIndex = 0;
+    if (currentDay != 0)
+      dayOfCurrentPeriod = currentDay - 1;
+    else
+      dayOfCurrentPeriod = 6;
+    dayOfNextPeriod = currentDay;
+  }
+  
   // update sensors
-  currentSetTo = programs[weeklySchedule[day]].periods[currentPeriod].temperature;
-  currentMode = programs[weeklySchedule[day]].periods[currentPeriod].setting;
-  setTempF(currentSetTo);
+  currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
 }
 
 void updateThermometer() {
@@ -796,7 +828,7 @@ void drawMainScreen() {
   goToText(35, 12);
   printStr("Mode");
   goToText(35, 14);
-  switch (currentMode) {
+  switch (currentPeriod.mode) {
     case HEAT:
       printStr("HEAT");
       break;
@@ -815,7 +847,7 @@ void drawMainScreen() {
   goToText(21, 5);
   printStr("Set To");
   goToText(24, 8);
-  printNum(currentSetTo);
+  printNum(currentPeriod.temperature);
 }
 
 void drawMainSetToMenu() {
@@ -1055,16 +1087,16 @@ void drawProgrammingScreen(unsigned char programIndex) {
   
   drawButton(mode1Button);
   goToText(mode1Button[0] + 1, mode1Button[1] + 1);
-  printMode(programs[programIndex].periods[0].setting);
+  printMode(programs[programIndex].periods[0].mode);
   drawButton(mode2Button);
   goToText(mode2Button[0] + 1, mode2Button[1] + 1);
-  printMode(programs[programIndex].periods[1].setting);
+  printMode(programs[programIndex].periods[1].mode);
   drawButton(mode3Button);
   goToText(mode3Button[0] + 1, mode3Button[1] + 1);
-  printMode(programs[programIndex].periods[2].setting);
+  printMode(programs[programIndex].periods[2].mode);
   drawButton(mode4Button);
   goToText(mode4Button[0] + 1, mode4Button[1] + 1);
-  printMode(programs[programIndex].periods[3].setting);
+  printMode(programs[programIndex].periods[3].mode);
   
   goToText(hour1Button[0] + 2, hour1Button[1] - 1);
   printStr("Start Time");

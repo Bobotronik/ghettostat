@@ -8,7 +8,6 @@
 #define OFF         0
 #define HEAT        1
 #define COOL        2
-#define CIRCULATE   3
 
 #define MORNING     0
 #define WORK        1
@@ -17,6 +16,10 @@
 
 #define NUM_PERIODS   4
 #define NUM_PROGRAMS  4
+
+// For main menu stuff
+#define ROOM_MAIN         0
+#define ROOM_AUX          1
 
 #define MAIN              0
 #define PROGRAMS_TAB      1
@@ -48,12 +51,16 @@
 struct period {
   unsigned char startTime;
   unsigned char temperature;
-  unsigned char setting;
+  unsigned char mode;
 };
 
 struct program {
   struct period periods[NUM_PERIODS];
 };
+
+struct room {
+  struct program rooms[NUM_PROGRAMS];
+}
 
 extern unsigned char currentRoom;
 
@@ -140,15 +147,17 @@ extern const unsigned char programmingTempMenu[];
 extern unsigned char programmingModeMenu[];
 
 void initializeThermostat();
+void printHours(unsigned char);
+void printMinutes(unsigned char);
+void printAmPm(unsigned char);
+void printMode(unsigned char);
 
 void displayTime();
 void displayTemps();
 
 void updateCurrentPeriod();
 void updateThermometer();
-
-void createProgram();
-void deleteProgram();
+void refreshThermostat();
 
 void printTopBorder();
 void printBottomBorder();
