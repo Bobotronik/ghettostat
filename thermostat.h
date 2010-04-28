@@ -21,6 +21,10 @@
 #define ROOM_MAIN         0
 #define ROOM_AUX          1
 
+#define FAN_OFF           0
+#define FAN_ON            1
+#define FAN_AUTO          2
+
 #define MAIN              0
 #define PROGRAMS_TAB      1
 #define DAYS_TAB          2
@@ -59,10 +63,12 @@ struct program {
 };
 
 struct room {
-  struct program rooms[NUM_PROGRAMS];
-}
+  struct program programs[NUM_PROGRAMS];
+};
 
 extern unsigned char currentRoom;
+extern unsigned char fanMode;
+extern unsigned char isOverride;
 
 // Left Bar
 extern const unsigned char leftBarX;
