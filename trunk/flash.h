@@ -1,19 +1,21 @@
 #ifndef FLASH_H
 #define FLASH_H
 
+// Flash ROM Routines
+#define F_LOAD    0xFF30          // Load FLASH data into RAM data array  (LDRNGE)
+#define F_ERASE   0xFCBE          // Erase FLASH block                    (ERARNGE)
+#define F_WRITE   0xFC06          // Write RAM data array to FLASH        (PRGRNGE)
 
-#define F_LOAD    0xFF30      // Load FLASH data into RAM data array
-#define F_ERASE   0xFCBE      // FLASH erase routine in internal ROM
-#define F_WRITE   0xFC06      // FLASH program routine in internal ROM 
-
-#define F_DATA_SIZE     64
+#define F_START   0xEA00          // Starting address in FLASH to use
 
 // RAM Data Block
-extern unsigned char BUS_SPD;           // Value should equal 4x Bus speed
-extern unsigned char DATASIZE;          // Number of bytes in data array (max 255)
-extern unsigned int  ADDR;              // Start address of FLASH to manipulate
-extern unsigned char DATA[F_DATA_SIZE]; // Data to program into FLASH
+extern unsigned char F_BUS_SPD;     // Value should equal 4x Bus speed
+extern unsigned char F_DATASIZE;    // Number of bytes in data array (max 255)
+extern unsigned int  F_ADDR;        // Start address of FLASH to manipulate
+extern unsigned char F_DATA[];      // Data to program into FLASH
+extern unsigned int* F_FILE_PTR;    // Points to the starting address of BUS_SPD
 
+void initFlash(void);
 void loadFlash(void);
 void eraseFlash(void);
 void writeFlash(void);
