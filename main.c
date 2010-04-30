@@ -11,6 +11,8 @@
 #include "functions.h"
 #include "thermostat.h"
 #include "int.h"
+#include "sci.h"
+#include "relayControl.h"
 
 #pragma TRAP_PROC
 void dummyISR(void) {
@@ -39,9 +41,11 @@ void main(void) {
  
   initI2C();
   initPortX();
+  initADC();
+  initSCI();
   configureTemp();
   startTemp();
-  initFlash();
+  initFlash();                                             
   initializeDisplay();
   
   initializeThermostat(); // Pass this function before enabling interrupts
@@ -52,10 +56,11 @@ void main(void) {
   menuState = NONE;
   
   //setModeMain(82,I_HEAT);
-  EnableInterrupts;
+  EnableInterrupts;                                                           
   INTSCR_IMASK = 0;
   
   for(;;) {
+    //sendModeAux(72, I_COOL);
     saveProgramData();
     // Poll clock
     drawTopBar();
@@ -140,7 +145,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 59 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -151,7 +156,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 62 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -162,7 +167,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 65 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);                                                
+                          drawMainScreen();                                        
                           menuState = NONE;
                         }
                         break;
@@ -173,7 +178,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 68 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -184,7 +189,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 71 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -195,7 +200,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 74 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -206,7 +211,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 77 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -218,7 +223,7 @@ void main(void) {
                           drawMainSetToMenu(++currentMenuViewing);
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 80 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -228,7 +233,7 @@ void main(void) {
                         }
                         else {
                           updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing].temperature), 83 + menuButtonTouched);
-                          drawProgrammingScreen(currentProgramEditing);
+                          drawMainScreen();
                           menuState = NONE;
                         }
                         break;
@@ -634,7 +639,7 @@ void main(void) {
               }
               break;
             case PROGRAM_MODE_MENU:
-              programmingModeMenu[1] = (1 + 3*currentPeriodEditing);
+              programmingModeMenu[1] = (1 + 3*(currentPeriodEditing+1));
               menuButtonTouched = isHorizontalMenuButtonTouched(x, y, programmingModeMenu);
               switch (menuButtonTouched) {
                 case 1:
