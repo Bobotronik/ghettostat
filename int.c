@@ -14,27 +14,27 @@ unsigned char status;
 #pragma TRAP_PROC
 
 void tempISRAux(void)  { 
-    if (mode == HEAT) {      
-      if(status != HEAT) {        //polarity is 1
+    if (mode == I_HEAT) {      
+      if(status != I_HEAT) {        //polarity is 1
         enableAuxHeat();          // turn on the heat
-        status = HEAT;
+        status = I_HEAT;
         clearTempPolarity();      //switch the polarity to 0
       }
       else {
         disableAuxHeat();         // turn off the heat
-        status = OFF;
+        status = I_OFF;
         setTempPolarity();        //switch the polarity to  1
       }
     }
-    else if (mode == COOL){         
-      if(status != COOL) {        //polarity is 0
+    else if (mode == I_COOL){         
+      if(status != I_COOL) {        //polarity is 0
         enableAuxCool();          // turn on the AC
-        status = COOL;
+        status = I_COOL;
         setTempPolarity();        //switch the polarity to 1
       }
       else {
         disableAuxCool();         // turn off the AC
-        status = OFF;
+        status = I_OFF;
         clearTempPolarity();      //switch the polarity to 0
       }
     }
@@ -46,27 +46,27 @@ void tempISR() {
 }
 
 void tempISRMain(void) {
-   if (mode == HEAT) {      
-      if(status != HEAT) {        //polarity is 1
+   if (mode == I_HEAT) {      
+      if(status != I_HEAT) {        //polarity is 1
         enableMainHeat();          // turn on the heat
-        status = HEAT;
+        status = I_HEAT;
         clearTempPolarity();      //switch the polarity to 0
       }
       else {
         disableMainHeat();         // turn off the heat
-        status = OFF;
+        status = I_OFF;
         setTempPolarity();        //switch the polarity to  1
       }
     }
-    else if (mode == COOL){         
-      if(status != COOL) {        //polarity is 0
+    else if (mode == I_COOL){         
+      if(status != I_COOL) {        //polarity is 0
         enableMainCool();          // turn on the AC
-        status = COOL;
+        status = I_COOL;
         setTempPolarity();        //switch the polarity to 1
       }
       else {
         disableMainCool();         // turn off the AC
-        status = OFF;
+        status = I_OFF;
         clearTempPolarity();      //switch the polarity to 0
       }
     }
@@ -83,7 +83,7 @@ void setModeAux(unsigned char * new_settings) {
   setTempC(new_settings);       // Set the desired temp
   mode = new_settings[2];       // Set the mode
   status = mode;                // Set the status to the mode (so ISR call works)
-  if( mode == FAN) {
+  if( mode == I_FAN) {
     enableAuxFan();
   } else {
     tempISRAux();
@@ -100,7 +100,7 @@ void setModeMain(unsigned char tempF, unsigned char mode1) {
   setTempF(tempF);       // Set the desired temp
   mode = mode1;
   status = mode;                // Set the status to the mode (so ISR call works)
-  if( mode == FAN) {
+  if( mode == I_FAN) {
     enableMainFan();
   } else {
     tempISRMain();
