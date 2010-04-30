@@ -98,6 +98,17 @@ void sendTempC(void) {
   SCI_DATA[3] = TYPE_SETTEMP;
   sendDataSCI();
 }
+
+// Send the new mode to aux
+void sendModeAux(unsigned char tempF, unsigned char mode1){
+  unsigned char C[2];
+  convertFtoC(tempF, C);
+  SCI_DATA[0] = C[0];
+  SCI_DATA[1] = C[1];
+  SCI_DATA[2] = mode1;
+  SCI_DATA[3] = TYPE_SETTEMP;
+  sendDataSCI();
+}
     
 // Small board receives SCI data and acts
 void smallBoardReceive(void){

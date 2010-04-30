@@ -12,6 +12,6 @@ extern unsigned char status;
 void tempISRAux(void);
 void tempISRMain(void);
 void setModeAux(unsigned char *);
-void setModeMain(unsigned char *);
+void setModeMain(unsigned char tempF, unsigned char mode1);
 
 #endif
