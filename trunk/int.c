@@ -2,7 +2,7 @@
 #include "derivative.h"
 #include "i2cdevices.h"
 #include "relayControl.h"
-#include "delay.h"
+#include "functions.h"
 #include "hidef.h"
 
 #pragma DATA_SEG DEFAULT
@@ -41,12 +41,9 @@ void tempISRAux(void)  {
     del1m(1);
 }
 
-void tempISR() {
-
-}
-
+#pragma TRAP_PROC
 void tempISRMain(void) {
-   if (mode == I_HEAT) {      
+  if (mode == I_HEAT) {      
       if(status != I_HEAT) {        //polarity is 1
         enableMainHeat();          // turn on the heat
         status = I_HEAT;
@@ -73,6 +70,7 @@ void tempISRMain(void) {
     del1m(1);
 }
 
+#pragma CODE_SEG DEFAULT
 
 void setModeAux(unsigned char * new_settings) {
   DisableInterrupts;
@@ -82,12 +80,14 @@ void setModeAux(unsigned char * new_settings) {
   disableAuxHeat();
   setTempC(new_settings);       // Set the desired temp
   mode = new_settings[2];       // Set the mode
-  status = mode;                // Set the status to the mode (so ISR call works)
+  status = I_OFF;               
   if( mode == I_FAN) {
     enableAuxFan();
+  } else if(mode == I_HEAT) {
+    setTempPolarity();
   } else {
-    tempISRAux();
-  }
+    clearTempPolarity();
+    }
   EnableInterrupts;   
 }
 
@@ -99,11 +99,13 @@ void setModeMain(unsigned char tempF, unsigned char mode1) {
   disableMainHeat();
   setTempF(tempF);       // Set the desired temp
   mode = mode1;
-  status = mode;                // Set the status to the mode (so ISR call works)
-  if( mode == I_FAN) {
+  status = I_OFF;             
+  if(mode == I_FAN) {
     enableMainFan();
+  } else if(mode == I_HEAT){
+    setTempPolarity();
   } else {
-    tempISRMain();
+    clearTempPolarity();
   }
   EnableInterrupts;   
 }
