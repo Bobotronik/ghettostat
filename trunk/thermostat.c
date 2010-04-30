@@ -5,6 +5,8 @@
 #include "i2cDevices.h"
 #include "humSense.h"
 #include "functions.h"
+#include "int.h"
+#include "flash.h"
 
 /*
 ****Features****
@@ -274,7 +276,8 @@ void initializeThermostat() {
   
   currentRoom = ROOM_MAIN;
   fanMode = FAN_OFF;
-  
+
+  /*
   for (i = 0; i < 2; i++) {
     for (j = 0; j < 4; j++) {
       rooms[i].programs[j].periods[MORNING].startTime = 24; //6*4
@@ -294,6 +297,8 @@ void initializeThermostat() {
       rooms[i].programs[j].periods[NIGHT].mode = HEAT;  
     }
   }
+  */
+  loadProgramData();
   
   refreshThermostat();
 }
@@ -606,6 +611,7 @@ void refreshThermostat() {
   
   // update sensors
   currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
+  setModeMain(currentPeriod.temperature,currentPeriod.mode);
 }
 
 void updateThermometer() {
