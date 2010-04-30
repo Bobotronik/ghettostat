@@ -155,6 +155,7 @@ const unsigned char settingsButton[] = {leftBarX, leftBarY + 2*leftBarOffset, le
 
 // Main Screen
 const unsigned char setToButton[] = {20, 6, 10, 6};
+const unsigned char setToMenu[] = {30, 1, 4, 3, 5};
 const unsigned char rightBarX = 34;
 const unsigned char rightBarY = 3;
 const unsigned char rightBarOffset = 5;
@@ -166,6 +167,7 @@ const unsigned char modeButton[] = {rightBarX, rightBarY + 2*rightBarOffset, rig
 const unsigned char roomMenu[] = {roomButton[0] - 12, roomButton[1], 6, 3, 2};
 const unsigned char fanMenu[] = {fanButton[0] - 18, fanButton[1], 6, 3, 3};
 const unsigned char modeMenu[] = {modeButton[0] - 18, modeButton[1], 6, 3, 3};
+const unsigned char overrideButton[] = {22, 13, 8, 3};
                                          
 // Program Screen
 const unsigned char tabY = 1;
@@ -539,6 +541,17 @@ void updateCurrentPeriod() {
       currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
       // Update thermometer
       //setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+      switch (currentRoom) {
+        case ROOM_MAIN:
+          //setModeMain(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
+                  //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
+          break;
+        case ROOM_AUX:
+          //setModeAux(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
+                  //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
+          break;
+      }
+      
     }
   }
 }
@@ -550,15 +563,15 @@ void refreshThermostat() {
   unsigned char i, day;
     
   for (i = 0; i < 4; i++) {
-    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime);
+    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime)
       break;
   }
   // Need to set dayOfCurrentPeriod, dayOfNextPeriod, currentPeriodIndex, nextPeriodIndex
   // Current day
-  if (i != 0) {
+  if (i > 0) {
     currentPeriodIndex = i - 1;
     dayOfCurrentPeriod = currentDay;
-    if (i != 4) {
+    if (i < 4) {
       nextPeriodIndex = i;
       dayOfNextPeriod = currentDay;
     }
@@ -585,22 +598,14 @@ void refreshThermostat() {
     dayOfNextPeriod = currentDay;
   }
   
+  if(!isOverride) {
+        overridePeriod.startTime = currentPeriod.startTime;
+        overridePeriod.temperature = currentPeriod.temperature;
+        overridePeriod.mode = currentPeriod.mode;
+  }
+  
   // update sensors
   currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
-  
-  goToText(5, 1);
-  printNum(dayOfCurrentPeriod);
-  goToText(10, 1);
-  printNum(currentPeriodIndex);
-  goToText(15, 1);
-  printNum(dayOfNextPeriod);
-  goToText(20, 1);
-  printNum(nextPeriodIndex);
-  goToText(25, 1);
-  printNum(currentRoom);
-  
-  goToText(30, 1);
-  printNum(currentTime);
 }
 
 void updateThermometer() {
@@ -850,17 +855,7 @@ void drawMainScreen() {
   goToText(35, 12);
   printStr("Mode");
   goToText(35, 14);
-  switch (currentPeriod.mode) {
-    case HEAT:
-      printStr("HEAT");
-      break;
-    case COOL:
-      printStr("COOL");
-      break;
-    case OFF:
-      printStr("OFF");
-      break; 
-  }
+  
   
   goToText(9, 5);
   printStr("Currently");
@@ -870,10 +865,74 @@ void drawMainScreen() {
   printStr("Set To");
   goToText(24, 8);
   printNum(currentPeriod.temperature);
+  
+  goToText(modeButton[0] + 1, modeButton[1] + 1);
+  
+  if (isOverride) {
+    switch (overridePeriod.mode) {
+      case HEAT:
+        printStr("HEAT");
+        break;
+      case COOL:
+        printStr("COOL");
+        break;
+      case OFF:
+        printStr("OFF");
+        break; 
+    }
+    goToText(10, 14);
+    printStr("Override on");
+    drawButton(overrideButton);
+    goToText(overrideButton[0] + 1, overrideButton[1] + 1);
+    printStr("Cancel"); 
+  } 
+  else {
+    switch (currentPeriod.mode) {
+      case HEAT:
+        printStr("HEAT");
+        break;
+      case COOL:
+        printStr("COOL");
+        break;
+      case OFF:
+        printStr("OFF");
+        break; 
+    }
+  }
 }
 
-void drawMainSetToMenu() {
+void drawMainSetToMenu(unsigned char menu) {
+  drawVerticalMenu(setToMenu);
   
+  switch (menu) {
+    case 1:
+      printMenuCells(setToMenu, 1, 60);
+      break;
+    case 2:
+      printMenuCells(setToMenu, 2, 64);
+      break;
+    case 3:
+      printMenuCells(setToMenu, 2, 67);
+      break;
+    case 4:
+      printMenuCells(setToMenu, 2, 70);
+      break;
+    case 5:
+      printMenuCells(setToMenu, 2, 73);
+      break;
+    case 6:
+      printMenuCells(setToMenu, 2, 76);
+      break;
+    case 7:
+      printMenuCells(setToMenu, 2, 79);
+      break;
+    case 8:
+      printMenuCells(setToMenu, 2, 82);
+      break;
+    case 9:
+      printMenuCells(setToMenu, 3, 85);
+      break;
+  }
 }
 
 void drawMainRoomMenu() {

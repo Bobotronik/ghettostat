@@ -73,7 +73,12 @@ void main(void) {
      
       switch (state) {
         case MAIN:
-          
+          if (isOverride) {
+            if (isButtonTouched(x, y, overrideButton)) {
+              isOverride = 0;
+              drawMainScreen();
+            }
+          }
           if (isButtonTouched(x, y, programButton)) {
             drawProgramsTab();
             state = PROGRAMS_TAB;
@@ -88,7 +93,16 @@ void main(void) {
             switch (menuState) {
               case NONE:
                 if (isButtonTouched(x, y, setToButton)) {
-                  //drawSettingsMenu();
+                  switch (isOverride) {
+                    case 0:
+                      menuButtonTouched = determineTempMenu(currentPeriod.temperature);
+                      break;
+                    case 1:
+                      menuButtonTouched = determineTempMenu(overridePeriod.temperature);
+                      break;
+                  }
+                  drawMainSetToMenu(menuButtonTouched);
+                  menuState = SET_TO_MENU;
                 }
                 else if (isButtonTouched(x, y, roomButton)) {
                   drawMainRoomMenu(); 
@@ -119,7 +133,7 @@ void main(void) {
                 }
                 break;
               case FAN_MENU:
-                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, roomMenu);
+                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, fanMenu);
                 switch (menuButtonTouched) {
                   case 1:
                     fanMode = FAN_ON;
@@ -140,30 +154,31 @@ void main(void) {
                 break;
               // Will cause manual override
               case MAIN_MODE_MENU:
-                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, roomMenu);
+                menuButtonTouched = isHorizontalMenuButtonTouched(x, y, modeMenu);
                 switch (menuButtonTouched) {
                   case 1:
-                    isOverride = 1;
-                    fanMode = FAN_ON;
-                    drawMainScreen();
+                    overridePeriod.mode = HEAT;
                     menuState = NONE; 
                     break;
                   case 2:
-                    isOverride = 1;
-                    fanMode = FAN_OFF;
-                    drawMainScreen();
+                    overridePeriod.mode = COOL;
                     menuState = NONE; 
                     break;
                   case 3:
-                    isOverride = 1;
-                    fanMode = FAN_AUTO;
-                    drawMainScreen();
+                    overridePeriod.mode = OFF;
                     menuState = NONE; 
                     break;
                 }
-                if (isHorizontalMenuButtonTouched(x, y, modeMenu)) {
-                  drawMainScreen();
-                  menuState = NONE;  
+                
+                if (overridePeriod.mode != currentPeriod.mode) {
+                  isOverride = 1;  
+                } 
+                else {
+                  isOverride = 0;   
+                }  
+                
+                if (menuButtonTouched) {
+                  drawMainScreen(); 
                 }
                 break;
               }
@@ -438,7 +453,7 @@ void main(void) {
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 68 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
@@ -449,7 +464,7 @@ void main(void) {
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 71 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
@@ -460,7 +475,7 @@ void main(void) {
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 74 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
@@ -471,7 +486,7 @@ void main(void) {
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 77 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
@@ -483,7 +498,7 @@ void main(void) {
                       drawProgrammingTempMenu(++currentMenuViewing);
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 80 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
@@ -493,7 +508,7 @@ void main(void) {
                     }
                     else {
                       updateProgrammingTemp(&(rooms[currentRoom].programs[currentProgramEditing].periods[currentPeriodEditing - 1].temperature), 83 + menuButtonTouched);
-                      drawProgrammingScreen(currentProgramEditing - 1);
+                      drawProgrammingScreen(currentProgramEditing);
                       menuState = NONE;
                     }
                     break;
