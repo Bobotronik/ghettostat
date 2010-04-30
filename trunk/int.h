@@ -1,10 +1,10 @@
 #ifndef INT_H
 #define INT_H
 
-#define OFF       0x00 
-#define HEAT      0x01
-#define COOL      0x02
-#define FAN       0x04
+#define I_OFF       0x00 
+#define I_HEAT      0x01
+#define I_COOL      0x02
+#define I_FAN       0x04
 
 extern unsigned char mode;
 extern unsigned char status;
