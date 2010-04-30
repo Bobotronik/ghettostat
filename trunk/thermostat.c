@@ -7,6 +7,9 @@
 #include "functions.h"
 #include "int.h"
 #include "flash.h"
+#include "relayControl.h"
+#include "sci.h"
+#include "i2c.h"
 
 /*
 ****Features****
@@ -891,14 +894,13 @@ void refreshThermostat() {
     
     if (!isOverride[i]) {
       overridePeriod[i] = currentPeriod[i];
-      //overridePeriod[i].temperature = currentPeriod[i].temperature;
-      //overridePeriod[i].mode = currentPeriod[i].mode;
     }
     
     // update sensors
     currentPeriod[i] = rooms[i].programs[weeklySchedule[dayOfCurrentPeriod[i]]].periods[currentPeriodIndex[i]];
   }
-  setModeMain(currentPeriod.temperature,currentPeriod.mode);
+  setModeMain(currentPeriod[0].temperature, currentPeriod[0].mode);
+  //sendModeAux(currentPeriod[2].temperature,currentPeriod[2].mode);
 }
 
 void drawButton(unsigned char* button) {
@@ -1101,7 +1103,7 @@ void drawTopBar() {
   
   goToText(0,0);
   displayTime();
-  printStr("        Humidity   %");
+  printStr("            Humidity   %");
   goToText(38, 0);
   printNum(getHumidityDec());
 }
@@ -1166,9 +1168,7 @@ void drawMainScreen() {
   goToText(21, 5);
   printStr("Set To");
   goToText(24, 8);
-  printNum(currentPeriod[currentRoom].temperature);
-  
-  goToText(modeButton[0] + 1, modeButton[1] + 1);
+  printNum(currentPeriod[currentRoom].temperature);  
   
   if (isOverride[currentRoom]) {
     mode = overridePeriod[currentRoom].mode;
@@ -1182,6 +1182,7 @@ void drawMainScreen() {
     mode = currentPeriod[currentRoom].mode;
   }
   
+  goToText(modeButton[0] + 1, modeButton[1] + 1);
   switch (mode) {
     case HEAT:
       printStr("HEAT");
@@ -1302,9 +1303,6 @@ void drawMainModeMenu() {
   }
 } */
 
-void draw24Digit(unsigned char x, unsigned char y, unsigned char digit) {
-  
-}
 
 void drawProgramsTab() {
   unsigned char i, j;
@@ -1683,7 +1681,7 @@ void updateProgrammingTemp(unsigned char* temperature, unsigned char newTemperat
 void drawProgrammingModeMenu(unsigned char currentPeriodEditing) {
   unsigned char menu[5];
   menu[0] = programmingModeMenu[0];
-  menu[1] = programmingModeMenu[1] + 3*(currentPeriodEditing - 1);
+  menu[1] = programmingModeMenu[1] + 3*(currentPeriodEditing + 1);
   menu[2] = programmingModeMenu[2];
   menu[3] = programmingModeMenu[3];
   menu[4] = programmingModeMenu[4];
