@@ -1,6 +1,7 @@
 #include "flash.h"
 #include "derivative.h"
 #include "thermostat.h"
+#include "hidef.h"
 
 // RAM Data Block
 unsigned char F_BUS_SPD     @0x0064;
@@ -18,21 +19,24 @@ void initFlash(void) {
 void loadFlash(void) {
   asm(LDHX F_FILE_PTR);    /* Load address of RAM Data Block to H:X */
   asm(JSR F_LOAD);       /* Call F_LOAD ROM Subroutine */
+  EnableInterrupts;
 }
 
 void eraseFlash(void) {
   asm(LDHX F_FILE_PTR);    /* Load address of RAM Data Block to H:X */
   asm(JSR F_ERASE);      /* Call F_ERASE ROM Subroutine */
+  EnableInterrupts;
 }
 
 void writeFlash(void) {
   asm(LDHX F_FILE_PTR);    /* Load address of RAM Data Block to H:X */
-  asm(JSR F_WRITE);      /* Call F_PROGRAM ROM Subroutine */        
+  asm(JSR F_WRITE);      /* Call F_PROGRAM ROM Subroutine */
+  EnableInterrupts;        
 }
 
 // Mid level functions ------------------------------------
 void loadProgramData(void) {
-  unsigned char periodCount, programCount, roomCount, lol;
+  unsigned char periodCount, programCount, roomCount;
   
   F_ADDR = F_START;
   for(roomCount = 0; roomCount < 2; roomCount++) { // 2 rooms
