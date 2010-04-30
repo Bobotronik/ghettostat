@@ -66,9 +66,20 @@ struct room {
   struct program programs[NUM_PROGRAMS];
 };
 
+extern struct room rooms[]; 
+extern unsigned char currentDay;
+
+extern unsigned char dayOfCurrentPeriod;
+extern unsigned char currentPeriodIndex;
+extern unsigned char dayOfNextPeriod;
+extern unsigned char nextPeriodIndex;
+
 extern unsigned char currentRoom;
 extern unsigned char fanMode;
 extern unsigned char isOverride;
+
+extern struct period currentPeriod;
+extern struct period overridePeriod;
 
 // Left Bar
 extern const unsigned char leftBarX;
@@ -80,6 +91,7 @@ extern const unsigned char settingsButton[];
 
 // Main Screen
 extern const unsigned char setToButton[];
+extern const unsigned char setToMenu[];
 extern const unsigned char rightBarX;
 extern const unsigned char rightBarWidth;
 extern const unsigned char rightBarHeight;
@@ -89,6 +101,7 @@ extern const unsigned char modeButton[];
 extern const unsigned char roomMenu[];
 extern const unsigned char fanMenu[];
 extern const unsigned char modeMenu[];
+extern const unsigned char overrideButton[];
 
 // Program Screen
 extern const unsigned char tabY;
@@ -182,7 +195,7 @@ void drawTopBar();
 void drawLeftBar();
 
 void drawMainScreen();
-void drawMainSetToMenu();
+void drawMainSetToMenu(unsigned char);
 void drawMainRoomMenu();
 void drawMainFanMenu();
 void drawMainModeMenu();
