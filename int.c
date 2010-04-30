@@ -2,7 +2,7 @@
 #include "derivative.h"
 #include "i2cdevices.h"
 #include "relayControl.h"
-#include "functions.h"
+#include "delay.h"
 #include "hidef.h"
 
 #pragma DATA_SEG DEFAULT
@@ -41,6 +41,10 @@ void tempISRAux(void)  {
     del1m(1);
 }
 
+void tempISR() {
+
+}
+
 void tempISRMain(void) {
    if (mode == HEAT) {      
       if(status != HEAT) {        //polarity is 1
@@ -69,6 +73,7 @@ void tempISRMain(void) {
     del1m(1);
 }
 
+
 void setModeAux(unsigned char * new_settings) {
   DisableInterrupts;
   // Turn everything off
@@ -86,14 +91,14 @@ void setModeAux(unsigned char * new_settings) {
   EnableInterrupts;   
 }
 
-void setModeMain(unsigned char * new_settings) {
+void setModeMain(unsigned char tempF, unsigned char mode1) {
   DisableInterrupts;
   // Turn everything off
   disableMainFan();
   disableMainCool();
   disableMainHeat();
-  setTempC(new_settings);       // Set the desired temp
-  mode = new_settings[2];       // Set the mode
+  setTempF(tempF);       // Set the desired temp
+  mode = mode1;
   status = mode;                // Set the status to the mode (so ISR call works)
   if( mode == FAN) {
     enableMainFan();
