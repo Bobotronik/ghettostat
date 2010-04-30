@@ -69,17 +69,17 @@ struct room {
 extern struct room rooms[]; 
 extern unsigned char currentDay;
 
-extern unsigned char dayOfCurrentPeriod;
-extern unsigned char currentPeriodIndex;
-extern unsigned char dayOfNextPeriod;
-extern unsigned char nextPeriodIndex;
+extern unsigned char dayOfCurrentPeriod[];
+extern unsigned char currentPeriodIndex[];
+extern unsigned char dayOfNextPeriod[];
+extern unsigned char nextPeriodIndex[];
 
 extern unsigned char currentRoom;
-extern unsigned char fanMode;
-extern unsigned char isOverride;
+extern unsigned char fanMode[];
+extern unsigned char isOverride[];
 
-extern struct period currentPeriod;
-extern struct period overridePeriod;
+extern struct period currentPeriod[];
+extern struct period overridePeriod[];
 
 // Left Bar
 extern const unsigned char leftBarX;
@@ -166,6 +166,10 @@ extern const unsigned char programmingTempMenu[];
 extern unsigned char programmingModeMenu[];
 
 void initializeThermostat();
+unsigned char accessStartTime(unsigned char, unsigned char, unsigned char);
+unsigned char accessTemperature(unsigned char, unsigned char, unsigned char);
+unsigned char accessMode(unsigned char, unsigned char, unsigned char);
+
 void printHours(unsigned char);
 void printMinutes(unsigned char);
 void printAmPm(unsigned char);
@@ -199,7 +203,8 @@ void drawMainSetToMenu(unsigned char);
 void drawMainRoomMenu();
 void drawMainFanMenu();
 void drawMainModeMenu();
-
+void draw32Digit(unsigned char);
+void draw24Digit(unsigned char);
 void drawProgramsTab();
 
 void drawDaysTab();
@@ -207,7 +212,7 @@ void drawDaysMenu(unsigned char*);
 
 void drawProgrammingScreen(unsigned char);
 
-void printMenuCells();
+void printMenuCells(unsigned char*, unsigned char, unsigned char);
 unsigned char determineHoursMenu(unsigned char);
 void drawHoursMenu(unsigned char);
 
@@ -215,7 +220,7 @@ void drawMinutesMenu();
 void toggleAmPm(unsigned char, unsigned char);
 
 unsigned char determineTempMenu(unsigned char);
-void drawProgrammingTempMenu();
+void drawProgrammingTempMenu(unsigned char);
 
 void drawProgrammingModeMenu(unsigned char);
 void updateProgrammingTemp(unsigned char*, unsigned char);

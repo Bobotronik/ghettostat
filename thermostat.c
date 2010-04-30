@@ -142,6 +142,281 @@ const unsigned char check[] = {
 0x07, 0x30, 
 0x01, 0x30};
 
+/*const unsigned char zero32[] = {
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x1f, 0x3e, 0x00, 
+0x01, 0x3f, 0x3f, 0x00, 
+0x03, 0x3c, 0x1f, 0x20, 
+0x07, 0x30, 0x07, 0x30, 
+0x07, 0x20, 0x07, 0x38, 
+0x0f, 0x00, 0x01, 0x38, 
+0x0e, 0x00, 0x00, 0x3c, 
+0x1e, 0x00, 0x00, 0x3c, 
+0x1c, 0x00, 0x00, 0x1c, 
+0x1c, 0x00, 0x00, 0x1c, 
+0x1c, 0x00, 0x00, 0x1c, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1e, 
+0x3c, 0x00, 0x00, 0x1c, 
+0x1c, 0x00, 0x00, 0x1c, 
+0x1c, 0x00, 0x00, 0x1c, 
+0x1e, 0x00, 0x00, 0x3c, 
+0x1e, 0x00, 0x00, 0x3c, 
+0x1e, 0x00, 0x00, 0x38, 
+0x0e, 0x00, 0x01, 0x38, 
+0x0f, 0x00, 0x01, 0x38, 
+0x07, 0x30, 0x07, 0x20, 
+0x03, 0x3f, 0x3f, 0x00, 
+0x01, 0x3f, 0x3e, 0x00, 
+0x00, 0x1f, 0x38, 0x00};
+
+const unsigned char one32[] = {
+0x00, 0x07, 0x30, 0x00, 
+0x00, 0x0f, 0x30, 0x00, 
+0x00, 0x3f, 0x30, 0x00, 
+0x01, 0x3f, 0x30, 0x00, 
+0x07, 0x33, 0x30, 0x00, 
+0x0f, 0x03, 0x30, 0x00, 
+0x0e, 0x03, 0x30, 0x00, 
+0x08, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x0f, 0x3f, 0x3f, 0x38, 
+0x0f, 0x3f, 0x3f, 0x38, 
+0x0f, 0x3f, 0x3f, 0x38};
+
+const unsigned char two32[] = {
+0x00, 0x03, 0x00, 0x00, 
+0x00, 0x3f, 0x3c, 0x00, 
+0x03, 0x3f, 0x3e, 0x00, 
+0x07, 0x3f, 0x3f, 0x00, 
+0x07, 0x20, 0x1f, 0x20, 
+0x06, 0x00, 0x0f, 0x20, 
+0x00, 0x00, 0x07, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x07, 0x30, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x0f, 0x00, 
+0x00, 0x00, 0x0f, 0x00, 
+0x00, 0x00, 0x1e, 0x00, 
+0x00, 0x00, 0x3e, 0x00, 
+0x00, 0x01, 0x3c, 0x00, 
+0x00, 0x01, 0x38, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x07, 0x20, 0x00, 
+0x00, 0x0f, 0x00, 0x00, 
+0x00, 0x1e, 0x00, 0x00, 
+0x00, 0x3c, 0x00, 0x00, 
+0x01, 0x38, 0x00, 0x00, 
+0x03, 0x30, 0x00, 0x00, 
+0x07, 0x20, 0x00, 0x00, 
+0x07, 0x20, 0x00, 0x00, 
+0x0f, 0x3f, 0x3f, 0x38, 
+0x0f, 0x3f, 0x3f, 0x38, 
+0x07, 0x3f, 0x3f, 0x38};
+
+const unsigned char three32[] = {
+0x00, 0x07, 0x30, 0x00, 
+0x00, 0x3f, 0x3c, 0x00, 
+0x03, 0x3f, 0x3e, 0x00, 
+0x07, 0x38, 0x1f, 0x00, 
+0x07, 0x00, 0x0f, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x07, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x0f, 0x00, 
+0x00, 0x00, 0x1e, 0x00, 
+0x00, 0x3f, 0x38, 0x00, 
+0x01, 0x3f, 0x30, 0x00, 
+0x01, 0x3f, 0x3c, 0x00, 
+0x00, 0x00, 0x3f, 0x00, 
+0x00, 0x00, 0x0f, 0x20, 
+0x00, 0x00, 0x07, 0x30, 
+0x00, 0x00, 0x03, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x03, 0x30, 
+0x0c, 0x00, 0x07, 0x30, 
+0x0f, 0x20, 0x0f, 0x20, 
+0x0f, 0x3f, 0x3f, 0x00, 
+0x03, 0x3f, 0x3e, 0x00, 
+0x00, 0x1f, 0x30, 0x00};
+
+const unsigned char four32[] = {
+0x00, 0x00, 0x0f, 0x30, 
+0x00, 0x00, 0x0f, 0x30, 
+0x00, 0x00, 0x1f, 0x30, 
+0x00, 0x00, 0x3d, 0x30, 
+0x00, 0x00, 0x39, 0x30, 
+0x00, 0x01, 0x39, 0x30, 
+0x00, 0x01, 0x31, 0x30, 
+0x00, 0x03, 0x21, 0x30, 
+0x00, 0x07, 0x21, 0x30, 
+0x00, 0x07, 0x01, 0x30, 
+0x00, 0x0f, 0x01, 0x30, 
+0x00, 0x0e, 0x01, 0x30, 
+0x00, 0x1c, 0x01, 0x30, 
+0x00, 0x3c, 0x01, 0x30, 
+0x00, 0x38, 0x01, 0x30, 
+0x01, 0x38, 0x01, 0x30, 
+0x01, 0x30, 0x01, 0x30, 
+0x03, 0x20, 0x01, 0x30, 
+0x03, 0x20, 0x01, 0x30, 
+0x07, 0x00, 0x01, 0x30, 
+0x0f, 0x00, 0x01, 0x30, 
+0x0e, 0x00, 0x01, 0x30, 
+0x0f, 0x3f, 0x3f, 0x3e, 
+0x0f, 0x3f, 0x3f, 0x3e, 
+0x0f, 0x3f, 0x3f, 0x3e, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x01, 0x30};
+
+const unsigned char five32[] = {
+0x07, 0x3f, 0x3f, 0x20, 
+0x07, 0x3f, 0x3f, 0x20, 
+0x07, 0x3f, 0x3f, 0x20, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x07, 0x3f, 0x38, 0x00, 
+0x07, 0x3f, 0x3e, 0x00, 
+0x07, 0x3f, 0x3f, 0x20, 
+0x00, 0x00, 0x1f, 0x30, 
+0x00, 0x00, 0x07, 0x30, 
+0x00, 0x00, 0x03, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x07, 0x30, 
+0x0e, 0x00, 0x1f, 0x20, 
+0x0f, 0x3f, 0x3f, 0x00, 
+0x0f, 0x3f, 0x3c, 0x00, 
+0x03, 0x3f, 0x30, 0x00};
+
+const unsigned char six32[] = {
+0x00, 0x00, 0x1c, 0x00, 
+0x00, 0x07, 0x3f, 0x30, 
+0x00, 0x1f, 0x3f, 0x38, 
+0x00, 0x3f, 0x01, 0x38, 
+0x01, 0x3c, 0x00, 0x00, 
+0x03, 0x30, 0x00, 0x00, 
+0x03, 0x20, 0x00, 0x00, 
+0x07, 0x20, 0x00, 0x00, 
+0x07, 0x00, 0x00, 0x00, 
+0x0e, 0x00, 0x00, 0x00, 
+0x0e, 0x00, 0x00, 0x00, 
+0x0e, 0x00, 0x00, 0x00, 
+0x1e, 0x00, 0x00, 0x00, 
+0x1e, 0x07, 0x3e, 0x00, 
+0x1e, 0x3f, 0x3f, 0x20, 
+0x1f, 0x3f, 0x3f, 0x30, 
+0x1f, 0x30, 0x03, 0x38, 
+0x1f, 0x00, 0x01, 0x3c, 
+0x1e, 0x00, 0x00, 0x3c, 
+0x1e, 0x00, 0x00, 0x3c, 
+0x1e, 0x00, 0x00, 0x1c, 
+0x1e, 0x00, 0x00, 0x1c, 
+0x1e, 0x00, 0x00, 0x1c, 
+0x0e, 0x00, 0x00, 0x1c, 
+0x0e, 0x00, 0x00, 0x1c, 
+0x0f, 0x00, 0x00, 0x3c, 
+0x07, 0x00, 0x01, 0x38, 
+0x07, 0x20, 0x03, 0x38, 
+0x03, 0x30, 0x07, 0x30, 
+0x03, 0x3f, 0x3f, 0x20, 
+0x00, 0x3f, 0x3f, 0x00, 
+0x00, 0x1f, 0x3c, 0x00};
+
+const unsigned char seven32[] = {
+0x1f, 0x3f, 0x3f, 0x3c, 
+0x1f, 0x3f, 0x3f, 0x3c, 
+0x1f, 0x3f, 0x3f, 0x3c, 
+0x00, 0x00, 0x00, 0x3c, 
+0x00, 0x00, 0x00, 0x38, 
+0x00, 0x00, 0x01, 0x38, 
+0x00, 0x00, 0x01, 0x30, 
+0x00, 0x00, 0x03, 0x30, 
+0x00, 0x00, 0x03, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x07, 0x20, 
+0x00, 0x00, 0x07, 0x00, 
+0x00, 0x00, 0x0f, 0x00, 
+0x00, 0x00, 0x0e, 0x00, 
+0x00, 0x00, 0x1e, 0x00, 
+0x00, 0x00, 0x1c, 0x00, 
+0x00, 0x00, 0x3c, 0x00, 
+0x00, 0x00, 0x3c, 0x00, 
+0x00, 0x01, 0x38, 0x00, 
+0x00, 0x01, 0x38, 0x00, 
+0x00, 0x01, 0x30, 0x00, 
+0x00, 0x03, 0x30, 0x00, 
+0x00, 0x03, 0x20, 0x00, 
+0x00, 0x07, 0x20, 0x00, 
+0x00, 0x07, 0x20, 0x00, 
+0x00, 0x0f, 0x00, 0x00, 
+0x00, 0x0f, 0x00, 0x00, 
+0x00, 0x1e, 0x00, 0x00, 
+0x00, 0x1e, 0x00, 0x00, 
+0x00, 0x3c, 0x00, 0x00, 
+0x00, 0x3c, 0x00, 0x00, 
+0x01, 0x38, 0x00, 0x00};*/
+
+//const unsigned char eight32[] = {
+//};
+
 // Buttons
 // Format: {X, Y, width, height}
 
@@ -253,19 +528,19 @@ unsigned char currentDay;
 unsigned char currentTime;
 
 unsigned char currentRoom; // Manually controlled
-unsigned char fanSetting; // Manually controlled
+unsigned char fanMode[2]; // Manually controlled
 
-unsigned char dayOfCurrentPeriod;
-unsigned char currentPeriodIndex;
-unsigned char dayOfNextPeriod;
-unsigned char nextPeriodIndex;
+unsigned char dayOfCurrentPeriod[2];
+unsigned char currentPeriodIndex[2];
+unsigned char dayOfNextPeriod[2];
+unsigned char nextPeriodIndex[2];
 
 unsigned char currentTemperature;
 
-struct period currentPeriod;
-struct period overridePeriod;
+struct period currentPeriod[2];
+struct period overridePeriod[2];
 
-unsigned char isOverride;
+unsigned char isOverride[] = {0, 0};
 
 unsigned char mainState, menuState;
 
@@ -275,10 +550,12 @@ void initializeThermostat() {
   displayTemps(); // must be called first to initialize time variables
   
   currentRoom = ROOM_MAIN;
-  fanMode = FAN_OFF;
 
   /*
   for (i = 0; i < 2; i++) {
+  
+  fanMode[i] = FAN_OFF;
+  
     for (j = 0; j < 4; j++) {
       rooms[i].programs[j].periods[MORNING].startTime = 24; //6*4
       rooms[i].programs[j].periods[MORNING].temperature = 72;
@@ -303,16 +580,28 @@ void initializeThermostat() {
   refreshThermostat();
 }
 
+unsigned char accessStartTime(unsigned char roomIndex, unsigned char programIndex, unsigned char periodIndex) {
+  return rooms[roomIndex].programs[programIndex].periods[periodIndex].startTime;  
+}
+
+unsigned char accessTemperature(unsigned char roomIndex, unsigned char programIndex, unsigned char periodIndex) {
+  return rooms[roomIndex].programs[programIndex].periods[periodIndex].temperature; 
+}
+
+unsigned char accessMode(unsigned char roomIndex, unsigned char programIndex, unsigned char periodIndex) {
+  return rooms[roomIndex].programs[programIndex].periods[periodIndex].mode; 
+}
+
 void printHours(unsigned char temp) {
   if (temp <= 51) {
-    if (temp/4)
-      printNum(temp/4);
+    if (temp >> 2)
+      printNum(temp >> 2);
     else {
       printNum(12); 
     }
   }
   else
-    printNum((temp - 48) / 4);  
+    printNum((temp - 48) >> 2);  
 }
 
 void printMinutes(unsigned char temp) {
@@ -355,7 +644,6 @@ void displayTime() {
   getTime();
   
   // Day of week
-  temp = RTC_TIME[3];
   switch (temp) {
     case 1:
       printStr("Sun ");
@@ -455,7 +743,6 @@ void displayTime() {
   // Determine whether to display nothing or 1
   if (temp & 0x10) {
     printDigit(1);
-    //tempTime += 40;
   }
   else {
     printChar(' ');
@@ -463,7 +750,6 @@ void displayTime() {
   
   // Display hour (1's digit)
   printDigit(temp & 0x0f);
-  //tempTime += (temp & 0x0f);
   tempTime += (((temp & 0x10) >> 4)*10 + (temp & 0x0f)) << 2;
   printChar(':');
  
@@ -482,16 +768,11 @@ void displayTime() {
     printStr(" PM");
   }
   
-  /* Check if new day
-  if (DEVICE_TIME[2]-1 > currentDay)
-    isLastPeriodOfDay = 0;
-  currentDay = DEVICE_TIME[2] - 1;*/
 }
 
 void updateTemp() {
   goToText(10, 6);
   printNum(getTempF());
-  //goToText();
 }
 
 void displayTemps() {
@@ -517,46 +798,48 @@ void displayTemps() {
 }
 
 void updateCurrentPeriod() {
-
-  // Update only applicable if next period is on current day
-  if (dayOfNextPeriod == currentDay) {
+  unsigned char i;
   
-    if(currentTime >= rooms[currentRoom].programs[weeklySchedule[dayOfNextPeriod]].periods[nextPeriodIndex].startTime) {
-      currentPeriodIndex = nextPeriodIndex;
-      
-      // Updating period
-      // Same day   
-      if (nextPeriodIndex < NUM_PERIODS-1)
-        nextPeriodIndex++;
-      // New day
-      else {
-        nextPeriodIndex = 0;
+  for (i = 0; i < 2; i++) {
+  // Update only applicable if next period is on current day
+    if (dayOfNextPeriod[i] == currentDay) {
+    
+      if(currentTime >= accessStartTime(i, weeklySchedule[dayOfNextPeriod[i]], nextPeriodIndex[i])) {
+        currentPeriodIndex[i] = nextPeriodIndex[i];
         
-        // Updating day
-        // Same week
-        if (dayOfNextPeriod < 6){
-          dayOfNextPeriod++;
-        }
-        // New week
+        // Updating period
+        // Same day   
+        if (nextPeriodIndex[i] < NUM_PERIODS-1)
+          nextPeriodIndex[i]++;
+        // New day
         else {
-          dayOfNextPeriod = 0;
+          nextPeriodIndex[i] = 0;
+          
+          // Updating day
+          // Same week
+          if (dayOfNextPeriod[i] < 6){
+            dayOfNextPeriod[i]++;
+          }
+          // New week
+          else {
+            dayOfNextPeriod[i] = 0;
+          }
+        }
+                          
+        currentPeriod[i] = rooms[i].programs[weeklySchedule[dayOfCurrentPeriod[i]]].periods[currentPeriodIndex[i]];
+        // Update thermometer
+        //setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
+        switch (currentRoom) {
+          case ROOM_MAIN:
+            //setModeMain(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
+                    //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
+            break;
+          case ROOM_AUX:
+            //setModeAux(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
+                    //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
+            break;
         }
       }
-      
-      currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
-      // Update thermometer
-      //setTemp(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature);
-      switch (currentRoom) {
-        case ROOM_MAIN:
-          //setModeMain(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
-                  //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
-          break;
-        case ROOM_AUX:
-          //setModeAux(programs[weeklySchedule[currentDay]].periods[currentPeriod].temperature,
-                  //programs[weeklySchedule[currentDay]].periods[currentPeriod].mode);
-          break;
-      }
-      
     }
   }
 }
@@ -565,57 +848,57 @@ void updateCurrentPeriod() {
 "Refreshes the thermostat by finding the current period with only the current day and time
 */
 void refreshThermostat() {
-  unsigned char i, day;
+  unsigned char i, j, day;
+  
+  for (i = 0; i < 2; i++) {
     
-  for (i = 0; i < 4; i++) {
-    if (rooms[currentRoom].programs[weeklySchedule[currentDay]].periods[i].startTime > currentTime)
-      break;
-  }
-  // Need to set dayOfCurrentPeriod, dayOfNextPeriod, currentPeriodIndex, nextPeriodIndex
-  // Current day
-  if (i > 0) {
-    currentPeriodIndex = i - 1;
-    dayOfCurrentPeriod = currentDay;
-    if (i < 4) {
-      nextPeriodIndex = i;
-      dayOfNextPeriod = currentDay;
+    for (j = 0; j < 4; j++) {
+          //accessStartTime(i, weeklySchedule[currentDay], j);
+      if (accessStartTime(i, weeklySchedule[currentDay], j) > currentTime)
+      //if (rooms[i].programs[weeklySchedule[currentDay]].periods[j].startTime > currentTime)
+        break;
     }
-    // Next day
-    else {
-      nextPeriodIndex = 0;
-      if (currentDay != 6) {
-        dayOfNextPeriod = currentDay + 1;
+    // Need to set dayOfCurrentPeriod, dayOfNextPeriod, currentPeriodIndex, nextPeriodIndex
+    // Current day
+    if (j > 0) {
+      currentPeriodIndex[i] = j - 1;
+      dayOfCurrentPeriod[i] = currentDay;
+      if (j < 4) {
+        nextPeriodIndex[i]= j;
+        dayOfNextPeriod[i] = currentDay;
       }
+      // Next day
       else {
-        dayOfNextPeriod = 0;
+        nextPeriodIndex[i] = 0;
+        if (currentDay != 6) {
+          dayOfNextPeriod[i] = currentDay + 1;
+        }
+        else {
+          dayOfNextPeriod[i] = 0;
+        }
       }
     }
+    // Previous day
+    else {
+      currentPeriodIndex[i] = 3;
+      nextPeriodIndex[i] = 0;
+      if (currentDay != 0)
+        dayOfCurrentPeriod[i] = currentDay - 1;
+      else
+        dayOfCurrentPeriod[i] = 6;
+      dayOfNextPeriod[i] = currentDay;
+    }
+    
+    if (!isOverride[i]) {
+      overridePeriod[i] = currentPeriod[i];
+      //overridePeriod[i].temperature = currentPeriod[i].temperature;
+      //overridePeriod[i].mode = currentPeriod[i].mode;
+    }
+    
+    // update sensors
+    currentPeriod[i] = rooms[i].programs[weeklySchedule[dayOfCurrentPeriod[i]]].periods[currentPeriodIndex[i]];
   }
-  
-  // Previous day
-  else {
-    currentPeriodIndex = 3;
-    nextPeriodIndex = 0;
-    if (currentDay != 0)
-      dayOfCurrentPeriod = currentDay - 1;
-    else
-      dayOfCurrentPeriod = 6;
-    dayOfNextPeriod = currentDay;
-  }
-  
-  if(!isOverride) {
-        overridePeriod.startTime = currentPeriod.startTime;
-        overridePeriod.temperature = currentPeriod.temperature;
-        overridePeriod.mode = currentPeriod.mode;
-  }
-  
-  // update sensors
-  currentPeriod = rooms[currentRoom].programs[weeklySchedule[dayOfCurrentPeriod]].periods[currentPeriodIndex];
   setModeMain(currentPeriod.temperature,currentPeriod.mode);
-}
-
-void updateThermometer() {
-  
 }
 
 void drawButton(unsigned char* button) {
@@ -781,7 +1064,7 @@ void drawHorizontalMenu(unsigned char* menu) {
 }
 
 unsigned char isButtonTouched(unsigned char x, unsigned char y, unsigned char* button) {
-  if ( (x < button[0]*6) || (x > button[0]*6 + button[2]*6) )
+  if ( (x < button[0]*FONT_WIDTH) || (x > button[0]*FONT_WIDTH + button[2]*FONT_WIDTH) )
     return 0;
   if ( (y < button[1]*8) || (y > button[1]*8 + button[3]*8) )
     return 0;
@@ -798,7 +1081,7 @@ unsigned char isVerticalMenuButtonTouched(unsigned char x, unsigned char y, unsi
 }
 
 unsigned char isHorizontalMenuButtonTouched(unsigned char x, unsigned char y, unsigned char* menu) {
-  if ( (x < menu[0]*6) || (x > menu[0]*6 + menu[2]*menu[4]*6) )
+  if ( (x < menu[0]*FONT_WIDTH) || (x > menu[0]*FONT_WIDTH + menu[2]*menu[4]*FONT_WIDTH) )
     return 0;
   if ( (y < menu[1]*8) || (y > menu[1]*8 + menu[3]*8) )
     return 0;
@@ -834,6 +1117,8 @@ void drawLeftBar() {
 
 void drawMainScreen() { 
 
+  unsigned char mode;
+  
   clearPartialScreen();
   drawLeftBar();
   drawSolidButton(homeButton);
@@ -856,6 +1141,17 @@ void drawMainScreen() {
   goToText(35, 7);
   printStr("Fan");
   goToText(35, 9);
+  switch (fanMode[currentRoom]) {
+    case FAN_ON:
+      printStr(" ON");
+      break;
+    case FAN_OFF:
+      printStr("OFF");
+      break;
+    case FAN_AUTO:
+      printStr("AUTO");
+      break;
+  }
   
   drawButton(modeButton);
   goToText(35, 12);
@@ -870,22 +1166,12 @@ void drawMainScreen() {
   goToText(21, 5);
   printStr("Set To");
   goToText(24, 8);
-  printNum(currentPeriod.temperature);
+  printNum(currentPeriod[currentRoom].temperature);
   
   goToText(modeButton[0] + 1, modeButton[1] + 1);
   
-  if (isOverride) {
-    switch (overridePeriod.mode) {
-      case HEAT:
-        printStr("HEAT");
-        break;
-      case COOL:
-        printStr("COOL");
-        break;
-      case OFF:
-        printStr("OFF");
-        break; 
-    }
+  if (isOverride[currentRoom]) {
+    mode = overridePeriod[currentRoom].mode;
     goToText(10, 14);
     printStr("Override on");
     drawButton(overrideButton);
@@ -893,23 +1179,26 @@ void drawMainScreen() {
     printStr("Cancel"); 
   } 
   else {
-    switch (currentPeriod.mode) {
-      case HEAT:
-        printStr("HEAT");
-        break;
-      case COOL:
-        printStr("COOL");
-        break;
-      case OFF:
-        printStr("OFF");
-        break; 
-    }
+    mode = currentPeriod[currentRoom].mode;
+  }
+  
+  switch (mode) {
+    case HEAT:
+      printStr("HEAT");
+      break;
+    case COOL:
+      printStr("COOL");
+      break;
+    case OFF:
+      printStr("OFF");
+      break;   
   }
 }
 
 void drawMainSetToMenu(unsigned char menu) {
   drawVerticalMenu(setToMenu);
-  
+  goToText(25, 1);
+  printNum(menu);
   switch (menu) {
     case 1:
       printMenuCells(setToMenu, 1, 60);
@@ -978,6 +1267,45 @@ void drawMainModeMenu() {
   printStr("OFF");
 }
 
+/*void draw32Digit(unsigned char x, unsigned char y, unsigned char digit) {
+  switch (digit) {
+    case 0:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 1:
+      drawGraphic(x, y, 4, 32, one32);
+      break;
+    case 2:
+      drawGraphic(x, y, 4, 32, two32);
+      break;
+    case 3:
+      drawGraphic(x, y, 4, 32, three32);
+      break;
+    case 4:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 5:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 6:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 7:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 8:
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+    case 9:                            
+      drawGraphic(x, y, 4, 32, zero32);
+      break;
+  }
+} */
+
+void draw24Digit(unsigned char x, unsigned char y, unsigned char digit) {
+  
+}
+
 void drawProgramsTab() {
   unsigned char i, j;
   
@@ -1040,8 +1368,8 @@ void drawDaysTab() {
   printStr("Programs");
   
   drawSolidButton(daysTab);
-  goToText(28, 2);
-  printStr("  Days  ");
+  goToText(30, 2);
+  printStr("Days");
   
   // Draw border
   for (i = 3; i < 16; i++) {
@@ -1058,8 +1386,8 @@ void drawDaysTab() {
   printCG(SOLID_BOTTOM_BORDER);  
   
   for (i = 0; i < 8;i++) {
-    goToGraphic(28*6, 2*8 + i);
-    for (j = 0; j < 8;j++) {
+    goToGraphic(30*FONT_WIDTH, 2*8 + i);
+    for (j = 0; j < 4;j++) {
       display(0x3f); 
     }
   }
@@ -1355,7 +1683,7 @@ void updateProgrammingTemp(unsigned char* temperature, unsigned char newTemperat
 void drawProgrammingModeMenu(unsigned char currentPeriodEditing) {
   unsigned char menu[5];
   menu[0] = programmingModeMenu[0];
-  menu[1] = programmingModeMenu[1] + 3*currentPeriodEditing;
+  menu[1] = programmingModeMenu[1] + 3*(currentPeriodEditing - 1);
   menu[2] = programmingModeMenu[2];
   menu[3] = programmingModeMenu[3];
   menu[4] = programmingModeMenu[4];
