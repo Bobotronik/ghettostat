@@ -54,7 +54,9 @@ void sendDataSCI(void) {
     sendByteSCI(SCI_DATA[1]);
     //Output the command byte
     sendByteSCI(SCI_DATA[2]);
+    sendByteSCI(DUMMY_TX);
   } else {
+    sendByteSCI(DUMMY_TX);
     sendByteSCI(DUMMY_TX);
     sendByteSCI(DUMMY_TX);
     sendByteSCI(DUMMY_TX);
@@ -102,7 +104,10 @@ void sendTempC(void) {
 
 // Send the new mode to aux
 void sendModeAux(unsigned char tempF, unsigned char mode1){
-  convertFtoC(tempF, SCI_DATA);
+  unsigned char C[2];
+  convertFtoC(tempF, C);
+  SCI_DATA[0] = C[0];
+  SCI_DATA[1] = C[1];
   SCI_DATA[2] = mode1;
   SCI_DATA[3] = TYPE_SETTEMP;
   sendDataSCI();

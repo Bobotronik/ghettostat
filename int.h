@@ -8,10 +8,11 @@
 
 extern unsigned char mode;
 extern unsigned char status;
+extern unsigned char goalTemp[];
 
 void tempISRAux(void);
 void tempISRMain(void);
 void setModeAux(unsigned char *);
-void setModeMain(unsigned char tempF, unsigned char mode1);
+void setModeMain(unsigned char, unsigned char);
 
 #endif

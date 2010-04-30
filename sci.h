@@ -37,7 +37,7 @@ unsigned char receiveByteSCI(void);
 void sendDataSCI(void);
 void receiveDataSCI(void);
 void receiveTempC(unsigned char * C);
-void sendModeAux(unsigned char tempF, unsigned char mode1);
+void sendModeAux(unsigned char, unsigned char);
 void sendTempC(void);
 void smallBoardReceive(void);
 
