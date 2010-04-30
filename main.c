@@ -3,11 +3,14 @@
 
 #include "pins.h"
 
-#include "delay.h"
+#include "flash.h"
+#include "functions.h"
 #include "i2c.h"
+#include "i2cDevices.h"
 #include "lcd.h"
 #include "functions.h"
 #include "thermostat.h"
+#include "int.h"
 
 #pragma TRAP_PROC
 void dummyISR(void) {
@@ -27,24 +30,33 @@ void main(void) {
   extern struct room rooms[2]; // For programs Tab
   extern unsigned char weeklySchedule[]; // For days tab
   
-  EnableInterrupts; /* enable interrupts */
+  //EnableInterrupts; /* enable interrupts */
   /* include your code here */
  
   CONFIG1_COPD = 1;
+  INTSCR_MODE = 1;
+  INTSCR_IMASK = 1;
  
   initI2C();
   initPortX();
   configureTemp();
   startTemp();
+  initFlash();
   initializeDisplay();
-  initializeThermostat();
+  
+  initializeThermostat(); // Pass this function before enabling interrupts
   
   drawMainScreen();
   drawSolidButton(homeButton);
   state = MAIN;
   menuState = NONE;
   
+  //setModeMain(82,I_HEAT);
+  EnableInterrupts;
+  INTSCR_IMASK = 0;
+  
   for(;;) {
+    saveProgramData();
     // Poll clock
     drawTopBar();
    
