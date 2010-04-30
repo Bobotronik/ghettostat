@@ -2,7 +2,6 @@
 #include "i2cDevices.h"
 
 #include "i2c.h"
-#include "delay.h"
 #include "functions.h"
 
 #pragma DATA_SEG DEFAULT

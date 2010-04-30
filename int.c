@@ -2,7 +2,7 @@
 #include "derivative.h"
 #include "i2cdevices.h"
 #include "relayControl.h"
-#include "delay.h"
+#include "functions.h"
 #include "hidef.h"
 
 #pragma DATA_SEG DEFAULT
